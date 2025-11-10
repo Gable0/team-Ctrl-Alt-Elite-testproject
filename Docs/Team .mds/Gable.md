@@ -1,4 +1,4 @@
 # Gable Krich
-## Role: Front-End maybe
+## Role: good guy
 ### Skills: Organization, HTML, Security
-### Github Username: @Gable0
+### Github Username: Gable0
