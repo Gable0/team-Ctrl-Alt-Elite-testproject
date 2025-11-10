@@ -188,3 +188,10 @@ terraform.tfstate.*
 # Package manager auth files
 .npmrc
 .yarnrc
+
+# IntelliJ IDEA
+.idea/
+*.iml
+.idea
+*.iws
+out/
