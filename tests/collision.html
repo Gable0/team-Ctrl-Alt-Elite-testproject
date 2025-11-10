@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Basic Canvas Game</title>
+    <style>
+        body { margin: 0; background: #000; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        canvas { border: 1px solid #fff; background: #111; }
+    </style>
+</head>
+<body>
+<canvas id="gameCanvas" width="400" height="300"></canvas>
+<script>
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+
+    // Game state
+    let ball = { x: 200, y: 150, dx: 2, dy: -2, radius: 10 };
+    let paddle = { x: 180, y: 280, width: 40, height: 10, speed: 4 };
+    let keys = {};
+
+    // Input handling
+    window.addEventListener('keydown', (e) => keys[e.key] = true);
+    window.addEventListener('keyup', (e) => keys[e.key] = false);
+
+    // Update logic
+    function update() {
+        // Ball movement
+        ball.x += ball.dx;
+        ball.y += ball.dy;
+
+        // Wall collisions
+        if (ball.x + ball.radius > canvas.width || ball.x - ball.radius < 0) ball.dx = -ball.dx;
+        if (ball.y - ball.radius < 0) ball.dy = -ball.dy;
+        if (ball.y + ball.radius > canvas.height) ball.y = canvas.height - ball.radius; // Reset if hits bottom
+
+        // Paddle movement
+        if (keys['ArrowLeft'] && paddle.x > 0) paddle.x -= paddle.speed;
+        if (keys['ArrowRight'] && paddle.x < canvas.width - paddle.width) paddle.x += paddle.speed;
+
+        // Paddle-ball collision (simple check)
+        if (ball.y + ball.radius > paddle.y && ball.x > paddle.x && ball.x < paddle.x + paddle.width) {
+            ball.dy = -Math.abs(ball.dy); // Bounce up
+        }
+    }
+
+    // Draw everything
+    function draw() {
+        // Clear canvas
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Draw ball
+        ctx.beginPath();
+        ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+        ctx.fillStyle = '#fff';
+        ctx.fill();
+
+        // Draw paddle
+        ctx.fillStyle = '#0f0';
+        ctx.fillRect(paddle.x, paddle.y, paddle.width, paddle.height);
+    }
+
+    // Game loop
+    function loop() {
+        update();
+        draw();
+        requestAnimationFrame(loop);
+    }
+    loop();
+</script>
+</body>
+</html>
