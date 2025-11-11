@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Simple Shooting Interaction</title>
+    <style>
+        body {
+            margin: 0;
+            background: #111827;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        canvas {
+            background: #0f172a;
+            border: 2px solid #334155;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+<canvas id="game" width="600" height="400"></canvas>
+<script>
+    const canvas = document.getElementById('game');
+    const ctx = canvas.getContext('2d');
+
+    const player = { x: 280, y: 360, w: 40, h: 20 };
+    const box = { x: 270, y: 100, w: 60, h: 40 };
+
+    let bullet = null;
+    let boxVisible = true;
+
+    // Draw everything
+    function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // player
+        ctx.fillStyle = "#60a5fa";
+        ctx.fillRect(player.x, player.y, player.w, player.h);
+
+        // target box
+        if (boxVisible) {
+            ctx.fillStyle = "#f87171";
+            ctx.fillRect(box.x, box.y, box.w, box.h);
+        }
+
+        // bullet
+        if (bullet) {
+            ctx.beginPath();
+            ctx.arc(bullet.x, bullet.y, 6, 0, Math.PI * 2);
+            ctx.fillStyle = "#fde047";
+            ctx.fill();
+        }
+    }
+
+    // Update bullet
+    function update() {
+        if (bullet) {
+            bullet.y -= 6;
+
+            // check hit
+            if (
+                boxVisible &&
+                bullet.x > box.x &&
+                bullet.x < box.x + box.w &&
+                bullet.y - 6 < box.y + box.h &&
+                bullet.y + 6 > box.y
+            ) {
+                boxVisible = false;
+                bullet = null;
+
+                // reset after 1 second
+                setTimeout(() => {
+                    boxVisible = true;
+                }, 800);
+            }
+
+            // remove bullet off-screen
+            if (bullet && bullet.y < 0) bullet = null;
+        }
+    }
+
+    function loop() {
+        update();
+        draw();
+        requestAnimationFrame(loop);
+    }
+
+    // Shoot
+    window.addEventListener('keydown', (e) => {
+        if (e.code === 'Space' && !bullet) {
+            bullet = {
+                x: player.x + player.w / 2,
+                y: player.y - 8
+            };
+        }
+    });
+
+    loop();
+</script>
+</body>
+</html>
