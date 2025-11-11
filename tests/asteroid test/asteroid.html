@@ -1,92 +1,65 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Asteroid Movement Test</title>
+    <title>Rect Demo</title>
     <style>
         body {
             margin: 0;
-            background: #000;
+            background: #fff;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
         }
         canvas {
-            background: #000;
-            border: 1px solid #fff;
+            background: #fff;
+            border: 1px solid #000;
         }
     </style>
 </head>
 <body>
-<canvas id="game" width="600" height="400"></canvas>
+<canvas id="c" width="600" height="400"></canvas>
 <script>
-    const canvas = document.getElementById('game');
-    const ctx = canvas.getContext('2d');
+    const c = document.getElementById('c'),
+        ctx = c.getContext('2d');
 
-    // Asteroid class for our library
-    class Asteroid {
-        constructor(x, y, vx, vy, size = 20) {
+    class R {
+        constructor(x, y, vx, vy, s = 20) {
             this.x = x;
             this.y = y;
-            this.vx = vx; // pixels per frame
+            this.vx = vx;
             this.vy = vy;
-            this.size = size;
-            this.rotation = 0;
-            this.rotSpeed = (Math.random() - 0.5) * 0.1; // slight tumble
+            this.s = s;
         }
-
         update() {
             this.x += this.vx;
             this.y += this.vy;
-            this.rotation += this.rotSpeed;
-
-            // Wrap around screen edges
-            if (this.x > canvas.width + this.size) this.x = -this.size;
-            if (this.x < -this.size) this.x = canvas.width + this.size;
-            if (this.y > canvas.height + this.size) this.y = -this.size;
-            if (this.y < -this.size) this.y = canvas.height + this.size;
+            if (this.x > c.width + this.s) this.x = -this.s;
+            if (this.x < -this.s) this.x = c.width + this.s;
+            if (this.y > c.height + this.s) this.y = -this.s;
+            if (this.y < -this.s) this.y = c.height + this.s;
         }
-
         draw() {
-            ctx.save();
-            ctx.translate(this.x, this.y);
-            ctx.rotate(this.rotation);
-            ctx.strokeStyle = '#fff';
-            ctx.lineWidth = 2;
-            ctx.beginPath();
-            // Rough asteroid shape (jagged circle)
-            for (let i = 0; i < 8; i++) {
-                const angle = (i / 8) * Math.PI * 2;
-                const r = this.size + Math.sin(angle * 3) * (this.size / 4);
-                const px = Math.cos(angle) * r;
-                const py = Math.sin(angle) * r;
-                if (i === 0) ctx.moveTo(px, py);
-                else ctx.lineTo(px, py);
-            }
-            ctx.closePath();
-            ctx.stroke();
-            ctx.restore();
+            ctx.fillStyle = '#f00';
+            ctx.fillRect(this.x - this.s / 2, this.y - this.s / 2, this.s, this.s);
         }
     }
 
-    // Spawn a few asteroids
-    const asteroids = [
-        new Asteroid(100, 100, 1, 0.5),
-        new Asteroid(400, 200, -0.8, 1.2),
-        new Asteroid(300, 50, 0.5, -1)
+    const rs = [
+        new R(100, 100, 1, .5),
+        new R(400, 200, -.8, 1.2),
+        new R(300, 50, .5, -1)
     ];
 
-    function animate() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        asteroids.forEach(asteroid => {
-            asteroid.update();
-            asteroid.draw();
+    const a = () => {
+        ctx.clearRect(0, 0, c.width, c.height);
+        rs.forEach(r => {
+            r.update();
+            r.draw();
         });
-        requestAnimationFrame(animate);
-    }
-
-    animate();
+        requestAnimationFrame(a);
+    };
+    a();
 </script>
 </body>
 </html>
