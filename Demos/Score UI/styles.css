@@ -92,5 +92,55 @@ body {
 
 /* Final score display */
 #finalScore {
-    
+    font-size: 36px;
+    color: #00ffff;
+    margin-bottom: 40px;
+}
+
+#restartButton {
+    padding: 15px 40px;
+    font-size: 24px;
+    font-weight: bold;
+    background-color: #00ffff;
+    color: #000;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'Courier New', monospace;
+    transition: all 0.3s;
+}
+
+#restartButton:hover {
+    background-color: #00cccc;
+    transform: scale(1.05);
+}
+
+/* Botton Center Instructions */
+#instructions {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #888;
+    text-align: center;
+    z-index: 10;
+}
+
+#instructions p:first-child {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+#instructions p:last-child {
+    font-size: 14px;
+}
+
+/*Animations*/
+@keyframes pulse {
+    0%, 100% { 
+        opacity: 1; 
+    }
+    50% { 
+        opacity: 0.5; 
+    }
 }
