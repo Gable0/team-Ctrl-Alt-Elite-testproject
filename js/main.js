@@ -1,5 +1,6 @@
 const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');
+const barrierY = canvas.height * 0.75;
 
 const Game = {
     player: createPlayer(),
@@ -33,7 +34,7 @@ function updatePlayer(delta) {
 
     const margin = player.size;
     player.x = Math.max(margin, Math.min(canvas.width - margin, player.x));
-    player.y = Math.max(margin, Math.min(canvas.height - margin, player.y));
+    player.y = Math.max(barrierY + margin, Math.min(canvas.height - margin, player.y));
 }
 
 function updateEnemies(delta) {}
@@ -56,7 +57,7 @@ function drawPlayer() {
     ctx.restore();
 }
 
-function drawEnemies() {}
+function drawEnemies(){}
 function drawPlayerShots() {}
 function drawEnemyShots() {}
 function drawHUD() {}

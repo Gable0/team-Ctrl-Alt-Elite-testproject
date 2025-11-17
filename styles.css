@@ -30,3 +30,8 @@ canvas {
     font-size: 0.9rem;
     color: #bbb;
 }
+homepage-galaga  {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
