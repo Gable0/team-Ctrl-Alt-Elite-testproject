@@ -9,7 +9,8 @@ body {
     background: #000;
     color: #f5f5f5;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    justify-content: flex-start;
     align-items: center;
 }
 
@@ -34,4 +35,44 @@ homepage-galaga  {
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+homepage-galaga  h1{
+    display:flex;
+
+    color: red;
+    font-size: 100px;
+}
+homepage-galaga  a{
+    text-decoration: none;
+}
+difficulty-buttons {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    
+    align-items: center;
+    gap: 10px;
+    border-width: 30vh;
+    border: 2px, solid #f5f5f5;
+}
+
+.tourney-style-font {
+  font-family: "Tourney", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  font-variation-settings:
+    "wdth" 100;
+}
+difficulty-buttons button{
+    font-family: "Tourney", sans-serif;
+    background: #000;
+    color:red;
+    font-size: 100px;
+    box-shadow: none;
+    border: #000;
+}
+difficulty-buttons button:hover {
+    color: rgb(145, 16, 27);
+    cursor: pointer;
 }
