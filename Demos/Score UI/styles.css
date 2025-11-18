@@ -1,0 +1,283 @@
+/* ==========================================
+   GALAGA SCORE UI DEMO - GROUP 2
+   STYLES.CSS
+   
+   Purpose: Visual styling for score system demo
+
+   Separation of Concerns:
+   - This file handles ALL presentation
+   - No JavaScript styling
+   - No inline styles
+   ========================================== */
+
+/* RESET & BASE STYLES */
+
+
+/* 
+Notes:
+restart  level button and a  levels 
+Make game over bigger
+Make the game over black screen tv static like
+*/
+
+
+/* Import Jersey 10 Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Jersey+10&display=swap');
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Courier New', monospace;
+    background-color: #000;
+    overflow: hidden;
+    cursor: crosshair;
+}
+
+/* Canvas */
+
+#gameCanvas {
+    display:block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+}
+
+/* Top Left Display */
+#scoreUI {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    color:#fff;
+    z-index: 10;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+}
+#scoreDisplay {
+    font-size: 24px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+}
+
+.score-value {
+    color: #00ffff;
+}
+
+#livesDisplay {
+    font-size: 20px;
+}
+
+.heart {
+    color:#ff0000;
+    font-size: 20px;
+    margin-left: 5px;
+}
+
+/* Game Over Screen */
+
+#gameOverScreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vw;
+    background-color: linear-gradient(180deg, 
+        rgba(0, 0, 0, 0.95) 0%, 
+        rgba(20, 0, 40, 0.95) 100%);
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 20;
+    padding: 40px 20px;
+}
+
+#gameOverScreen.active {
+    display: flex;
+    animation: fadeIn 0.5s ease-in;
+}
+#gameOverScreen.active ~ #scoreUI{
+    display: none; /*might take out*/
+}
+
+#gameOverTitle {
+    font-family: 'Jersey 10', sans-serif;
+    font-size: clamp(200px, 60vw, 200px);
+    color: #ff0040;
+    font-weight: normal;
+    margin-bottom: 60px;
+    text-shadow: 
+        0 0 20px #ff0040,
+        0 0 40px #ff0040,
+        0 0 60px #ff0040,
+        4px 4px 0px rgba(0, 0, 0, 0.8);
+    animation: pulse 2s ease-in-out infinite, glitch 3s infinite;
+    letter-spacing: clamp(4px, 1vw, 8px);
+    text-align: center;
+    width: 100%;
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
+/* Final score display */
+#finalScore {
+    font-family: 'Jersey 10', sans-serif;
+    font-size: clamp(24px, 4vw, 36px);
+    color: #00ffff;
+    text-align: center;
+    margin-bottom: 60px;
+    text-shadow: 
+        0 0 10px #00ffff,
+        0 0 20px #00ffff,
+        2px 2px 0px rgba(0, 0, 0, 0.8);
+    line-height: 1.8;
+    letter-spacing: clamp(2px, 0.5vw, 4px);
+    width: 100%;
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
+#finalScoreValue {
+    font-size: clamp(48px, 10vw, 72px);
+    color: #ffff00;
+    display: block;
+    margin-top: 10px;
+    text-shadow: 
+        0 0 15px #ffff00,
+        0 0 30px #ffff00,
+        3px 3px 0px rgba(0, 0, 0, 0.8);
+    animation: scoreFlash 1.5s ease-in-out infinite;
+}
+
+#restartButton {
+    font-family: 'Jersey 10', sans-serif;
+    padding: clamp(15px, 3vw, 20px) clamp(40px, 8vw, 60px);
+    font-size: clamp(28px, 5vw, 42px);
+    font-weight: normal;
+    background: linear-gradient(180deg, #00ff88 0%, #00cc66 100%);
+    color: #000;
+    border: 4px solid #00ffaa;
+    border-radius: 0;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: clamp(2px, 0.5vw, 4px);
+    box-shadow: 
+        0 0 20px #00ff88,
+        0 8px 0 #006644,
+        0 8px 20px rgba(0, 0, 0, 0.5);
+    transition: all 0.1s;
+    position: relative;
+    top: 0;
+    margin-bottom: 20px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#restartButton:hover {
+    background: linear-gradient(180deg, #00ffaa 0%, #00ee77 100%);
+    box-shadow: 
+        0 0 30px #00ff88,
+        0 8px 0 #006644,
+        0 8px 30px rgba(0, 255, 136, 0.5);
+    transform: scale(1.05);
+}
+
+#restartButton:active {
+    top: 4px;
+    box-shadow: 
+        0 0 20px #00ff88,
+        0 4px 0 #006644,
+        0 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+/* Botton Center Instructions */
+#instructions {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #888;
+    text-align: center;
+    z-index: 10;
+}
+
+#instructions p:first-child {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+#instructions p:last-child {
+    font-size: 14px;
+}
+/* Home Button - Below Restart Button */
+#homeButton {
+    font-family: 'Jersey 10', sans-serif;
+    padding: clamp(15px, 3vw, 20px) clamp(40px, 8vw, 60px);
+    font-size: clamp(28px, 5vw, 42px);
+    font-weight: normal;
+    background: linear-gradient(180deg, #888 0%, #666 100%);
+    color: #fff;
+    border: 4px solid #aaa;
+}
+
+/*Animations*/
+@keyframes pulse {
+    0%, 100% { 
+        opacity: 1; 
+    }
+    50% { 
+        opacity: 0.5; 
+    }
+}
+
+
+/* Glitch effect for Game Over title */
+@keyframes glitch {
+    0%, 90%, 100% {
+        text-shadow: 
+            0 0 20px #ff0040,
+            0 0 40px #ff0040,
+            0 0 60px #ff0040,
+            4px 4px 0px rgba(0, 0, 0, 0.8);
+    }
+    92% {
+        text-shadow: 
+            -2px 0 20px #ff0040,
+            2px 2px 40px #00ffff,
+            0 0 60px #ff0040,
+            4px 4px 0px rgba(0, 0, 0, 0.8);
+    }
+    94% {
+        text-shadow: 
+            2px 0 20px #ff0040,
+            -2px -2px 40px #ffff00,
+            0 0 60px #ff0040,
+            4px 4px 0px rgba(0, 0, 0, 0.8);
+    }
+}
+
+/* Score flash animation */
+@keyframes scoreFlash {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.7;
+        transform: scale(1.1);
+    }
+}
+
+/* Fade in animation for game over screen */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
