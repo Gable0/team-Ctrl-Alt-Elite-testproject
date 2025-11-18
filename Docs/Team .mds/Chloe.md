@@ -1,9 +1,16 @@
 # Chloe
-<<<<<<< HEAD
-## Role: ??
-## Skills:
-=======
 ## Role: Front-end
 ## Skills: Security, Style, Repo Organization
->>>>>>> 6e45779736b344f6ef3564bef7d7e2ee34828b18
 ## Github: @ChloeO-03
+
+# Issues
+
+## Text in corner
+## Add score on enemy death
+## Score persists until Game Over
+
+## Game Over Page (completed on 11/18/2025)
+### Additional Notes:
+- Restart  level button and a  levels 
+- Make game over bigger
+- Make the game over black screen tv static like
