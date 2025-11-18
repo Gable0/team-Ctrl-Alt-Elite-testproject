@@ -36,8 +36,13 @@
   font-variation-settings:
     "ROND" 0;
 }
+.jersey-10-regular {
+  font-family: "Jersey 10", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
 :root{
     background: #000;
-    font-family: "Press Start 2P", system-ui;
+    font-family: "Jersey 10", sans-serif;
     color:gold;
 }
