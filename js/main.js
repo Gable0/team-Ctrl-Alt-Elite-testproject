@@ -1,13 +1,18 @@
+import { initEnemyModule, spawnEnemyWave, updateEnemies, drawEnemies, checkEnemyCollisions } from './enemies.js';
+
 const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');
 const barrierY = canvas.height * 0.75;
+
+initEnemyModule(canvas, ctx);
 
 const Game = {
     player: createPlayer(),
     enemies: [],
     playerShots: [],
     enemyShots: [],
-    lastTime: 0
+    lastTime: 0,
+    pendingWaveTimer: 0
 };
 
 const keys = new Set();
@@ -37,11 +42,17 @@ function updatePlayer(delta) {
     player.y = Math.max(barrierY + margin, Math.min(canvas.height - margin, player.y));
 }
 
-function updateEnemies(delta) {}
-function updatePlayerShots(delta) {}
-function updateEnemyShots(delta) {}
-function checkCollisions() {}
+function updatePlayerShots(delta) {
+    Game.playerShots = Game.playerShots.filter((shot) => {
+        if (!shot || shot.active === false) return false;
+        if (typeof shot.update === 'function') {
+            shot.update(delta);
+        }
+        return true;
+    });
+}
 
+function updateEnemyShots(delta) {}
 function drawPlayer() {
     const player = Game.player;
     if (!player) return;
@@ -57,23 +68,22 @@ function drawPlayer() {
     ctx.restore();
 }
 
-function drawEnemies(){}
 function drawPlayerShots() {}
 function drawEnemyShots() {}
 function drawHUD() {}
 
 function update(delta) {
     updatePlayer(delta);
-    updateEnemies(delta);
+    updateEnemies(Game, delta);
     updatePlayerShots(delta);
     updateEnemyShots(delta);
-    checkCollisions(delta);
+    checkEnemyCollisions(Game);
 }
 
 function draw() {
     ctx.fillStyle = '#010101';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    drawEnemies();
+    drawEnemies(Game.enemies);
     drawEnemyShots();
     drawPlayerShots();
     drawPlayer();
@@ -93,4 +103,5 @@ function start() {
     requestAnimationFrame(loop);
 }
 
+spawnEnemyWave(Game);
 start();
