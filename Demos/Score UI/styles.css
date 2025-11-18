@@ -12,6 +12,15 @@
 
 /* RESET & BASE STYLES */
 
+
+/* 
+Notes:
+restart  level button and a  levels 
+Make game over bigger
+Make the game over black screen tv static like
+*/
+
+
 /* Import Jersey 10 Google Font */
 @import url('https://fonts.googleapis.com/css2?family=Jersey+10&display=swap');
 *{
@@ -96,7 +105,7 @@ body {
 
 #gameOverTitle {
     font-family: 'Jersey 10', sans-serif;
-    font-size: clamp(60px, 15vw, 120px);
+    font-size: clamp(200px, 60vw, 200px);
     color: #ff0040;
     font-weight: normal;
     margin-bottom: 60px;
