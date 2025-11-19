@@ -10,30 +10,29 @@
 </head>
 <body>
     <!-- Score UI - Top Left Corner-->
-     <section id="ScoreUI">
-        <p id="ScoreDisplay">
-            SCORE: <span class="score-value" id="scoreValue"> 000000</span>
+     <section id="scoreUI">
+        <p id="scoreDisplay">
+            SCORE: <span class="score-value" id="scoreValue">000000</span>
         </p>
-        <p id="LivesDisplay">
+        <p id="livesDisplay">
             LIVES: <span id="heartsContainer"></span>
         </p>
      </section>
 
      <!-- Game Over Screen Overlay-->
-      <section id="gamerOverScreen">
-        <h1 id="gameOverTitle"> GAME OVER</h1>
+      <section id="gameOverScreen" class="active">
+        <h1 id="gameOverTitle">GAME OVER</h1>
         <p id="finalScore">
             FINAL SCORE: <span id="finalScoreValue">000000</span>
         </p>
-        <button id="restartButton"> PLAY AGAIN </button>
+        <button id="restartLevelButton">RESTART LEVEL</button>
+        <button id="levelsButton">LEVELS</button>
       </section>
     
       <!-- Player Instructions-->
-       <footer id="instruction">
-        <p> Click enemies to destroy them!</p>
-        <p> +100 points per kill
-            Score perists until Game Over
-        </p>
+       <footer id="instructions">
+        <p>Click enemies to destroy them!</p>
+        <p>+100 points per kill - Score persists until Game Over</p>
        </footer>
 
        <canvas id="gameCanvas"></canvas>
