@@ -39,6 +39,7 @@ export function spawnEnemyWave(game) {
             const type = enemyTypes[Math.min(row, enemyTypes.length - 1)];
             const fromLeft = (row + col) % 2 === 0;
             const entryDelay = row * 0.25 + col * 0.12;
+
             game.enemies.push(createEnemy({
                 id: index++,
                 finalX,
@@ -54,12 +55,12 @@ export function spawnEnemyWave(game) {
 
 function createEnemy({ id, finalX, finalY, type, fromLeft, entryDelay, col }) {
     const path = generateEntryPath(finalX, finalY, fromLeft, col);
-    const [startPoint] = path;
+    const [start] = path;
 
     return {
         id,
-        x: startPoint.x,
-        y: startPoint.y,
+        x: start.x,
+        y: start.y,
         finalX,
         finalY,
         color: type.color,
@@ -75,43 +76,37 @@ function createEnemy({ id, finalX, finalY, type, fromLeft, entryDelay, col }) {
     };
 }
 
-function generateEntryPath(finalX, finalY, fromLeft, columnIndex) {
+function generateEntryPath(finalX, finalY, fromLeft, colIdx) {
     if (!canvasRef) return [];
-    const horizontalBias = canvasRef.width * 0.15 + (columnIndex % 3) * 20;
-    const startX = fromLeft ? -80 : canvasRef.width + 80;
-    const midX = fromLeft ? horizontalBias : canvasRef.width - horizontalBias;
-    const midY = canvasRef.height * 0.3;
-    const loopY = canvasRef.height * 0.55;
-    const turnX = canvasRef.width / 2 + (fromLeft ? -90 : 90);
+    const bias = canvasRef.width * 0.15 + (colIdx % 3) * 20;
+    const startX = fromLeft ? -100 : canvasRef.width + 100;
+    const midX = fromLeft ? bias : canvasRef.width - bias;
 
     return [
         { x: startX, y: canvasRef.height * 0.8 },
-        { x: midX, y: midY },
-        { x: turnX, y: loopY },
-        { x: turnX, y: finalY - 40 },
+        { x: midX, y: canvasRef.height * 0.3 },
+        { x: canvasRef.width / 2 + (fromLeft ? -120 : 120), y: canvasRef.height * 0.55 },
         { x: finalX, y: finalY }
     ];
 }
 
 function advanceEnemyAlongPath(enemy, delta) {
-    let remaining = enemy.enterSpeed * delta;
+    let dist = enemy.enterSpeed * delta;
+    while (dist > 0 && enemy.pathIndex < enemy.path.length - 1) {
+        const target = enemy.path[enemy.pathIndex + 1];
+        const dx = target.x - enemy.x;
+        const dy = target.y - enemy.y;
+        const len = Math.hypot(dx, dy);
 
-    while (remaining > 0 && enemy.pathIndex < enemy.path.length - 1) {
-        const currentTarget = enemy.path[enemy.pathIndex + 1];
-        const dx = currentTarget.x - enemy.x;
-        const dy = currentTarget.y - enemy.y;
-        const distance = Math.hypot(dx, dy);
-
-        if (distance <= remaining) {
-            enemy.x = currentTarget.x;
-            enemy.y = currentTarget.y;
-            enemy.pathIndex += 1;
-            remaining -= distance;
+        if (len <= dist) {
+            enemy.x = target.x;
+            enemy.y = target.y;
+            enemy.pathIndex++;
+            dist -= len;
         } else {
-            const ratio = remaining / distance;
-            enemy.x += dx * ratio;
-            enemy.y += dy * ratio;
-            remaining = 0;
+            enemy.x += (dx / len) * dist;
+            enemy.y += (dy / len) * dist;
+            dist = 0;
         }
     }
 
@@ -123,46 +118,34 @@ function advanceEnemyAlongPath(enemy, delta) {
 }
 
 function moveEnemyInFormation(enemy, delta) {
-    enemy.oscillationPhase += delta * 2;
-    enemy.x = enemy.finalX + Math.sin(enemy.oscillationPhase + enemy.waveOffset) * 12;
-    enemy.y = enemy.finalY + Math.sin(enemy.oscillationPhase * 0.5 + enemy.waveOffset) * 6;
-}
-
-function killEnemy(enemy) {
-    if (enemy.state === 'dying') return;
-    enemy.state = 'dying';
-    enemy.dyingTimer = 0.3;
+    enemy.oscillationPhase += delta * 2.2;
+    enemy.x = enemy.finalX + Math.sin(enemy.oscillationPhase + enemy.waveOffset) * 14;
+    enemy.y = enemy.finalY + Math.sin(enemy.oscillationPhase * 0.6) * 7;
 }
 
 export function updateEnemies(game, delta) {
     if (!game.enemies.length) {
         if (game.pendingWaveTimer > 0) {
             game.pendingWaveTimer -= delta;
-            if (game.pendingWaveTimer <= 0) {
-                spawnEnemyWave(game);
-            }
+            if (game.pendingWaveTimer <= 0) spawnEnemyWave(game);
         }
         return;
     }
 
     const alive = [];
-    for (const enemy of game.enemies) {
-        if (enemy.state === 'waiting') {
-            enemy.entryDelay -= delta;
-            if (enemy.entryDelay <= 0) {
-                enemy.state = 'entering';
-            }
-        } else if (enemy.state === 'entering') {
-            advanceEnemyAlongPath(enemy, delta);
-        } else if (enemy.state === 'formation') {
-            moveEnemyInFormation(enemy, delta);
-        } else if (enemy.state === 'dying') {
-            enemy.dyingTimer -= delta;
+    for (const e of game.enemies) {
+        if (e.state === 'waiting') {
+            e.entryDelay -= delta;
+            if (e.entryDelay <= 0) e.state = 'entering';
+        } else if (e.state === 'entering') {
+            advanceEnemyAlongPath(e, delta);
+        } else if (e.state === 'formation') {
+            moveEnemyInFormation(e, delta);
+        } else if (e.state === 'dying') {
+            e.dyingTimer -= delta;
         }
 
-        if (enemy.state !== 'dying' || enemy.dyingTimer > 0) {
-            alive.push(enemy);
-        }
+        if (e.state !== 'dying' || e.dyingTimer > 0) alive.push(e);
     }
 
     game.enemies = alive;
@@ -172,106 +155,39 @@ export function updateEnemies(game, delta) {
     }
 }
 
-function getEnemyHitbox(enemy) {
-    const width = enemy.size * 1.7;
-    const height = enemy.size * 1.3;
-    return {
-        x: enemy.x - width / 2,
-        y: enemy.y - height / 2,
-        width,
-        height
-    };
-}
-
-function getLaserHitbox(shot) {
-    if (!shot || !canvasRef) return null;
-    if (shot.hitbox) {
-        const { x, y, width, height } = shot.hitbox;
-        return { x, y, width, height };
-    }
-
-    if (typeof shot.x === 'number' && typeof shot.y === 'number') {
-        const width = shot.width ?? 6;
-        const height = shot.height ?? canvasRef.height;
-        const direction = shot.direction ?? -1;
-        const topY = direction < 0 ? shot.y - height : shot.y;
-        return {
-            x: shot.x - width / 2,
-            y: topY,
-            width,
-            height
-        };
-    }
-
-    return null;
-}
-
-function boxesOverlap(a, b) {
-    return (
-        a.x < b.x + b.width &&
-        a.x + a.width > b.x &&
-        a.y < b.y + b.height &&
-        a.y + a.height > b.y
-    );
-}
-
-export function checkEnemyCollisions(game) {
-    if (!game.playerShots.length || !game.enemies.length) return;
-
-    for (const shot of game.playerShots) {
-        if (!shot || shot.active === false) continue;
-
-        const shotBox = getLaserHitbox(shot);
-        if (!shotBox) continue;
-
-        for (const enemy of game.enemies) {
-            if (enemy.state === 'dying') continue;
-            const enemyBox = getEnemyHitbox(enemy);
-            if (boxesOverlap(shotBox, enemyBox)) {
-                killEnemy(enemy);
-                if (typeof shot.onHit === 'function') {
-                    shot.onHit(enemy);
-                }
-                if (!shot.pierces) {
-                    shot.active = false;
-                }
-                break;
-            }
-        }
-    }
-
-    game.playerShots = game.playerShots.filter((shot) => shot && shot.active !== false);
-}
-
 export function drawEnemies(enemies) {
     if (!ctxRef) return;
 
-    for (const enemy of enemies) {
+    for (const e of enemies) {
         ctxRef.save();
-        ctxRef.translate(enemy.x, enemy.y);
+        ctxRef.translate(e.x, e.y);
 
-        if (enemy.state === 'dying') {
-            const progress = Math.max(enemy.dyingTimer / 0.3, 0);
-            ctxRef.globalAlpha = progress;
+        if (e.state === 'dying') {
+            const alpha = e.dyingTimer / 0.3;
+            ctxRef.globalAlpha = alpha;
             ctxRef.fillStyle = '#fef08a';
+            ctxRef.shadowBlur = 30;
+            ctxRef.shadowColor = '#fef08a';
             ctxRef.beginPath();
-            ctxRef.arc(0, 0, enemy.size * (1.5 - progress), 0, Math.PI * 2);
+            ctxRef.arc(0, 0, e.size * (1 + (1 - alpha) * 2), 0, Math.PI * 2);
             ctxRef.fill();
-            ctxRef.restore();
-            continue;
+            ctxRef.shadowBlur = 0;
+        } else {
+            ctxRef.fillStyle = e.color;
+            ctxRef.shadowBlur = 10;
+            ctxRef.shadowColor = e.color;
+            ctxRef.beginPath();
+            ctxRef.moveTo(0, -e.size * 0.8);
+            ctxRef.lineTo(e.size, e.size * 0.9);
+            ctxRef.lineTo(-e.size, e.size * 0.9);
+            ctxRef.closePath();
+            ctxRef.fill();
+
+            ctxRef.fillStyle = '#ffffff';
+            ctxRef.fillRect(-e.size * 0.4, -2, e.size * 0.3, 4);
+            ctxRef.fillRect(e.size * 0.1, -2, e.size * 0.3, 4);
+            ctxRef.shadowBlur = 0;
         }
-
-        ctxRef.fillStyle = enemy.color;
-        ctxRef.beginPath();
-        ctxRef.moveTo(0, -enemy.size * 0.8);
-        ctxRef.lineTo(enemy.size, enemy.size * 0.9);
-        ctxRef.lineTo(-enemy.size, enemy.size * 0.9);
-        ctxRef.closePath();
-        ctxRef.fill();
-
-        ctxRef.fillStyle = '#ffffff';
-        ctxRef.fillRect(-enemy.size * 0.4, 0, enemy.size * 0.3, 3);
-        ctxRef.fillRect(enemy.size * 0.1, 0, enemy.size * 0.3, 3);
         ctxRef.restore();
     }
 }
