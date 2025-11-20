@@ -9,7 +9,7 @@ function getEnemyHitbox(enemy) {
     };
 }
 
-function getPlayerHitbox(player) { // enemies.js
+function getPlayerHitbox(player) {
     const width = player.size * 1.2;
     const height = player.size * 2;
     return {
@@ -20,30 +20,32 @@ function getPlayerHitbox(player) { // enemies.js
     };
 }
 
-function getLaserHitbox(shot, canvasHeight) {
-    if (!shot) return null;
-    if (shot.hitbox) {
-        const { x, y, width, height } = shot.hitbox;
-        return { x, y, width, height };
-    }
+function getShotHitbox(shot) {
+    if (!shot || shot.active === false) return null;
 
-    if (typeof shot.x === 'number' && typeof shot.y === 'number') {
-        const width = shot.width ?? 6;
-        const height = shot.height ?? canvasHeight;
-        const direction = shot.direction ?? -1;
-        const topY = direction < 0 ? shot.y - height : shot.y;
-        return {
-            x: shot.x - width / 2,
-            y: topY,
-            width,
-            height
-        };
-    }
-
-    return null;
+    // Player bullet - small vertical rectangle
+    const width = 5;
+    const height = 26;
+    return {
+        x: shot.x - width / 2,
+        y: shot.y - height / 2,
+        width,
+        height
+    };
 }
 
-function boxesOverlap(a, b) { // enemies.js
+function getEnemyShotHitbox(shot) {
+    if (!shot) return null;
+    const s = shot.size;
+    return {
+        x: shot.x - s,
+        y: shot.y - s,
+        width: s * 2,
+        height: s * 2
+    };
+}
+
+function boxesOverlap(a, b) {
     return (
         a.x < b.x + b.width &&
         a.x + a.width > b.x &&
@@ -52,52 +54,75 @@ function boxesOverlap(a, b) { // enemies.js
     );
 }
 
-export function checkPlayerShotCollisions(game, canvasHeight, onEnemyKilled) {
-    if (!game.playerShots.length || !game.enemies.length) return;
+export function checkPlayerShotCollisions(game, onEnemyKilled) {
+    if (!game.playerShots?.length || !game.enemies?.length) return;
 
-    for (const shot of game.playerShots) {
+    for (let i = game.playerShots.length - 1; i >= 0; i--) {
+        const shot = game.playerShots[i];
         if (!shot || shot.active === false) continue;
 
-        const shotBox = getLaserHitbox(shot, canvasHeight);
+        const shotBox = getShotHitbox(shot);
         if (!shotBox) continue;
 
+        let hitSomething = false;
         for (const enemy of game.enemies) {
             if (enemy.state === 'dying') continue;
+
             const enemyBox = getEnemyHitbox(enemy);
             if (boxesOverlap(shotBox, enemyBox)) {
-                if (typeof onEnemyKilled === 'function') {
-                    onEnemyKilled(enemy);
-                }
-                if (typeof shot.onHit === 'function') {
-                    shot.onHit(enemy);
-                }
-                if (!shot.pierces) {
-                    shot.active = false;
-                }
-                break;
+                // Kill the enemy
+                enemy.state = 'dying';
+                enemy.dyingTimer = 0.3;
+
+                // Remove the bullet immediately (no piercing)
+                shot.active = false;
+                hitSomething = true;
+
+                if (typeof onEnemyKilled === 'function') onEnemyKilled(enemy);
+                if (typeof shot.onHit === 'function') shot.onHit(enemy);
+
+                break; // Stop checking other enemies - this bullet is gone
             }
         }
     }
 
-    game.playerShots = game.playerShots.filter((shot) => shot && shot.active !== false);
+    game.playerShots = game.playerShots.filter(s => s && s.active !== false);
+}
+
+export function checkEnemyShotCollisions(game, onPlayerHit) {
+    if (!game.enemyShots?.length || !game.player) return false;
+
+    const playerBox = getPlayerHitbox(game.player);
+
+    for (let i = game.enemyShots.length - 1; i >= 0; i--) {
+        const shot = game.enemyShots[i];
+        const shotBox = getEnemyShotHitbox(shot);
+        if (!shotBox) continue;
+
+        if (boxesOverlap(shotBox, playerBox)) {
+            game.enemyShots.splice(i, 1);
+            if (typeof onPlayerHit === 'function') onPlayerHit();
+            return true;
+        }
+    }
+    return false;
 }
 
 export function checkPlayerEnemyCollision(game, onPlayerHit) {
-    if (!game.player || !game.enemies.length) return false;
+    if (!game.player || !game.enemies?.length) return false;
 
     const playerBox = getPlayerHitbox(game.player);
 
     for (const enemy of game.enemies) {
         if (enemy.state === 'dying' || enemy.state === 'waiting') continue;
-        
+
         const enemyBox = getEnemyHitbox(enemy);
         if (boxesOverlap(playerBox, enemyBox)) {
-            if (typeof onPlayerHit === 'function') {
-                onPlayerHit(enemy);
-            }
-            return true; // Collision detected
+            enemy.state = 'dying';
+            enemy.dyingTimer = 0.3;
+            if (typeof onPlayerHit === 'function') onPlayerHit();
+            return true;
         }
     }
-
     return false;
 }
