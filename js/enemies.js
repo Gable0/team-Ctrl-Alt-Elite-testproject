@@ -39,7 +39,6 @@ export function spawnEnemyWave(game) {
             const type = enemyTypes[Math.min(row, enemyTypes.length - 1)];
             const fromLeft = (row + col) % 2 === 0;
             const entryDelay = row * 0.25 + col * 0.12;
-
             game.enemies.push(createEnemy({
                 id: index++,
                 finalX,
@@ -55,12 +54,12 @@ export function spawnEnemyWave(game) {
 
 function createEnemy({ id, finalX, finalY, type, fromLeft, entryDelay, col }) {
     const path = generateEntryPath(finalX, finalY, fromLeft, col);
-    const [start] = path;
+    const [startPoint] = path;
 
     return {
         id,
-        x: start.x,
-        y: start.y,
+        x: startPoint.x,
+        y: startPoint.y,
         finalX,
         finalY,
         color: type.color,
@@ -72,41 +71,51 @@ function createEnemy({ id, finalX, finalY, type, fromLeft, entryDelay, col }) {
         pathIndex: 0,
         oscillationPhase: Math.random() * Math.PI * 2,
         waveOffset: col * 0.4,
-        dyingTimer: 0
+        dyingTimer: 0,
+        isAttacking: false,
+        attackPath: null,
+        attackPathIndex: 0,
+        attackSpeed: 0
     };
 }
 
-function generateEntryPath(finalX, finalY, fromLeft, colIdx) {
+function generateEntryPath(finalX, finalY, fromLeft, columnIndex) {
     if (!canvasRef) return [];
-    const bias = canvasRef.width * 0.15 + (colIdx % 3) * 20;
-    const startX = fromLeft ? -100 : canvasRef.width + 100;
-    const midX = fromLeft ? bias : canvasRef.width - bias;
+    const horizontalBias = canvasRef.width * 0.15 + (columnIndex % 3) * 20;
+    const startX = fromLeft ? -80 : canvasRef.width + 80;
+    const midX = fromLeft ? horizontalBias : canvasRef.width - horizontalBias;
+    const midY = canvasRef.height * 0.3;
+    const loopY = canvasRef.height * 0.55;
+    const turnX = canvasRef.width / 2 + (fromLeft ? -90 : 90);
 
     return [
         { x: startX, y: canvasRef.height * 0.8 },
-        { x: midX, y: canvasRef.height * 0.3 },
-        { x: canvasRef.width / 2 + (fromLeft ? -120 : 120), y: canvasRef.height * 0.55 },
+        { x: midX, y: midY },
+        { x: turnX, y: loopY },
+        { x: turnX, y: finalY - 40 },
         { x: finalX, y: finalY }
     ];
 }
 
 function advanceEnemyAlongPath(enemy, delta) {
-    let dist = enemy.enterSpeed * delta;
-    while (dist > 0 && enemy.pathIndex < enemy.path.length - 1) {
-        const target = enemy.path[enemy.pathIndex + 1];
-        const dx = target.x - enemy.x;
-        const dy = target.y - enemy.y;
-        const len = Math.hypot(dx, dy);
+    let remaining = enemy.enterSpeed * delta;
 
-        if (len <= dist) {
-            enemy.x = target.x;
-            enemy.y = target.y;
-            enemy.pathIndex++;
-            dist -= len;
+    while (remaining > 0 && enemy.pathIndex < enemy.path.length - 1) {
+        const currentTarget = enemy.path[enemy.pathIndex + 1];
+        const dx = currentTarget.x - enemy.x;
+        const dy = currentTarget.y - enemy.y;
+        const distance = Math.hypot(dx, dy);
+
+        if (distance <= remaining) {
+            enemy.x = currentTarget.x;
+            enemy.y = currentTarget.y;
+            enemy.pathIndex += 1;
+            remaining -= distance;
         } else {
-            enemy.x += (dx / len) * dist;
-            enemy.y += (dy / len) * dist;
-            dist = 0;
+            const ratio = remaining / distance;
+            enemy.x += dx * ratio;
+            enemy.y += dy * ratio;
+            remaining = 0;
         }
     }
 
@@ -118,34 +127,48 @@ function advanceEnemyAlongPath(enemy, delta) {
 }
 
 function moveEnemyInFormation(enemy, delta) {
-    enemy.oscillationPhase += delta * 2.2;
-    enemy.x = enemy.finalX + Math.sin(enemy.oscillationPhase + enemy.waveOffset) * 14;
-    enemy.y = enemy.finalY + Math.sin(enemy.oscillationPhase * 0.6) * 7;
+    enemy.oscillationPhase += delta * 2;
+    enemy.x = enemy.finalX + Math.sin(enemy.oscillationPhase + enemy.waveOffset) * 12;
+    enemy.y = enemy.finalY + Math.sin(enemy.oscillationPhase * 0.5 + enemy.waveOffset) * 6;
+}
+
+export function killEnemy(enemy) {
+    if (enemy.state === 'dying') return;
+    enemy.state = 'dying';
+    enemy.dyingTimer = 0.3;
+    enemy.isAttacking = false;
 }
 
 export function updateEnemies(game, delta) {
     if (!game.enemies.length) {
         if (game.pendingWaveTimer > 0) {
             game.pendingWaveTimer -= delta;
-            if (game.pendingWaveTimer <= 0) spawnEnemyWave(game);
+            if (game.pendingWaveTimer <= 0) {
+                spawnEnemyWave(game);
+            }
         }
         return;
     }
 
     const alive = [];
-    for (const e of game.enemies) {
-        if (e.state === 'waiting') {
-            e.entryDelay -= delta;
-            if (e.entryDelay <= 0) e.state = 'entering';
-        } else if (e.state === 'entering') {
-            advanceEnemyAlongPath(e, delta);
-        } else if (e.state === 'formation') {
-            moveEnemyInFormation(e, delta);
-        } else if (e.state === 'dying') {
-            e.dyingTimer -= delta;
+    for (const enemy of game.enemies) {
+        if (enemy.state === 'waiting') {
+            enemy.entryDelay -= delta;
+            if (enemy.entryDelay <= 0) {
+                enemy.state = 'entering';
+            }
+        } else if (enemy.state === 'entering') {
+            advanceEnemyAlongPath(enemy, delta);
+        } else if (enemy.state === 'formation') {
+            moveEnemyInFormation(enemy, delta);
+        } else if (enemy.state === 'dying') {
+            enemy.dyingTimer -= delta;
         }
+        // Note: 'attacking' state is handled by enemy-collision module
 
-        if (e.state !== 'dying' || e.dyingTimer > 0) alive.push(e);
+        if (enemy.state !== 'dying' || enemy.dyingTimer > 0) {
+            alive.push(enemy);
+        }
     }
 
     game.enemies = alive;
@@ -158,36 +181,42 @@ export function updateEnemies(game, delta) {
 export function drawEnemies(enemies) {
     if (!ctxRef) return;
 
-    for (const e of enemies) {
+    for (const enemy of enemies) {
         ctxRef.save();
-        ctxRef.translate(e.x, e.y);
+        ctxRef.translate(enemy.x, enemy.y);
 
-        if (e.state === 'dying') {
-            const alpha = e.dyingTimer / 0.3;
-            ctxRef.globalAlpha = alpha;
+        if (enemy.state === 'dying') {
+            const progress = Math.max(enemy.dyingTimer / 0.3, 0);
+            ctxRef.globalAlpha = progress;
             ctxRef.fillStyle = '#fef08a';
-            ctxRef.shadowBlur = 30;
-            ctxRef.shadowColor = '#fef08a';
             ctxRef.beginPath();
-            ctxRef.arc(0, 0, e.size * (1 + (1 - alpha) * 2), 0, Math.PI * 2);
+            ctxRef.arc(0, 0, enemy.size * (1.5 - progress), 0, Math.PI * 2);
             ctxRef.fill();
-            ctxRef.shadowBlur = 0;
-        } else {
-            ctxRef.fillStyle = e.color;
-            ctxRef.shadowBlur = 10;
-            ctxRef.shadowColor = e.color;
-            ctxRef.beginPath();
-            ctxRef.moveTo(0, -e.size * 0.8);
-            ctxRef.lineTo(e.size, e.size * 0.9);
-            ctxRef.lineTo(-e.size, e.size * 0.9);
-            ctxRef.closePath();
-            ctxRef.fill();
-
-            ctxRef.fillStyle = '#ffffff';
-            ctxRef.fillRect(-e.size * 0.4, -2, e.size * 0.3, 4);
-            ctxRef.fillRect(e.size * 0.1, -2, e.size * 0.3, 4);
-            ctxRef.shadowBlur = 0;
+            ctxRef.restore();
+            continue;
         }
+
+        // Visual indicator for attacking enemies
+        if (enemy.state === 'attacking') {
+            ctxRef.fillStyle = '#ff0000';
+            ctxRef.globalAlpha = 0.3;
+            ctxRef.beginPath();
+            ctxRef.arc(0, 0, enemy.size * 1.5, 0, Math.PI * 2);
+            ctxRef.fill();
+            ctxRef.globalAlpha = 1.0;
+        }
+
+        ctxRef.fillStyle = enemy.color;
+        ctxRef.beginPath();
+        ctxRef.moveTo(0, -enemy.size * 0.8);
+        ctxRef.lineTo(enemy.size, enemy.size * 0.9);
+        ctxRef.lineTo(-enemy.size, enemy.size * 0.9);
+        ctxRef.closePath();
+        ctxRef.fill();
+
+        ctxRef.fillStyle = '#ffffff';
+        ctxRef.fillRect(-enemy.size * 0.4, 0, enemy.size * 0.3, 3);
+        ctxRef.fillRect(enemy.size * 0.1, 0, enemy.size * 0.3, 3);
         ctxRef.restore();
     }
 }
