@@ -26,7 +26,14 @@ const Game = {
     globalEnemyShotTimer: 0,
     canShoot: true,
     score: 0,
-    lives: 3
+    lives: 3,
+    level: 1,
+    pendingWaveTimer: 0,
+    showingLevelTransition: false,
+    levelTransitionTimer: 0,
+    baseFireRateDelay: 1.2,
+    baseFireRateVariance: 0.8,
+    gameOver: false  // ADD THIS LINE
 };
 
 const keys = new Set();
@@ -80,12 +87,14 @@ function updatePlayerShots(delta) {
 }
 
 function fireEnemyShot(enemy) {
-    if (Game.enemyShots.length >= 8) return; // Allow more bullets on screen
+    if (Game.enemyShots.length >= 8) return;
     const p = Game.player;
     const dx = p.x - enemy.x + (Math.random() * 80 - 40);
     const dy = p.y - enemy.y + (Math.random() * 60 - 30);
     const dist = Math.hypot(dx, dy) || 1;
-    const speed = 180;
+    const baseSpeed = 180;
+    const speedMultiplier = 1 + (Game.level - 1) * 0.5;
+    const speed = baseSpeed * speedMultiplier;
     Game.enemyShots.push({
         x: enemy.x,
         y: enemy.y + enemy.size,
@@ -96,20 +105,23 @@ function fireEnemyShot(enemy) {
 }
 
 function updateEnemyShots(delta) {
-    // *** SHOOT 3X MORE OFTEN ***
+    // Calculate fire rate multiplier based on level (10% faster each level)
+    const fireRateMultiplier = Math.pow(0.9, Game.level - 1); // 0.9 = 10% faster
+    const currentDelay = Game.baseFireRateDelay * fireRateMultiplier;
+    const currentVariance = Game.baseFireRateVariance * fireRateMultiplier;
+    
     Game.globalEnemyShotTimer -= delta;
     if (Game.globalEnemyShotTimer <= 0) {
         const shooters = Game.enemies.filter(e => e.state === 'formation');
-        if (shooters.length > 0 && Math.random() < 0.8) { // Increased from 0.3 to 0.8
+        if (shooters.length > 0 && Math.random() < 0.8) {
             const shooter = shooters[Math.floor(Math.random() * shooters.length)];
             fireEnemyShot(shooter);
         }
-        Game.globalEnemyShotTimer = Math.random() * 0.8 + 0.4; // Decreased from 2.5+1.2 to 0.8+0.4
+        Game.globalEnemyShotTimer = Math.random() * currentVariance + currentDelay;
     }
 
-    // Diving enemies shoot more too
     for (const e of Game.enemies) {
-        if (e.state === 'diving' && Math.random() < 0.08) { // Increased diving shot chance
+        if (e.state === 'diving' && Math.random() < 0.08) {
             fireEnemyShot(e);
         }
     }
@@ -170,12 +182,40 @@ function onEnemyKilled() {
 function onPlayerHit() {
     Game.lives--;
     if (Game.lives <= 0) {
-        alert(`GAME OVER!\nFinal Score: ${Game.score}`);
-        location.reload();
+        // Store game data for the game over screen
+        localStorage.setItem('finalScore', Game.score);
+        localStorage.setItem('finalLevel', Game.level);
+        
+        // Redirect to the game over screen
+        window.location.href = 'Demos/Score UI/index.html';
     }
 }
 
+function startNextLevel() {
+    Game.level++;
+    Game.showingLevelTransition = true;
+    Game.levelTransitionTimer = 2.0; // Show for 2 seconds
+    
+    // Clear any remaining enemy shots
+    Game.enemyShots = [];
+    
+    // Spawn the new wave after transition
+    setTimeout(() => {
+        spawnEnemyWave(Game);
+    }, 2000);
+}
+
 function update(delta) {
+    // Handle level transition screen
+    if (Game.gameOver) return;
+    if (Game.showingLevelTransition) {
+        Game.levelTransitionTimer -= delta;
+        if (Game.levelTransitionTimer <= 0) {
+            Game.showingLevelTransition = false;
+        }
+        return; // Don't update game during transition
+    }
+
     updatePlayer(delta);
     updateEnemies(Game, delta);
     updatePlayerShots(delta);
@@ -184,22 +224,69 @@ function update(delta) {
     checkPlayerShotCollisions(Game, onEnemyKilled);
     checkEnemyShotCollisions(Game, onPlayerHit);
     checkPlayerEnemyCollision(Game, onPlayerHit);
+
+    // Check if all enemies are dead and start next level
+    if (Game.enemies.length === 0 && !Game.showingLevelTransition) {
+        if (Game.pendingWaveTimer > 0) {
+            Game.pendingWaveTimer -= delta;
+            if (Game.pendingWaveTimer <= 0) {
+                startNextLevel();
+            }
+        } else {
+            Game.pendingWaveTimer = 1.5; // Short delay before level transition
+        }
+    }
 }
 
 function drawHUD() {
     ctx.fillStyle = '#ffffff';
     ctx.font = '24px monospace';
     ctx.fillText(`Score: ${Game.score}`, 20, 50);
+    ctx.fillText(`Level: ${Game.level}`, 20, 80);
     ctx.fillText(`Lives: ${Game.lives}`, canvas.width - 160, 50);
+}
+
+function drawLevelTransition() {
+    // Semi-transparent overlay
+    ctx.fillStyle = 'rgba(0, 8, 20, 0.85)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Level text
+    ctx.save();
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    
+    // Animated glow effect
+    const pulse = Math.sin(Date.now() * 0.005) * 0.3 + 0.7;
+    ctx.shadowBlur = 30 * pulse;
+    ctx.shadowColor = '#00ffff';
+    
+    ctx.fillStyle = '#00ffff';
+    ctx.font = 'bold 72px monospace';
+    ctx.fillText(`LEVEL ${Game.level}`, canvas.width / 2, canvas.height / 2 - 40);
+    
+    ctx.shadowBlur = 15;
+    ctx.font = '32px monospace';
+    ctx.fillStyle = '#ffffff';
+    ctx.fillText('GET READY!', canvas.width / 2, canvas.height / 2 + 40);
+    
+    ctx.restore();
 }
 
 function draw() {
     ctx.fillStyle = '#000814';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    drawEnemies(Game.enemies);
-    drawEnemyShots();
-    drawPlayerShots();
-    drawPlayer();
+    
+    if (Game.showingLevelTransition) {
+        drawPlayer();
+        drawLevelTransition();
+    } else {
+        drawEnemies(Game.enemies);
+        drawEnemyShots();
+        drawPlayerShots();
+        drawPlayer();
+    }
+    
     drawHUD();
 }
 
