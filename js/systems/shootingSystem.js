@@ -1,4 +1,4 @@
-// js/shooting.js
+// js/systems/shootingSystem.js
 let canvasRef = null;
 
 export function initShooting(canvas) {

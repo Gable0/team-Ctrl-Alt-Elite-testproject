@@ -164,7 +164,7 @@ export function updateEnemies(game, delta) {
         } else if (enemy.state === 'dying') {
             enemy.dyingTimer -= delta;
         }
-        // Note: 'attacking' state is handled by enemy-collision module
+        // Note: 'attacking' state is handled by systems/enemyAttack module
 
         if (enemy.state !== 'dying' || enemy.dyingTimer > 0) {
             alive.push(enemy);
