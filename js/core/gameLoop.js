@@ -43,12 +43,14 @@ function update(delta) {
         return;
     }
 
-    updatePlayer(Game, delta, canvas, barrierY, createPlayerShot);
     updateEnemies(Game, delta);
+    updatePlayer(Game, delta, canvas, barrierY, createPlayerShot);
     updatePlayerShots(Game, delta);
     updateEnemyShots(Game, delta);
 
-    Game.attackTimer = scheduleEnemyAttacks(Game.enemies, Game.player, delta, Game.attackTimer);
+    if (Game.playerShootingUnlocked) {
+        Game.attackTimer = scheduleEnemyAttacks(Game.enemies, Game.player, delta, Game.attackTimer);
+    }
     for (const enemy of Game.enemies) {
         if (enemy.state === 'attacking') {
             updateAttackingEnemy(enemy, delta);

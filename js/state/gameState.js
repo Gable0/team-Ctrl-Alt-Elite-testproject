@@ -7,7 +7,8 @@ export function createInitialGame() {
         lastTime: 0,
         attackTimer: { current: 3 },
         globalEnemyShotTimer: 0,
-        canShoot: true,
+        canShoot: false,
+        playerShootingUnlocked: false,
         score: 0,
         lives: 3,
         level: 1,
@@ -52,6 +53,9 @@ export function startNextLevel(game, spawnWaveCallback) {
     game.showingLevelTransition = true;
     game.levelTransitionTimer = 2.0;
     game.enemyShots = [];
+    game.playerShootingUnlocked = false;
+    game.canShoot = false;
+    game.globalEnemyShotTimer = game.baseFireRateDelay;
 
     setTimeout(() => {
         if (typeof spawnWaveCallback === 'function') {

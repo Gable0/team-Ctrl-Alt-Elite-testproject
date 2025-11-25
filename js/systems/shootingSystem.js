@@ -44,6 +44,12 @@ export function fireEnemyShot(enemy, game) {
 
 export function updateEnemyShots(game, delta) {
     if (!canvasRef) return;
+
+    if (!game.playerShootingUnlocked) {
+        // Prevent enemy fire until the player can respond
+        game.globalEnemyShotTimer = Math.max(game.globalEnemyShotTimer, 0);
+        return;
+    }
     
     const fireRateMultiplier = Math.pow(0.9, game.level - 1);
     const currentDelay = game.baseFireRateDelay * fireRateMultiplier;

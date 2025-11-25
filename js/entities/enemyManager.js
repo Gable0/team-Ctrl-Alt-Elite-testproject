@@ -31,6 +31,9 @@ export function spawnEnemyWave(game) {
     let index = 0;
     game.enemies = [];
     game.pendingWaveTimer = 0;
+    game.playerShootingUnlocked = false;
+    game.canShoot = false;
+    game.globalEnemyShotTimer = game.baseFireRateDelay;
 
     for (let row = 0; row < rows; row++) {
         for (let col = 0; col < columns; col++) {
@@ -141,12 +144,6 @@ export function killEnemy(enemy) {
 
 export function updateEnemies(game, delta) {
     if (!game.enemies.length) {
-        if (game.pendingWaveTimer > 0) {
-            game.pendingWaveTimer -= delta;
-            if (game.pendingWaveTimer <= 0) {
-                spawnEnemyWave(game);
-            }
-        }
         return;
     }
 
@@ -173,9 +170,17 @@ export function updateEnemies(game, delta) {
 
     game.enemies = alive;
 
-    if (!game.enemies.length) {
-        game.pendingWaveTimer = 2;
+    if (!game.playerShootingUnlocked && game.enemies.length > 0) {
+        const allEnemiesReady = game.enemies.every(enemy =>
+            enemy.state !== 'waiting' && enemy.state !== 'entering'
+        );
+
+        if (allEnemiesReady) {
+            game.playerShootingUnlocked = true;
+            game.canShoot = true;
+        }
     }
+
 }
 
 export function drawEnemies(enemies) {

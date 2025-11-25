@@ -21,7 +21,7 @@ export function updatePlayer(game, delta, canvas, barrierY, createPlayerShot) {
     player.x = Math.max(player.size, Math.min(canvas.width - player.size, player.x));
     player.y = Math.max(barrierY + player.size, Math.min(canvas.height - player.size, player.y));
 
-    if (isKeyPressed('Space') && game.canShoot) {
+    if (game.playerShootingUnlocked && isKeyPressed('Space') && game.canShoot) {
         game.playerShots.push(createPlayerShot(player.x, player.y - player.size));
         game.canShoot = false;
         setTimeout(() => {
