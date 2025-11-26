@@ -18,7 +18,8 @@ export function createInitialGame() {
         baseFireRateDelay: 1.2,
         baseFireRateVariance: 0.8,
         gameOver: false,
-        invincibilityTimer: 0
+        invincibilityTimer: 0,
+        paused: false  // NEW: Track pause state
     };
 }
 

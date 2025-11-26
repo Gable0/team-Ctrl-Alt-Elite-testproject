@@ -21,6 +21,7 @@ import {
     updateLevelTransition
 } from '../state/gameState.js';
 import { drawHUD, drawLevelTransition } from '../ui/hud.js';
+import { initPauseMenu } from '../ui/pauseMenu.js';
 
 const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');
@@ -34,8 +35,10 @@ initShooting(canvas);
 const Game = createInitialGame();
 Game.player = createPlayer(canvas);
 
+initPauseMenu(Game);
+
 function update(delta) {
-    if (Game.gameOver) return;
+    if (Game.gameOver || Game.paused) return;
 
     updateInvincibility(Game, delta);
 
