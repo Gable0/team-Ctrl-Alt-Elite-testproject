@@ -11,20 +11,18 @@ export function initPauseMenu(game) {
             <div class="pause-menu-content">
                 <h2>PAUSED</h2>
                 <button id="resumeButton" class="pause-menu-button">Resume</button>
-                <button id="settingsButton" class="pause-menu-button">Settings</button>
+                <button id="restartButton" class="pause-menu-button">Restart</button>
                 <button id="exitButton" class="pause-menu-button">Exit to Menu</button>
             </div>
         `;
         document.body.appendChild(pauseMenuElement);
 
-        // Add event listeners
         document.getElementById('resumeButton').addEventListener('click', () => {
             togglePause(game);
         });
 
-        document.getElementById('settingsButton').addEventListener('click', () => {
-            // Navigate to settings (you can implement this)
-            window.location.href = 'settings.html';
+        document.getElementById('restartButton').addEventListener('click', () => {
+            window.location.href = 'index.html';
         });
 
         document.getElementById('exitButton').addEventListener('click', () => {
