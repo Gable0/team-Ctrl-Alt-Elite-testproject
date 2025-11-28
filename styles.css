@@ -62,14 +62,6 @@ homepage-galaga p{
     padding: 0;
 }
 
-.settings-btn {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    font-size: 3rem;
-    text-decoration: none;
-    transition: transform 0.2s ease;
-}
 
 .shop-btn, .skins-btn {
     color: blue;
@@ -241,4 +233,91 @@ canvas { display: block; margin: 0 auto; background: #050505; border: 1px solid 
 .pause-menu-button:nth-child(4):hover {
     background: linear-gradient(180deg, #ff6666 0%, #ee4444 100%);
 
+}
+
+.settings-btn {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    font-size: 3rem;
+    background: none;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    z-index: 1000;
+    transition: transform 0.2s ease;
+}
+
+.settings-btn:hover {
+    transform: scale(1.1);
+}
+
+settings-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(0.6rem);
+    z-index: 999;
+}
+
+.settings-modal.hidden {
+    display: none;
+}
+
+.settings-content {
+    background: linear-gradient(180deg, rgba(20,0,40,0.95), rgba(0,0,0,0.95));
+    border: 0.25rem solid #00ffff;
+    border-radius: 0.5rem;
+    padding: 2rem 3rem;
+    text-align: center;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    box-shadow: 0 0 2.5rem rgba(0, 255, 255, 0.4);
+}
+
+.settings-content h2 {
+    font-family: 'Jersey 10', monospace, sans-serif;
+    font-size: 3rem;
+    color: #00ffff;
+    text-shadow: 0 0 1rem #00ffff;
+}
+
+.settings-content label {
+    display: flex;
+    flex-direction: column;
+    font-size: 1.5rem;
+    text-align: left;
+    color: #fff;
+}
+
+.settings-content input,
+.settings-content select {
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    font-size: 1.25rem;
+    border-radius: 0.25rem;
+    border: none;
+}
+
+.settings-content .close-settings {
+    margin-top: 1rem;
+    padding: 0.75rem 1.5rem;
+    font-size: 1.5rem;
+    border: none;
+    background: #0ff;
+    color: #000;
+    cursor: pointer;
+    border-radius: 0.25rem;
+    transition: all 0.1s;
+}
+
+.settings-content .close-settings:hover {
+    background: #0aa;
 }
