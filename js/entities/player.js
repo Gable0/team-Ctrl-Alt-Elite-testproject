@@ -30,7 +30,7 @@ export function updatePlayer(game, delta, canvas, barrierY, createPlayerShot) {
     }
 }
 
-export function drawPlayer(ctx, player, invincibilityTimer) {
+export function drawPlayer(ctx, player, invincibilityTimer, game) {
     if (!player) return;
 
     ctx.save();
@@ -46,13 +46,19 @@ export function drawPlayer(ctx, player, invincibilityTimer) {
     ctx.fillStyle = '#5eead4';
     ctx.shadowBlur = 20;
     ctx.shadowColor = '#5eead4';
-    ctx.beginPath();
-    ctx.moveTo(0, -player.size);
-    ctx.lineTo(player.size * 0.7, player.size * 0.8);
-    ctx.lineTo(0, player.size * 0.4);
-    ctx.lineTo(-player.size * 0.7, player.size * 0.8);
-    ctx.closePath();
-    ctx.fill();
+    if (game.activeSkin === 'squarePack') { // CHANGED: Check activeSkin
+        // Square skin
+        ctx.fillRect(-player.size / 2, -player.size / 2, player.size, player.size);
+    } else {
+        // Original triangle
+        ctx.beginPath();
+        ctx.moveTo(0, -player.size);
+        ctx.lineTo(player.size * 0.7, player.size * 0.8);
+        ctx.lineTo(0, player.size * 0.4);
+        ctx.lineTo(-player.size * 0.7, player.size * 0.8);
+        ctx.closePath();
+        ctx.fill();
+    }
     ctx.shadowBlur = 0;
     ctx.restore();
 }

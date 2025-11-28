@@ -1,3 +1,5 @@
+import { getActiveSkin } from '../skins/skinsManager.js'; // FIXED: Relative path from js/state/
+
 export function createInitialGame() {
     return {
         player: null,
@@ -19,7 +21,8 @@ export function createInitialGame() {
         baseFireRateVariance: 0.8,
         gameOver: false,
         invincibilityTimer: 0,
-        paused: false  // NEW: Track pause state
+        paused: false,
+        activeSkin: getActiveSkin() // NEW: Active skin from manager (fixes unequip)
     };
 }
 

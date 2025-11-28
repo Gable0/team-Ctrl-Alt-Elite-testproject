@@ -1,7 +1,7 @@
 import { initEnemyModule, spawnEnemyWave, updateEnemies, drawEnemies } from '../entities/enemyManager.js';
 import { createPlayer, updatePlayer, drawPlayer } from '../entities/player.js';
 import { initInput } from './input.js';
-import { 
+import {
     initShooting,
     updatePlayerShots,
     updateEnemyShots,
@@ -75,13 +75,13 @@ function draw() {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     if (Game.showingLevelTransition) {
-        drawPlayer(ctx, Game.player, Game.invincibilityTimer);
+        drawPlayer(ctx, Game.player, Game.invincibilityTimer, Game);
         drawLevelTransition(ctx, canvas, Game);
     } else {
-        drawEnemies(Game.enemies);
+        drawEnemies(Game.enemies, Game);
         drawEnemyShots(ctx, Game.enemyShots);
         drawPlayerShots(ctx, Game.playerShots);
-        drawPlayer(ctx, Game.player, Game.invincibilityTimer);
+        drawPlayer(ctx, Game.player, Game.invincibilityTimer, Game);
     }
 
     drawHUD(ctx, canvas, Game);

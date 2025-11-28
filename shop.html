@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RetroGa Shop</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Doto:wght@100..900&family=Nabla&family=Press+Start+2P&family=Tourney:ital,wght@0,100..900;1,100..900&family=Jersey+10&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<shop-container>
+    <shop-header>
+        <h1>RetroGa Shop</h1>
+        <p>Unlock new looks for your ship and the enemy fleet!</p>
+    </shop-header>
+
+    <section class="skins-grid">
+        <article class="skin-card">
+            <h3>Sample Item</h3>
+            <p>Sample Item</p>
+            <button class="purchase-btn">Buy - 500 pts</button>
+        </article>
+        <article class="skin-card">
+            <h3>Sample Item</h3>
+            <p>Sample Item</p>
+            <button class="purchase-btn">Buy - 500 pts</button>
+        </article>
+        <article class="skin-card">
+            <h3>Sample Item</h3>
+            <p>Sample Item</p>
+            <button class="purchase-btn">Buy - 500 pts</button>
+        </article>
+        <article class="skin-card">
+            <h3>Sample Item</h3>
+            <p>Sample Item</p>
+            <button class="purchase-btn">Buy - 500 pts</button>
+        </article>
+        <article class="skin-card">
+            <h3>Sample Item</h3>
+            <p>Sample Item</p>
+            <button class="purchase-btn">Buy - 500 pts</button>
+        </article>
+        <article class="skin-card">
+            <h3>Sample Item</h3>
+            <p>Sample Item</p>
+            <button class="purchase-btn">Buy - 500 pts</button>
+        </article>
+        <article class="skin-card">
+            <h3>Sample Item</h3>
+            <p>Sample Item</p>
+            <button class="purchase-btn">Buy - 500 pts</button>
+        </article>
+        <article class="skin-card">
+            <h3>Sample Item</h3>
+            <p>Sample Item</p>
+            <button class="purchase-btn">Buy - 500 pts</button>
+        </article>
+        <article class="skin-card">
+            <h3>Square Pack</h3>
+            <p>Blocky vibes for ships and foes.</p>
+            <button class="purchase-btn" id="square-pack-btn">Buy - 800 pts</button>
+        </article>
+    </section>
+
+    <button id="back-homepage" onclick="location.href='homepage.html'">Back to Home</button>
+</shop-container>
+
+<script type="module">
+    import { injectSettings } from './js/ui/settingsComponent.js';
+    injectSettings();
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const btn = document.getElementById('square-pack-btn');
+        if (localStorage.getItem('squarePackOwned')) {
+            btn.disabled = true;
+            btn.textContent = 'Purchased';
+        } else {
+            btn.addEventListener('click', () => {
+                localStorage.setItem('squarePackOwned', 'true');
+                btn.disabled = true;
+                btn.textContent = 'Purchased';
+            });
+        }
+    });
+</script>
+</body>
+</html>

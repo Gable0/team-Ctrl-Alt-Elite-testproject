@@ -183,7 +183,7 @@ export function updateEnemies(game, delta) {
 
 }
 
-export function drawEnemies(enemies) {
+export function drawEnemies(enemies, game) {
     if (!ctxRef) return;
 
     for (const enemy of enemies) {
@@ -212,12 +212,18 @@ export function drawEnemies(enemies) {
         }
 
         ctxRef.fillStyle = enemy.color;
-        ctxRef.beginPath();
-        ctxRef.moveTo(0, -enemy.size * 0.8);
-        ctxRef.lineTo(enemy.size, enemy.size * 0.9);
-        ctxRef.lineTo(-enemy.size, enemy.size * 0.9);
-        ctxRef.closePath();
-        ctxRef.fill();
+        if (game.activeSkin === 'squarePack') { // CHANGED: Check activeSkin
+            // Square skin
+            ctxRef.fillRect(-enemy.size / 2, -enemy.size / 2, enemy.size, enemy.size);
+        } else {
+            // Original triangle
+            ctxRef.beginPath();
+            ctxRef.moveTo(0, -enemy.size * 0.8);
+            ctxRef.lineTo(enemy.size, enemy.size * 0.9);
+            ctxRef.lineTo(-enemy.size, enemy.size * 0.9);
+            ctxRef.closePath();
+            ctxRef.fill();
+        }
 
         ctxRef.fillStyle = '#ffffff';
         ctxRef.fillRect(-enemy.size * 0.4, 0, enemy.size * 0.3, 3);

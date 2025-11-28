@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RetroGa Skins Library</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Doto:wght@100..900&family=Nabla&family=Press+Start+2P&family=Tourney:ital,wght@0,100..900;1,100..900&family=Jersey+10&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<skins-container>
+    <skins-header>
+        <h1>RetroGa Skins Library</h1>
+        <p>Equip your favorite looks for ships and enemies!</p>
+    </skins-header>
+
+    <section class="skins-grid" id="skins-grid">
+        <!-- Dynamically populated by JS -->
+    </section>
+
+    <button id="back-shop" onclick="location.href='shop.html'">Back to Shop</button>
+    <button id="back-homepage" onclick="location.href='homepage.html'">Back to Home</button>
+</skins-container>
+
+<script type="module">
+    import { injectSettings } from './js/ui/settingsComponent.js';
+    injectSettings();
+</script>
+<script type="module">
+    import { getActiveSkin, isSkinOwned, equipSkin } from './js/skins/skinsManager.js';
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const grid = document.getElementById('skins-grid');
+        const activeSkin = getActiveSkin();
+
+        // Sample owned skins (extend ownedSkins in manager for more)
+        if (isSkinOwned('squarePack')) {
+            const card = document.createElement('article');
+            card.className = 'skin-card';
+            card.innerHTML = `
+                <h3>Square Pack</h3>
+                <p>Blocky vibes for ships and foes.</p>
+                <button class="equip-btn" id="square-pack-equip">${activeSkin === 'squarePack' ? 'Equipped' : 'Equip'}</button>
+            `;
+            grid.appendChild(card);
+
+            const btn = document.getElementById('square-pack-equip');
+            btn.addEventListener('click', () => {
+                equipSkin(activeSkin === 'squarePack' ? 'default' : 'squarePack');
+                location.reload(); // Refresh UI
+            });
+        } else {
+            const emptyMsg = document.createElement('p');
+            emptyMsg.textContent = 'No skins owned yet. Visit the shop!';
+            emptyMsg.style.textAlign = 'center';
+            emptyMsg.style.gridColumn = '1 / -1';
+            grid.appendChild(emptyMsg);
+        }
+    });
+</script>
+</body>
+</html>
