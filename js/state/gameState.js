@@ -1,6 +1,7 @@
 import { getActiveSkin } from '../skins/skinsManager.js'; // FIXED: Relative path from js/state/
 
 export function createInitialGame() {
+    const difficulty = localStorage.getItem('gameDifficulty') || 'medium';
     return {
         player: null,
         enemies: [],
@@ -22,7 +23,8 @@ export function createInitialGame() {
         gameOver: false,
         invincibilityTimer: 0,
         paused: false,
-        activeSkin: getActiveSkin() // NEW: Active skin from manager (fixes unequip)
+        activeSkin: getActiveSkin(),
+        difficulty: difficulty
     };
 }
 

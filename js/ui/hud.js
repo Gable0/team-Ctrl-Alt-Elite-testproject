@@ -1,5 +1,13 @@
 export function drawHUD(ctx, canvas, game) {
-    ctx.fillStyle = '#ffffff';
+    let scoreColor = '#ffffff';
+    if (game.difficulty === 'easy') {
+        scoreColor = '#00ff00'; // green for easy
+    } else if (game.difficulty === 'medium') {
+        scoreColor = '#ffff00'; // yellow for medium
+    } else if (game.difficulty === 'hard') {
+        scoreColor = '#ff0000'; // red for hard
+    }
+    ctx.fillStyle = scoreColor;
     ctx.font = '24px monospace';
     ctx.fillText(`Score: ${game.score}`, 20, 50);
     ctx.fillText(`Level: ${game.level}`, 20, 80);

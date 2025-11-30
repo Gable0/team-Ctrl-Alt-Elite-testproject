@@ -10,17 +10,31 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<difficulty-buttons>
-    <h1 class="difficulty-header">Choose a Game Mode</h1>
+    <difficulty-buttons>
+        <h1 class="difficulty-header">Choose a Game Mode</h1>
+        <button id="easy-difficulty">Easy</button>
+        <button id="medium-difficulty">Medium</button>
+        <button id="hard-difficulty">Hard</button>
 
-    <button id="easy-difficulty" onclick="location.href='index.html'">Easy</button>
-    <button id="medium-difficulty" onclick="location.href='index.html'">Medium</button>
-    <button id="hard-difficulty" onclick="location.href='index.html'">Hard</button>
 
-    <button id="back-homepage" onclick="location.href='homepage.html'">Back</button>
-</difficulty-buttons>
-<script type="module">
-    import { injectSettings } from './js/ui/settingsComponent.js';
-    injectSettings();
-</script>
+        <button id="back-homepage" onclick="location.href='homepage.html'">Back</button>
+    </difficulty-buttons>
+    <script type="module">
+        import { injectSettings } from './js/ui/settingsComponent.js';
+        injectSettings();
+    </script>
+    <script>
+        document.getElementById('easy-difficulty').addEventListener('click', () => {
+            localStorage.setItem('gameDifficulty', 'easy');
+            location.href = 'index.html';
+        });
+        document.getElementById('medium-difficulty').addEventListener('click', () => {
+            localStorage.setItem('gameDifficulty', 'medium');
+            location.href = 'index.html';
+        });
+        document.getElementById('hard-difficulty').addEventListener('click', () => {
+            localStorage.setItem('gameDifficulty', 'hard');
+            location.href = 'index.html';
+        });
+    </script>
 </body>
