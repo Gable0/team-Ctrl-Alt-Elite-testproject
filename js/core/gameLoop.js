@@ -22,6 +22,7 @@ import {
 } from '../state/gameState.js';
 import { drawHUD, drawLevelTransition } from '../ui/hud.js';
 import { initPauseMenu } from '../ui/pauseMenu.js';
+import { spawnPowerUp, updatePowerUps, drawPowerUps } from '../systems/powerUps.js';
 
 const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');
@@ -50,6 +51,7 @@ function update(delta) {
     updatePlayer(Game, delta, canvas, barrierY, createPlayerShot);
     updatePlayerShots(Game, delta);
     updateEnemyShots(Game, delta);
+    updatePowerUps(Game, delta, canvas);
 
     if (Game.playerShootingUnlocked) {
         Game.attackTimer = scheduleEnemyAttacks(Game.enemies, Game.player, delta, Game.attackTimer);
@@ -60,7 +62,10 @@ function update(delta) {
         }
     }
 
-    checkPlayerShotCollisions(Game, () => handleEnemyKilled(Game));
+    checkPlayerShotCollisions(Game, (enemy) => {
+        handleEnemyKilled(Game, enemy);
+        spawnPowerUp(Game, enemy);
+    });
 
     if (Game.invincibilityTimer <= 0) {
         checkEnemyShotCollisions(Game, () => handlePlayerHit(Game));
@@ -81,6 +86,7 @@ function draw() {
         drawEnemies(Game.enemies, Game);
         drawEnemyShots(ctx, Game.enemyShots);
         drawPlayerShots(ctx, Game.playerShots);
+        drawPowerUps(ctx, Game.powerUps);
         drawPlayer(ctx, Game.player, Game.invincibilityTimer, Game);
     }
 

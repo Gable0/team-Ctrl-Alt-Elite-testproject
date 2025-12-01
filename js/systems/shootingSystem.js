@@ -5,15 +5,21 @@ export function initShooting(canvas) {
     canvasRef = canvas;
 }
 
-export function createPlayerShot(x, y) {
+export function createPlayerShot(x, y, angle = 0) {
+    const speed = 800;
     return {
         x: x,
         y: y - 20,
-        speed: 800,
+        vx: Math.sin(angle) * speed,
+        vy: -Math.cos(angle) * speed,
+        speed: speed,
         active: true,
         update(delta) {
-            this.y -= this.speed * delta;
-            if (this.y < -50) this.active = false;
+            this.x += this.vx * delta;
+            this.y += this.vy * delta;
+            if (this.y < -50 || this.x < -50 || this.x > canvasRef.width + 50) {
+                this.active = false;
+            }
         }
     };
 }

@@ -84,6 +84,47 @@ homepage-galaga p{
     padding: 0;
 }
 
+.options-container {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2rem;
+}
+
+.option-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    background: rgba(255, 0, 64, 0.1);
+    border: 2px solid #ff0040;
+    border-radius: 1rem;
+    padding: 2rem 3rem;
+    text-decoration: none;
+    color: #ff0040;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 1rem rgba(255, 0, 64, 0.3);
+    min-width: 150px;
+}
+
+.option-btn:hover {
+    background: rgba(255, 0, 64, 0.2);
+    box-shadow: 0 0 2rem rgba(255, 0, 64, 0.6);
+    transform: translateY(-5px);
+}
+
+.option-icon {
+    font-size: 3rem;
+}
+
+.option-text {
+    font-size: 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1rem;
+}
+
 .shop-btn, .skins-btn {
     color: blue;
     text-decoration: none;

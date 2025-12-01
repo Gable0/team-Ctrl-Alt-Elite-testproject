@@ -7,6 +7,7 @@ export function createInitialGame() {
         enemies: [],
         playerShots: [],
         enemyShots: [],
+        powerUps: [],
         lastTime: 0,
         attackTimer: { current: 3 },
         globalEnemyShotTimer: 0,
@@ -24,11 +25,12 @@ export function createInitialGame() {
         invincibilityTimer: 0,
         paused: false,
         activeSkin: getActiveSkin(),
-        difficulty: difficulty
+        difficulty: difficulty,
+        tripleShotTimer: 0
     };
 }
 
-export function handleEnemyKilled(game, points = 100) {
+export function handleEnemyKilled(game, enemy, points = 100) {
     game.score += points;
 }
 

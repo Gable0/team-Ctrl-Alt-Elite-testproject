@@ -1,0 +1,91 @@
+// js/systems/powerUps.js
+
+export function spawnPowerUp(game, enemy) {
+    // 25% chance to drop a power-up
+    if (Math.random() < 0.25) {
+        game.powerUps.push({
+            x: enemy.x,
+            y: enemy.y,
+            size: 12,
+            speed: 80,
+            active: true
+        });
+    }
+}
+
+export function updatePowerUps(game, delta, canvas) {
+    // Update power-up positions
+    for (const powerUp of game.powerUps) {
+        powerUp.y += powerUp.speed * delta;
+        if (powerUp.y > canvas.height + 50) powerUp.active = false;
+    }
+    game.powerUps = game.powerUps.filter(p => p.active);
+
+    // Check power-up collisions with player
+    for (let i = game.powerUps.length - 1; i >= 0; i--) {
+        const powerUp = game.powerUps[i];
+        const dx = game.player.x - powerUp.x;
+        const dy = game.player.y - powerUp.y;
+        const distance = Math.hypot(dx, dy);
+        if (distance < game.player.size + powerUp.size) {
+            game.tripleShotTimer = 30;
+            game.powerUps.splice(i, 1);
+        }
+    }
+
+    // Update triple shot timer
+    if (game.tripleShotTimer > 0) {
+        game.tripleShotTimer -= delta;
+        if (game.tripleShotTimer < 0) game.tripleShotTimer = 0;
+    }
+}
+
+export function drawPowerUps(ctx, powerUps) {
+    for (const powerUp of powerUps) {
+        ctx.save();
+        ctx.translate(powerUp.x, powerUp.y);
+
+        // Outer glow circle
+        ctx.fillStyle = '#fbbf24';
+        ctx.shadowBlur = 15;
+        ctx.shadowColor = '#fbbf24';
+        ctx.beginPath();
+        ctx.arc(0, 0, powerUp.size, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.shadowBlur = 0;
+
+        // Inner darker circle for contrast
+        ctx.fillStyle = '#d97706';
+        ctx.beginPath();
+        ctx.arc(0, 0, powerUp.size * 0.85, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Triple shot icon - white with black outline for clarity
+        const iconSize = powerUp.size * 0.7;
+
+        // Draw white strokes first (thicker)
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 2.5;
+        ctx.lineCap = 'round';
+
+        // Left laser
+        ctx.beginPath();
+        ctx.moveTo(-iconSize * 0.4, iconSize * 0.4);
+        ctx.lineTo(-iconSize * 0.25, -iconSize * 0.5);
+        ctx.stroke();
+
+        // Center laser
+        ctx.beginPath();
+        ctx.moveTo(0, iconSize * 0.5);
+        ctx.lineTo(0, -iconSize * 0.6);
+        ctx.stroke();
+
+        // Right laser
+        ctx.beginPath();
+        ctx.moveTo(iconSize * 0.4, iconSize * 0.4);
+        ctx.lineTo(iconSize * 0.25, -iconSize * 0.5);
+        ctx.stroke();
+
+        ctx.restore();
+    }
+}

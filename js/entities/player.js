@@ -22,7 +22,16 @@ export function updatePlayer(game, delta, canvas, barrierY, createPlayerShot) {
     player.y = Math.max(barrierY + player.size, Math.min(canvas.height - player.size, player.y));
 
     if (game.playerShootingUnlocked && isKeyPressed('Space') && game.canShoot) {
-        game.playerShots.push(createPlayerShot(player.x, player.y - player.size));
+        if (game.tripleShotTimer > 0) {
+            // Triple shot - shotgun pattern
+            const angleOffset = Math.PI / 10; // 18 degrees
+            game.playerShots.push(createPlayerShot(player.x, player.y - player.size, -angleOffset));
+            game.playerShots.push(createPlayerShot(player.x, player.y - player.size, 0));
+            game.playerShots.push(createPlayerShot(player.x, player.y - player.size, angleOffset));
+        } else {
+            // Normal single shot
+            game.playerShots.push(createPlayerShot(player.x, player.y - player.size, 0));
+        }
         game.canShoot = false;
         setTimeout(() => {
             game.canShoot = true;
