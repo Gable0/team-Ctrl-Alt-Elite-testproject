@@ -1,0 +1,19 @@
+{
+  "name": "sound-testing-game",
+  "version": "1.0.0",
+  "description": "A simple sound testing game that plays shooting sounds.",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "build": "webpack --mode production"
+  },
+  "dependencies": {
+    "howler": "^2.2.3"
+  },
+  "devDependencies": {
+    "webpack": "^5.64.4",
+    "webpack-cli": "^4.9.1"
+  },
+  "author": "",
+  "license": "ISC"
+}
