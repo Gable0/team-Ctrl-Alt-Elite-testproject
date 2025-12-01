@@ -1,4 +1,6 @@
 // js/systems/shootingSystem.js
+import { audioManager } from './audioManager.js';
+
 let canvasRef = null;
 
 export function initShooting(canvas) {
@@ -6,6 +8,9 @@ export function initShooting(canvas) {
 }
 
 export function createPlayerShot(x, y, angle = 0) {
+    // Play shooting sound when creating a shot
+    audioManager.playSound('shoot');
+    
     const speed = 800;
     return {
         x: x,
@@ -52,7 +57,6 @@ export function updateEnemyShots(game, delta) {
     if (!canvasRef) return;
 
     if (!game.playerShootingUnlocked) {
-        // Prevent enemy fire until the player can respond
         game.globalEnemyShotTimer = Math.max(game.globalEnemyShotTimer, 0);
         return;
     }

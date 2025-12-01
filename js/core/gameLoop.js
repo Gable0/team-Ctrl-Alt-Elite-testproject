@@ -24,16 +24,19 @@ import { drawHUD, drawLevelTransition } from '../ui/hud.js';
 import { initPauseMenu } from '../ui/pauseMenu.js';
 import { spawnPowerUp, updatePowerUps, drawPowerUps } from '../systems/powerUps.js';
 import { initBackground, updateBackground, drawBackground } from './background.js';
+import { initAudio } from '../systems/audioManager.js';
 
 const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');
 const barrierY = canvas.height * 0.75;
 
+// Initialize all systems
 initInput();
 initEnemyModule(canvas, ctx);
 initEnemyAttack(canvas);
 initShooting(canvas);
 initBackground(canvas);
+initAudio(); // Initialize audio system
 
 const Game = createInitialGame();
 Game.player = createPlayer(canvas);
