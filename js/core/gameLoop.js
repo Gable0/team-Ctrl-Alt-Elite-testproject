@@ -23,6 +23,7 @@ import {
 import { drawHUD, drawLevelTransition } from '../ui/hud.js';
 import { initPauseMenu } from '../ui/pauseMenu.js';
 import { spawnPowerUp, updatePowerUps, drawPowerUps } from '../systems/powerUps.js';
+import { initBackground, updateBackground, drawBackground } from './background.js';
 
 const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');
@@ -32,6 +33,7 @@ initInput();
 initEnemyModule(canvas, ctx);
 initEnemyAttack(canvas);
 initShooting(canvas);
+initBackground(canvas);
 
 const Game = createInitialGame();
 Game.player = createPlayer(canvas);
@@ -47,6 +49,7 @@ function update(delta) {
         return;
     }
 
+    updateBackground(delta, canvas);
     updateEnemies(Game, delta);
     updatePlayer(Game, delta, canvas, barrierY, createPlayerShot);
     updatePlayerShots(Game, delta);
@@ -76,8 +79,7 @@ function update(delta) {
 }
 
 function draw() {
-    ctx.fillStyle = '#000814';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    drawBackground(ctx, canvas);
 
     if (Game.showingLevelTransition) {
         drawPlayer(ctx, Game.player, Game.invincibilityTimer, Game);

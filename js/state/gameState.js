@@ -61,6 +61,8 @@ export function startNextLevel(game, spawnWaveCallback) {
     game.showingLevelTransition = true;
     game.levelTransitionTimer = 2.0;
     game.enemyShots = [];
+    game.powerUps = [];
+    game.tripleShotTimer = 0;
     game.playerShootingUnlocked = false;
     game.canShoot = false;
     game.globalEnemyShotTimer = game.baseFireRateDelay;
