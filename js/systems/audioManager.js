@@ -5,6 +5,10 @@ class AudioManager {
         this.sounds = {};
         this.enabled = true;
         this.volume = 0.5;
+        // Read fun mode from localStorage on initialization
+        const savedFunMode = localStorage.getItem('funMode');
+        this.funMode = savedFunMode === 'true';
+        console.log(`AudioManager initialized - Fun mode: ${this.funMode}`);
     }
 
     loadSound(name, path) {
@@ -20,15 +24,57 @@ class AudioManager {
     }
 
     playSound(name) {
-        if (!this.enabled || !this.sounds[name]) return;
+        if (!this.enabled) {
+            console.log('Audio is disabled');
+            return;
+        }
+        
+        if (!this.sounds[name]) {
+            console.warn(`❌ Sound not found: ${name}`);
+            console.log('Available sounds:', Object.keys(this.sounds));
+            return;
+        }
+        
+        console.log(`▶️ Actually playing sound: ${name}`);
         
         try {
             const sound = this.sounds[name].cloneNode();
             sound.volume = this.volume;
-            sound.play().catch(err => console.warn(`Failed to play: ${name}`, err));
+            sound.play()
+                .then(() => console.log(`✅ Successfully played: ${name}`))
+                .catch(err => console.warn(`❌ Failed to play: ${name}`, err));
         } catch (error) {
             console.error(`Error playing sound: ${name}`, error);
         }
+    }
+
+    playShootSound() {
+        // Check fun mode status every time
+        const localStorageValue = localStorage.getItem('funMode');
+        console.log(`📦 localStorage value for 'funMode': "${localStorageValue}"`);
+        console.log(`📦 Type: ${typeof localStorageValue}`);
+        
+        const currentFunMode = localStorageValue === 'true';
+        console.log(`📦 Comparison result (localStorageValue === 'true'): ${currentFunMode}`);
+        
+        this.funMode = currentFunMode; // Update internal state
+        
+        const soundName = this.funMode ? 'chloe-shoot' : 'shoot';
+        console.log(`🔫 Playing shoot sound: ${soundName} (fun mode: ${this.funMode})`);
+        this.playSound(soundName);
+    }
+
+    setFunMode(enabled) {
+        this.funMode = enabled;
+        localStorage.setItem('funMode', String(enabled));
+        console.log(`🎉 Fun mode ${enabled ? 'ENABLED' : 'DISABLED'} - Next shot will use ${enabled ? 'Chloe-shooting' : 'normal shoot'} sound`);
+    }
+
+    getFunMode() {
+        // Always read from localStorage to ensure consistency
+        const savedFunMode = localStorage.getItem('funMode') === 'true';
+        this.funMode = savedFunMode;
+        return this.funMode;
     }
 }
 
@@ -36,5 +82,8 @@ export const audioManager = new AudioManager();
 
 export function initAudio() {
     console.log('Initializing audio...');
-    audioManager.loadSound('shoot', 'assets/sounds/shoot.mp3');
+    // Load both shooting sounds - use absolute paths from root
+    audioManager.loadSound('shoot', '/assets/sounds/shoot.mp3');
+    audioManager.loadSound('chloe-shoot', '/assets/sounds/Chloe-shooting.mp3');
+    console.log(`Audio initialized with fun mode: ${audioManager.getFunMode()}`);
 }

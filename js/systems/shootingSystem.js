@@ -8,8 +8,9 @@ export function initShooting(canvas) {
 }
 
 export function createPlayerShot(x, y, angle = 0) {
-    // Play shooting sound when creating a shot
-    audioManager.playSound('shoot');
+    // Play shooting sound (will automatically use fun mode if enabled)
+    console.log('🎯 createPlayerShot called - about to play shoot sound');
+    audioManager.playShootSound();
     
     const speed = 800;
     return {

@@ -1,3 +1,4 @@
+// js/ui/settingsComponent.js
 export function injectSettings() {
     // Create settings button
     const settingsBtn = document.createElement('button');
@@ -26,6 +27,12 @@ export function injectSettings() {
                     <option value="fr">Français</option>
                 </select>
             </label>
+            <div class="fun-mode-container">
+                <label class="fun-mode-label">
+                    Fun Mode (Chloe's Shooting Sound) 🎉
+                </label>
+                <button class="fun-mode-btn" id="fun-mode-toggle">Have Some Fun!</button>
+            </div>
             <button class="close-settings">Close</button>
         </div>
     `;
@@ -34,7 +41,34 @@ export function injectSettings() {
     document.body.appendChild(settingsBtn);
     document.body.appendChild(modal);
 
+    // Import audio manager dynamically to toggle fun mode
+    import('../systems/audioManager.js').then(module => {
+        const { audioManager } = module;
+        
+        const funModeBtn = document.getElementById('fun-mode-toggle');
+        
+        // Set initial button state
+        updateFunModeButton(funModeBtn, audioManager.getFunMode());
+        
+        // Toggle fun mode on click
+        funModeBtn.addEventListener('click', () => {
+            const newFunMode = !audioManager.getFunMode();
+            audioManager.setFunMode(newFunMode);
+            updateFunModeButton(funModeBtn, newFunMode);
+        });
+    });
+
     // Event listeners
     settingsBtn.addEventListener('click', () => modal.classList.toggle('hidden'));
     modal.querySelector('.close-settings').addEventListener('click', () => modal.classList.add('hidden'));
+}
+
+function updateFunModeButton(button, isFunMode) {
+    if (isFunMode) {
+        button.textContent = '🎉 Fun Mode ON!';
+        button.classList.add('active');
+    } else {
+        button.textContent = 'Have Some Fun!';
+        button.classList.remove('active');
+    }
 }
