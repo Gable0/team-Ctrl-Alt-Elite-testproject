@@ -61,11 +61,11 @@ export function updateEnemyShots(game, delta) {
         game.globalEnemyShotTimer = Math.max(game.globalEnemyShotTimer, 0);
         return;
     }
-    
+
     const fireRateMultiplier = Math.pow(0.9, game.level - 1);
     const currentDelay = game.baseFireRateDelay * fireRateMultiplier;
     const currentVariance = game.baseFireRateVariance * fireRateMultiplier;
-    
+
     game.globalEnemyShotTimer -= delta;
     if (game.globalEnemyShotTimer <= 0) {
         const shooters = game.enemies.filter(e => e.state === 'formation');
@@ -85,7 +85,7 @@ export function updateEnemyShots(game, delta) {
     game.enemyShots = game.enemyShots.filter(shot => {
         shot.x += shot.vx * delta;
         shot.y += shot.vy * delta;
-        return shot.y < canvasRef.height + 50;
+        return shot.y <= canvasRef.height + 50;  // ← CHANGED < TO <=
     });
 }
 
