@@ -23,6 +23,7 @@
   "homepage": "https://github.com/Gable0/team-Ctrl-Alt-Elite-testproject#readme",
   "devDependencies": {
     "@playwright/test": "^1.57.0",
+    "@vitest/coverage-v8": "^4.0.14",
     "@vitest/ui": "^4.0.14",
     "jsdom": "^27.2.0",
     "playwright": "^1.57.0",
