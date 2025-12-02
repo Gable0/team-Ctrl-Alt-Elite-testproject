@@ -14,26 +14,28 @@ export function spawnPowerUp(game, enemy) {
 }
 
 export function updatePowerUps(game, delta, canvas) {
-    // Update power-up positions
-    for (const powerUp of game.powerUps) {
+    // ONE PASS — move + collect + filter all at once
+    game.powerUps = game.powerUps.filter(powerUp => {
+        // Move down
         powerUp.y += powerUp.speed * delta;
-        if (powerUp.y > canvas.height + 50) powerUp.active = false;
-    }
-    game.powerUps = game.powerUps.filter(p => p.active);
 
-    // Check power-up collisions with player
-    for (let i = game.powerUps.length - 1; i >= 0; i--) {
-        const powerUp = game.powerUps[i];
+        // Off-screen → remove
+        if (powerUp.y > canvas.height + 50) return false;
+
+        // Check player collection
         const dx = game.player.x - powerUp.x;
         const dy = game.player.y - powerUp.y;
         const distance = Math.hypot(dx, dy);
+
         if (distance < game.player.size + powerUp.size) {
             game.tripleShotTimer = 30;
-            game.powerUps.splice(i, 1);
+            return false; // collected → remove
         }
-    }
 
-    // Update triple shot timer
+        return true; // keep on screen
+    });
+
+    // Timer countdown
     if (game.tripleShotTimer > 0) {
         game.tripleShotTimer -= delta;
         if (game.tripleShotTimer < 0) game.tripleShotTimer = 0;

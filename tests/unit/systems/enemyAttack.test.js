@@ -1,4 +1,3 @@
-// tests/unit/systems/enemyAttack.test.js
 import { test, assert } from 'vitest'
 import {
     initEnemyAttack,
