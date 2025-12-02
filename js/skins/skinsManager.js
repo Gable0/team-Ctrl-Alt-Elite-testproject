@@ -11,14 +11,15 @@ export function getActiveSkin() {
 }
 
 export function isSkinOwned(skinName) {
-    return ownedSkins[skinName] || false;
+    return localStorage.getItem(skinName + 'Owned') === 'true';
 }
 
 export function equipSkin(skinName) {
-    if (!isSkinOwned(skinName) || skinName === 'default') {
+    if (skinName === 'default') {
         localStorage.setItem('activeSkin', 'default');
-    } else {
+    }
+    else if (isSkinOwned(skinName)) {
         localStorage.setItem('activeSkin', skinName);
     }
-    return getActiveSkin(); // Return updated state
+    return getActiveSkin();
 }

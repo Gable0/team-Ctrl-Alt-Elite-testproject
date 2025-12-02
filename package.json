@@ -1,0 +1,31 @@
+{
+  "name": "team-ctrl-alt-elite-testproject",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest run --coverage",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Gable0/team-Ctrl-Alt-Elite-testproject.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Gable0/team-Ctrl-Alt-Elite-testproject/issues"
+  },
+  "homepage": "https://github.com/Gable0/team-Ctrl-Alt-Elite-testproject#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.57.0",
+    "@vitest/ui": "^4.0.14",
+    "jsdom": "^27.2.0",
+    "playwright": "^1.57.0",
+    "vitest": "^4.0.14"
+  }
+}
