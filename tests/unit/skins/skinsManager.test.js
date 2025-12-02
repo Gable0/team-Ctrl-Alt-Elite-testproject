@@ -1,6 +1,6 @@
 // tests/unit/skinsManager.test.js
 import { test, assert } from 'vitest'
-import { getActiveSkin, equipSkin } from '../../js/skins/skinsManager.js'
+import { getActiveSkin, equipSkin } from '../../../js/skins/skinsManager.js'
 
 // Clear localStorage before every test
 test.beforeEach(() => {
