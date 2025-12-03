@@ -61,11 +61,11 @@ export function updateEnemyShots(game, delta) {
         game.globalEnemyShotTimer = Math.max(game.globalEnemyShotTimer, 0);
         return;
     }
-    
+
     const fireRateMultiplier = Math.pow(0.9, game.level - 1);
     const currentDelay = game.baseFireRateDelay * fireRateMultiplier;
     const currentVariance = game.baseFireRateVariance * fireRateMultiplier;
-    
+
     game.globalEnemyShotTimer -= delta;
     if (game.globalEnemyShotTimer <= 0) {
         const shooters = game.enemies.filter(e => e.state === 'formation');
@@ -77,7 +77,15 @@ export function updateEnemyShots(game, delta) {
     }
 
     for (const enemy of game.enemies) {
-        if (enemy.state === 'attacking' && Math.random() < 0.08) {
+        let  dive_fire = .04;
+        if(game.difficulty ==='easy'){
+            dive_fire = .01;
+        }
+        else if(game.difficulty ==='hard'){
+            dive_fire = .08
+        }
+        
+        if (enemy.state === 'attacking' && Math.random() < dive_fire) {
             fireEnemyShot(enemy, game);
         }
     }
@@ -85,7 +93,7 @@ export function updateEnemyShots(game, delta) {
     game.enemyShots = game.enemyShots.filter(shot => {
         shot.x += shot.vx * delta;
         shot.y += shot.vy * delta;
-        return shot.y < canvasRef.height + 50;
+        return shot.y <= canvasRef.height + 50;  // ← CHANGED < TO <=
     });
 }
 

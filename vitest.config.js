@@ -1,0 +1,14 @@
+import { defineConfig } from 'vitest/config'
+
+export default defineConfig({
+    test: {
+        globals: true,
+        environment: 'jsdom',
+        setupFiles: './tests/setup.js',
+        coverage: {
+            reporter: ['text', 'html'],
+            exclude: ['tests/', 'assets/']
+        },
+
+    },
+})
