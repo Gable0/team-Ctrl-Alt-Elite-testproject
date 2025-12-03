@@ -1,4 +1,5 @@
 // js/systems/audioManager.js
+// possibly do a libray. how to load a sound pack for a video game. make it rigid. use .wave instead
 
 class AudioManager {
     constructor() {
@@ -84,6 +85,6 @@ export function initAudio() {
     console.log('Initializing audio...');
     // Load both shooting sounds - use absolute paths from root
     audioManager.loadSound('shoot', '/assets/sounds/shoot.mp3');
-    audioManager.loadSound('chloe-shoot', '/assets/sounds/Chloe-shooting.mp3');
+    audioManager.loadSound('chloe-shoot', '/assets/sounds/Chloe-shooting.wav');
     console.log(`Audio initialized with fun mode: ${audioManager.getFunMode()}`);
 }
