@@ -8,6 +8,7 @@ export default defineConfig({
         coverage: {
             reporter: ['text', 'html'],
             exclude: ['tests/', 'assets/']
-        }
+        },
+
     },
 })

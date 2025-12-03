@@ -1,6 +1,7 @@
+// tests/setup.js
 import { beforeEach } from 'vitest'
 
-// Mock localStorage for every test
+// Mock localStorage
 beforeEach(() => {
     global.localStorage = {
         data: {},
@@ -10,4 +11,6 @@ beforeEach(() => {
         clear() { this.data = {} }
     }
     localStorage.clear()
+    global.canvasRef = document.getElementById('game')
 })
+

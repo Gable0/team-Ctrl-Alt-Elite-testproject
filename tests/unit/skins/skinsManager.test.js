@@ -1,4 +1,3 @@
-// tests/unit/skinsManager.test.js
 import { test, assert } from 'vitest'
 import { getActiveSkin, equipSkin } from '../../../js/skins/skinsManager.js'
 

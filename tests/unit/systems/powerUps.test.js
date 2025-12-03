@@ -1,31 +1,60 @@
-// tests/unit/systems/powerUps.test.js
 import { test, assert } from 'vitest'
 import { spawnPowerUp, updatePowerUps } from '../../../js/systems/powerUps.js'
 
-test('spawnPowerUp has ~25% chance to drop', () => {
-    const game = { powerUps: [] }
+test('spawnPowerUp uses difficulty-based drop chance', () => {
     const enemy = { x: 400, y: 100 }
-    let drops = 0
+
+    // EASY: 25%
+    const gameEasy = { powerUps: [], difficulty: 'easy' }
+    let dropsEasy = 0
     for (let i = 0; i < 1000; i++) {
-        game.powerUps = []
-        spawnPowerUp(game, enemy)
-        if (game.powerUps.length > 0) drops++
+        gameEasy.powerUps = []
+        spawnPowerUp(gameEasy, enemy)
+        if (gameEasy.powerUps.length > 0) dropsEasy++
     }
-    const rate = drops / 1000
-    assert.isAbove(rate, 0.15)
-    assert.isBelow(rate, 0.35)
+    const rateEasy = dropsEasy / 1000
+    assert.isAtLeast(rateEasy, 0.20)
+    assert.isAtMost(rateEasy, 0.30)
+
+    // MEDIUM: 10%
+    const gameMedium = { powerUps: [], difficulty: 'medium' }
+    let dropsMedium = 0
+    for (let i = 0; i < 1000; i++) {
+        gameMedium.powerUps = []
+        spawnPowerUp(gameMedium, enemy)
+        if (gameMedium.powerUps.length > 0) dropsMedium++
+    }
+    const rateMedium = dropsMedium / 1000
+    assert.isAtLeast(rateMedium, 0.06)
+    assert.isAtMost(rateMedium, 0.14)
+
+    // HARD: 5%
+    const gameHard = { powerUps: [], difficulty: 'hard' }
+    let dropsHard = 0
+    for (let i = 0; i < 1000; i++) {
+        gameHard.powerUps = []
+        spawnPowerUp(gameHard, enemy)
+        if (gameHard.powerUps.length > 0) dropsHard++
+    }
+    const rateHard = dropsHard / 1000
+    assert.isAtLeast(rateHard, 0.02)
+    assert.isAtMost(rateHard, 0.08)
 })
 
-test('spawnPowerUp adds power-up at enemy position', () => {
-    const game = { powerUps: [] }
+test('spawnPowerUp adds power-up at enemy position (force drop)', () => {
+    const game = { powerUps: [], difficulty: 'easy' }
     const enemy = { x: 420, y: 150 }
-    const realRandom = Math.random
-    global.Math.random = () => 0.1
+
+    const originalRandom = Math.random
+    global.Math.random = () => 0.01  // definitely drops
+
     spawnPowerUp(game, enemy)
+
     assert.equal(game.powerUps.length, 1)
     assert.closeTo(game.powerUps[0].x, 420, 0.1)
     assert.closeTo(game.powerUps[0].y, 150, 0.1)
-    global.Math.random = realRandom
+
+    global.Math.random = originalRandom
 })
 
 test('updatePowerUps moves power-ups down and removes off-screen', () => {
