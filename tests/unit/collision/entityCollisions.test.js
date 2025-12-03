@@ -1,4 +1,3 @@
-// tests/unit/collision/entityCollisions.test.js
 import { test, assert } from 'vitest'
 import { checkPlayerEnemyCollision } from '../../../js/systems/collision/entityCollisions.js'
 
