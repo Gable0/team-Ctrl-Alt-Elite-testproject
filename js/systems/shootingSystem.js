@@ -77,7 +77,15 @@ export function updateEnemyShots(game, delta) {
     }
 
     for (const enemy of game.enemies) {
-        if (enemy.state === 'attacking' && Math.random() < 0.08) {
+        let  dive_fire = .04;
+        if(game.difficulty ==='easy'){
+            dive_fire = .01;
+        }
+        else if(game.difficulty ==='hard'){
+            dive_fire = .08
+        }
+        
+        if (enemy.state === 'attacking' && Math.random() < dive_fire) {
             fireEnemyShot(enemy, game);
         }
     }
