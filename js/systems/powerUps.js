@@ -2,7 +2,14 @@
 
 export function spawnPowerUp(game, enemy) {
     // 25% chance to drop a power-up
-    if (Math.random() < 0.25) {
+    let dropChance = 0.10; // default (medium)
+    
+    if (game.difficulty === 'easy') {
+        dropChance = 0.25; // 40% chance on easy
+    } else if (game.difficulty === 'hard') {
+        dropChance = 0.05; // 5% chance on hard
+    }
+    if (Math.random() < dropChance) {
         game.powerUps.push({
             x: enemy.x,
             y: enemy.y,
