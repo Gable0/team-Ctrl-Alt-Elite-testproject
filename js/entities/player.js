@@ -58,6 +58,18 @@ export function drawPlayer(ctx, player, invincibilityTimer, game) {
     if (game.activeSkin === 'squarePack') { // CHANGED: Check activeSkin
         // Square skin
         ctx.fillRect(-player.size / 2, -player.size / 2, player.size, player.size);
+    } else if (game.activeSkin === 'starPack') {
+        // Star skin (simple 5-point star)
+        const r1 = player.size;
+        const r2 = player.size * 0.4;
+        ctx.beginPath();
+        for (let i = 0; i < 5; i++) {
+            const angle = Math.PI / 2.5 * i * 2;
+            ctx.lineTo(Math.cos(angle) * r1, Math.sin(angle) * r1);
+            ctx.lineTo(Math.cos(angle + Math.PI / 5) * r2, Math.sin(angle + Math.PI / 5) * r2);
+        }
+        ctx.closePath();
+        ctx.fill();
     } else {
         // Original triangle
         ctx.beginPath();

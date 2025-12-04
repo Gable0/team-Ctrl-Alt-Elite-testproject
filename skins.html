@@ -51,7 +51,27 @@
                 equipSkin(activeSkin === 'squarePack' ? 'default' : 'squarePack');
                 location.reload(); // Refresh UI
             });
-        } else {
+        }
+
+        if (isSkinOwned('starPack')) {
+            const card = document.createElement('article');
+            card.className = 'skin-card';
+            card.innerHTML = `
+                <h3>Star Pack</h3>
+                <p>Stellar shapes for ships and foes.</p>
+                <button class="equip-btn" id="star-pack-equip">${activeSkin === 'starPack' ? 'Equipped' : 'Equip'}</button>
+            `;
+            grid.appendChild(card);
+
+            const btn = document.getElementById('star-pack-equip');
+            btn.addEventListener('click', () => {
+                equipSkin(activeSkin === 'starPack' ? 'default' : 'starPack');
+                location.reload(); // Refresh UI
+            });
+        }
+
+        // Show empty message only if no skins were added
+        if (grid.children.length === 0) {
             const emptyMsg = document.createElement('p');
             emptyMsg.textContent = 'No skins owned yet. Visit the shop!';
             emptyMsg.style.textAlign = 'center';

@@ -29,9 +29,99 @@
             </a>
         </div>
     </homepage-galaga>
-    <script type="module">
-        import { injectSettings } from './js/ui/settingsComponent.js';
-        injectSettings();
-    </script>
+
+        <article class="skin-card">
+            <h3>Square Pack</h3>
+            <p>Blocky vibes for ships and foes.</p>
+            <button class="purchase-btn" id="square-pack-btn">Buy - 800 pts</button>
+        </article>
+        <article class="skin-card">
+            <h3>Star Pack</h3>
+            <p>Stellar shapes for ships and foes.</p>
+            <button class="purchase-btn" id="star-pack-btn">Buy - 800 pts</button>
+        </article>
+    </section>
+
+    
+</shop-container>
+
+<script type="module">
+    import { getActiveSkin, isSkinOwned, equipSkin } from './js/skins/skinsManager.js';
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const grid = document.getElementById('skins-grid');
+        const activeSkin = getActiveSkin();
+
+        // Sample owned skins (extend ownedSkins in manager for more)
+        if (isSkinOwned('squarePack')) {
+            const card = document.createElement('article');
+            card.className = 'skin-card';
+            card.innerHTML = `
+                <h3>Square Pack</h3>
+                <p>Blocky vibes for ships and foes.</p>
+                <button class="equip-btn" id="square-pack-equip">${activeSkin === 'squarePack' ? 'Equipped' : 'Equip'}</button>
+            `;
+            grid.appendChild(card);
+
+            const btn = document.getElementById('square-pack-equip');
+            btn.addEventListener('click', () => {
+                equipSkin(activeSkin === 'squarePack' ? 'default' : 'squarePack');
+                location.reload(); // Refresh UI
+            });
+        }
+
+        if (isSkinOwned('starPack')) {
+            const card = document.createElement('article');
+            card.className = 'skin-card';
+            card.innerHTML = `
+                <h3>Star Pack</h3>
+                <p>Stellar shapes for ships and foes.</p>
+                <button class="equip-btn" id="star-pack-equip">${activeSkin === 'starPack' ? 'Equipped' : 'Equip'}</button>
+            `;
+            grid.appendChild(card);
+
+            const btn = document.getElementById('star-pack-equip');
+            btn.addEventListener('click', () => {
+                equipSkin(activeSkin === 'starPack' ? 'default' : 'starPack');
+                location.reload(); // Refresh UI
+            });
+        }
+
+        if (grid.children.length === 0) {
+            const emptyMsg = document.createElement('p');
+            emptyMsg.textContent = 'No skins owned yet. Visit the shop!';
+            emptyMsg.style.textAlign = 'center';
+            emptyMsg.style.gridColumn = '1 / -1';
+            grid.appendChild(emptyMsg);
+        }
+    });
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const btn = document.getElementById('square-pack-btn');
+        if (localStorage.getItem('squarePackOwned')) {
+            btn.disabled = true;
+            btn.textContent = 'Purchased';
+        } else {
+            btn.addEventListener('click', () => {
+                localStorage.setItem('squarePackOwned', 'true');
+                btn.disabled = true;
+                btn.textContent = 'Purchased';
+            });
+        }
+
+        const starBtn = document.getElementById('star-pack-btn');
+        if (localStorage.getItem('starPackOwned')) {
+            starBtn.disabled = true;
+            starBtn.textContent = 'Purchased';
+        } else {
+            starBtn.addEventListener('click', () => {
+                localStorage.setItem('starPackOwned', 'true');
+                starBtn.disabled = true;
+                starBtn.textContent = 'Purchased';
+            });
+        }
+    });
+</script>
 </body>
 </html>
