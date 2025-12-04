@@ -643,3 +643,62 @@ skins-header p {
     }
 }
 
+/* Retro Pixel Coin Icon */
+.coin-icon {
+    position: relative;
+    width: 3rem;
+    height: 3rem;
+    display: inline-block;
+    transition: transform 0.6s ease;
+    transform-style: preserve-3d;
+}
+
+.coin-icon::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background:
+        linear-gradient(90deg, transparent 0%, transparent 10%, #ffd700 10%, #ffd700 90%, transparent 90%, transparent 100%),
+        linear-gradient(0deg, transparent 0%, transparent 10%, #ffd700 10%, #ffd700 90%, transparent 90%, transparent 100%);
+    background-size: 100% 100%;
+    box-shadow:
+        inset 0 0 0 0.3rem #ffed4e,
+        inset 0 0 0 0.6rem #ffa500,
+        inset 0.5rem 0.5rem 0 0 rgba(255, 255, 255, 0.3),
+        inset -0.5rem -0.5rem 0 0 rgba(0, 0, 0, 0.3),
+        0 0 1rem rgba(255, 215, 0, 0.5);
+    border-radius: 50%;
+    background-color: #ffd700;
+}
+
+.coin-icon::after {
+    content: '$';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    font-weight: bold;
+    color: #ff8c00;
+    text-shadow:
+        1px 1px 0 #ffa500,
+        -1px -1px 0 rgba(255, 255, 255, 0.5);
+    font-family: 'Press Start 2P', monospace;
+}
+
+.shop-btn-special:hover .coin-icon {
+    animation: coinSpin 0.6s ease-in-out;
+}
+
+@keyframes coinSpin {
+    0% {
+        transform: rotateY(0deg);
+    }
+    100% {
+        transform: rotateY(360deg);
+    }
+}
+
