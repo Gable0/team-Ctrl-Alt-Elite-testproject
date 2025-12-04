@@ -29,9 +29,63 @@
             </a>
         </div>
     </homepage-galaga>
+    <audio id="intro-audio" loop preload="auto">
+        <source src="assets/sounds/reg game sounds/intro.wav" type="audio/wav">
+    </audio>
     <script type="module">
         import { injectSettings } from './js/ui/settingsComponent.js';
         injectSettings();
+
+        const introAudio = document.getElementById('intro-audio');
+        let audioStarted = false;
+
+        function startIntroAudio() {
+            if (!audioStarted) {
+                introAudio.volume = 0; // Start at volume 0
+                introAudio.currentTime = 25; // Start at 25 seconds
+                introAudio.playbackRate = 0.90; // Slow down intro audio
+                introAudio.play().then(() => {
+                    audioStarted = true;
+                    // Fade in over 1.5 seconds
+                    const fadeInDuration = 1500; // 1.5 seconds
+                    const fadeInSteps = 50;
+                    const volumeIncrement = 1 / fadeInSteps;
+                    const stepDuration = fadeInDuration / fadeInSteps;
+
+                    let currentStep = 0;
+                    const fadeInInterval = setInterval(() => {
+                        currentStep++;
+                        introAudio.volume = Math.min(currentStep * volumeIncrement, 1);
+
+                        if (currentStep >= fadeInSteps) {
+                            clearInterval(fadeInInterval);
+                            introAudio.volume = 1; // Ensure it's exactly 1
+                        }
+                    }, stepDuration);
+                }).catch(error => {
+                    console.log('Audio play failed:', error);
+                });
+            }
+        }
+
+        // Try to play immediately
+        startIntroAudio();
+
+        // If autoplay is blocked, start on first user interaction
+        // Listen to multiple interaction types for better reliability
+        const interactionEvents = ['click', 'touchstart', 'mouseenter', 'keydown'];
+
+        interactionEvents.forEach(eventType => {
+            document.body.addEventListener(eventType, startIntroAudio, { once: true, passive: true });
+        });
+
+        // Also start when hovering over any button for seamless experience
+        window.addEventListener('DOMContentLoaded', () => {
+            const buttons = document.querySelectorAll('a, button');
+            buttons.forEach(button => {
+                button.addEventListener('mouseenter', startIntroAudio, { once: true, passive: true });
+            });
+        });
     </script>
 </body>
 </html>
