@@ -29,22 +29,8 @@
             </a>
         </div>
     </homepage-galaga>
-
     <script type="module">
         import { injectSettings } from './js/ui/settingsComponent.js';
-        import { initAudio, playIntroMusic } from './js/systems/audioManager.js';
-        
-        // Initialize audio system
-        initAudio();
-        
-        // Play intro music when page loads
-        document.addEventListener('DOMContentLoaded', () => {
-            // Small delay to ensure audio is loaded
-            setTimeout(() => {
-                playIntroMusic();
-            }, 500);
-        });
-        
         injectSettings();
     </script>
 </body>

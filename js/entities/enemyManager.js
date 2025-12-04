@@ -215,6 +215,18 @@ export function drawEnemies(enemies, game) {
         if (game.activeSkin === 'squarePack') { // CHANGED: Check activeSkin
             // Square skin
             ctxRef.fillRect(-enemy.size / 2, -enemy.size / 2, enemy.size, enemy.size);
+        } else if (game.activeSkin === 'starPack') {
+            // Star skin (simple 5-point star)
+            const r1 = enemy.size * 0.8;
+            const r2 = enemy.size * 0.32;
+            ctxRef.beginPath();
+            for (let i = 0; i < 5; i++) {
+                const angle = Math.PI / 2.5 * i * 2;
+                ctxRef.lineTo(Math.cos(angle) * r1, Math.sin(angle) * r1);
+                ctxRef.lineTo(Math.cos(angle + Math.PI / 5) * r2, Math.sin(angle + Math.PI / 5) * r2);
+            }
+            ctxRef.closePath();
+            ctxRef.fill();
         } else {
             // Original triangle
             ctxRef.beginPath();
