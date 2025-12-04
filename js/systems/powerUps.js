@@ -35,7 +35,7 @@ export function updatePowerUps(game, delta, canvas) {
         const distance = Math.hypot(dx, dy);
 
         if (distance < game.player.size + powerUp.size) {
-            game.tripleShotTimer = 30;
+            game.tripleShotTimer = 15; // 15 seconds of triple shot
             return false; // collected → remove
         }
 
