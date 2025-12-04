@@ -1,7 +1,14 @@
-import { getActiveSkin } from '../skins/skinsManager.js'; // FIXED: Relative path from js/state/
+import { getActiveSkin } from '../skins/skinsManager.js';
+import { audioManager } from '../systems/audioManager.js';
 
 export function createInitialGame() {
     const difficulty = localStorage.getItem('gameDifficulty') || 'medium';
+    
+    // Play start game sound when game initializes
+    setTimeout(() => {
+        audioManager.playStartGameSound();
+    }, 100);
+    
     return {
         player: null,
         enemies: [],
@@ -32,6 +39,9 @@ export function createInitialGame() {
 
 export function handleEnemyKilled(game, enemy, points = 100) {
     game.score += points;
+    
+    // Play kill enemy sound
+    audioManager.playKillEnemySound();
 }
 
 export function handlePlayerHit(game) {
@@ -42,9 +52,17 @@ export function handlePlayerHit(game) {
 
     if (game.lives <= 0) {
         game.gameOver = true;
+        
+        // Play game over sound
+        audioManager.playGameOverSound();
+        
+        // Save score and redirect after a delay to let sound play
         localStorage.setItem('finalScore', game.score);
         localStorage.setItem('finalLevel', game.level);
-        window.location.href = 'Demos/Score_UI/index.html';
+        
+        setTimeout(() => {
+            window.location.href = 'Demos/Score_UI/index.html';
+        }, 2000); // 2 second delay for game over sound
     }
 
     return true;
