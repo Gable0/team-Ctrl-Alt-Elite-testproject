@@ -52,9 +52,9 @@ export function drawPlayer(ctx, player, invincibilityTimer, game) {
         }
     }
 
-    ctx.fillStyle = '#5eead4';
+    ctx.fillStyle = '#00d9ff';
     ctx.shadowBlur = 20;
-    ctx.shadowColor = '#5eead4';
+    ctx.shadowColor = '#00d9ff';
     if (game.activeSkin === 'squarePack') { // CHANGED: Check activeSkin
         // Square skin
         ctx.fillRect(-player.size / 2, -player.size / 2, player.size, player.size);

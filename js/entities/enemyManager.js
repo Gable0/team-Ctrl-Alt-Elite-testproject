@@ -7,10 +7,10 @@ const formationConfig = {
 };
 
 const enemyTypes = [
-    { color: '#facc15', size: 14, enterSpeed: 210 },
-    { color: '#fb923c', size: 15, enterSpeed: 205 },
-    { color: '#f472b6', size: 16, enterSpeed: 200 },
-    { color: '#c084fc', size: 18, enterSpeed: 195 }
+    { color: '#ff0844', size: 14, enterSpeed: 210 },
+    { color: '#ff3366', size: 15, enterSpeed: 205 },
+    { color: '#ff5588', size: 16, enterSpeed: 200 },
+    { color: '#ff88aa', size: 18, enterSpeed: 195 }
 ];
 
 let canvasRef = null;

@@ -98,9 +98,9 @@ export function updateEnemyShots(game, delta) {
 }
 
 export function drawPlayerShots(ctx, shots) {
-    ctx.fillStyle = '#00ff99';
+    ctx.fillStyle = '#00ff41';
     ctx.shadowBlur = 18;
-    ctx.shadowColor = '#00ff99';
+    ctx.shadowColor = '#00ff41';
     for (const shot of shots) {
         if (shot.active !== false) {
             ctx.fillRect(shot.x - 2.5, shot.y - 13, 5, 26);
@@ -110,9 +110,9 @@ export function drawPlayerShots(ctx, shots) {
 }
 
 export function drawEnemyShots(ctx, shots) {
-    ctx.fillStyle = '#ff5555';
+    ctx.fillStyle = '#ff0844';
     ctx.shadowBlur = 10;
-    ctx.shadowColor = '#ff5555';
+    ctx.shadowColor = '#ff0844';
     for (const shot of shots) {
         ctx.beginPath();
         ctx.arc(shot.x, shot.y, shot.size, 0, Math.PI * 2);

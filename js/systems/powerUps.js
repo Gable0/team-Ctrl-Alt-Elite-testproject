@@ -55,16 +55,16 @@ export function drawPowerUps(ctx, powerUps) {
         ctx.translate(powerUp.x, powerUp.y);
 
         // Outer glow circle
-        ctx.fillStyle = '#fbbf24';
+        ctx.fillStyle = '#ffdd00';
         ctx.shadowBlur = 15;
-        ctx.shadowColor = '#fbbf24';
+        ctx.shadowColor = '#ffdd00';
         ctx.beginPath();
         ctx.arc(0, 0, powerUp.size, 0, Math.PI * 2);
         ctx.fill();
         ctx.shadowBlur = 0;
 
         // Inner darker circle for contrast
-        ctx.fillStyle = '#d97706';
+        ctx.fillStyle = '#cc9900';
         ctx.beginPath();
         ctx.arc(0, 0, powerUp.size * 0.85, 0, Math.PI * 2);
         ctx.fill();
