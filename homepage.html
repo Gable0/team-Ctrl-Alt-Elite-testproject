@@ -16,7 +16,7 @@
         </homepage-text>
 
         <a class="start-btn" href="difficulty.html">Start Game</a>
-        <a class="go-to-leaderboard" href = 'leaderboard.html'>Leaderboard</a>
+        <a class="go-to-leaderboard" href='leaderboard.html'>Leaderboard</a>
 
         <div class="options-container">
             <a class="option-btn" href="shop.html">
@@ -29,8 +29,22 @@
             </a>
         </div>
     </homepage-galaga>
+
     <script type="module">
         import { injectSettings } from './js/ui/settingsComponent.js';
+        import { initAudio, playIntroMusic } from './js/systems/audioManager.js';
+        
+        // Initialize audio system
+        initAudio();
+        
+        // Play intro music when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            // Small delay to ensure audio is loaded
+            setTimeout(() => {
+                playIntroMusic();
+            }, 500);
+        });
+        
         injectSettings();
     </script>
 </body>
