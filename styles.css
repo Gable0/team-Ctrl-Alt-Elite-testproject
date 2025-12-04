@@ -578,3 +578,68 @@ skins-header p {
     box-shadow: 0 0 10px #fff;
 }
 
+/* Fun Mode Container and Label */
+.fun-mode-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1rem;
+    background: rgba(255, 0, 64, 0.1);
+    border: 2px solid rgba(255, 0, 64, 0.3);
+    border-radius: 0.5rem;
+    margin: 0.5rem 0;
+}
+
+.fun-mode-label {
+    font-size: 1.3rem !important;
+    color: #ff0040 !important;
+    text-align: center !important;
+    font-weight: bold;
+    text-shadow: 0 0 10px rgba(255, 0, 64, 0.5);
+}
+
+/* Fun Mode Toggle Button */
+.fun-mode-btn {
+    padding: 0.75rem 1.5rem;
+    font-size: 1.5rem;
+    font-family: 'Jersey 10', monospace, sans-serif;
+    border: 2px solid #ff0040;
+    background: linear-gradient(180deg, #ff0040 0%, #cc0033 100%);
+    color: #fff;
+    cursor: pointer;
+    border-radius: 0.5rem;
+    transition: all 0.2s;
+    text-transform: uppercase;
+    letter-spacing: 0.1rem;
+    box-shadow: 0 0 15px rgba(255, 0, 64, 0.4);
+}
+
+.fun-mode-btn:hover {
+    background: linear-gradient(180deg, #ff1a55 0%, #dd0044 100%);
+    transform: scale(1.05);
+    box-shadow: 0 0 25px rgba(255, 0, 64, 0.7);
+}
+
+.fun-mode-btn.active {
+    background: linear-gradient(180deg, #00ff00 0%, #00cc00 100%);
+    border-color: #00ff00;
+    color: #000;
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.6);
+    animation: funPulse 1.5s ease-in-out infinite;
+}
+
+.fun-mode-btn.active:hover {
+    background: linear-gradient(180deg, #33ff33 0%, #00dd00 100%);
+    box-shadow: 0 0 30px rgba(0, 255, 0, 0.9);
+}
+
+/* Fun Mode Pulse Animation */
+@keyframes funPulse {
+    0%, 100% {
+        box-shadow: 0 0 20px rgba(0, 255, 0, 0.6);
+    }
+    50% {
+        box-shadow: 0 0 35px rgba(0, 255, 0, 1);
+    }
+}
+
