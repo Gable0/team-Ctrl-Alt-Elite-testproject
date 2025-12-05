@@ -24,7 +24,7 @@ canvas {
 body {
     margin: 0;
     min-height: 100vh;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-family: 'Jersey 10', monospace;
     background: #000814;
     color: #00d9ff; display: flex;
     flex-direction: column;
@@ -41,7 +41,7 @@ homepage-galaga {
     height: 100vh;
     overflow: hidden;
     position: relative;
-    font-family: "Jersey 10", sans-serif;
+    font-family: 'Jersey 10', monospace;
 }
 
 homepage-galaga h1{
@@ -147,7 +147,7 @@ homepage-galaga p{
 
 
 .difficulty-header {
-    font-family: "Jersey 10", sans-serif;
+    font-family: 'Jersey 10', monospace;
     font-size: 8rem;
     color: #00d9ff;
     text-shadow: 0 0 2rem #00d9ff, 0.3rem 0.3rem 0 rgba(0,0,0,0.8);
@@ -166,12 +166,12 @@ difficulty-buttons {
 
 
 .jersey-10-regular {
-    font-family: "Jersey 10", sans-serif;
+    font-family: 'Jersey 10', monospace;
     font-weight: 400;
     font-style: normal;
 }
 difficulty-buttons button{
-    font-family: "Jersey 10", sans-serif;
+    font-family: 'Jersey 10', monospace;
     background: #000814;
     color:#ff0844;
     font-size: 7rem;
@@ -234,7 +234,7 @@ difficulty-buttons button:hover {
 }
 
 .pause-menu-content h2 {
-    font-family: 'Jersey 10', monospace, sans-serif;
+    font-family: 'Jersey 10', monospace;
     font-size: 4.5rem;
     color: #00d9ff;
     margin-bottom: 1.5rem;
@@ -243,7 +243,7 @@ difficulty-buttons button:hover {
 }
 
 .pause-menu-button {
-    font-family: 'Jersey 10', monospace, sans-serif;
+    font-family: 'Jersey 10', monospace;
     display: block;
     width: 100%;
     margin: 1.5rem 0;
@@ -349,7 +349,7 @@ settings-modal {
 
 
 .settings-content h2 {
-    font-family: 'Jersey 10', monospace, sans-serif;
+    font-family: 'Jersey 10', monospace;
     font-size: 3rem;
     color: #00d9ff;
     text-shadow: 0 0 1rem #00d9ff;
@@ -401,7 +401,7 @@ shop-container {
     min-height: 100vh;
     background: #000814;
     color: #00d9ff;
-    font-family: 'DotGothic16', monospace;
+    font-family: 'Jersey 10', monospace;
 }
 
 shop-header {
@@ -410,7 +410,7 @@ shop-header {
 }
 
 shop-header h1 {
-    font-family: 'Press Start 2P', cursive;
+    font-family: 'Jersey 10', monospace;
     font-size: 2em;
     margin: 0 0 10px;
     text-shadow: 2px 2px 0 #ff0844;
@@ -448,7 +448,7 @@ shop-header p {
 }
 
 .skin-card h3 {
-    font-family: 'Press Start 2P', cursive;
+    font-family: 'Jersey 10', monospace;
     font-size: 0.8em;
     margin: 0 0 8px;
     color: #ffdd00;
@@ -466,7 +466,7 @@ shop-header p {
     color: #00d9ff;
     border: 1px solid #00d9ff;
     padding: 8px 12px;
-    font-family: 'DotGothic16', monospace;
+    font-family: 'Jersey 10', monospace;
     font-size: 0.7em;
     cursor: pointer;
     transition: background 0.2s, color 0.2s;
@@ -489,7 +489,7 @@ shop-header p {
     color: #00d9ff;
     border: 1px solid #00d9ff;
     padding: 10px 20px;
-    font-family: 'Press Start 2P', cursive;
+    font-family: 'Jersey 10', monospace;
     font-size: 0.8em;
     cursor: pointer;
     transition: all 0.2s;
@@ -510,7 +510,7 @@ skins-container {
     min-height: 100vh;
     background: #000814;
     color: #00d9ff;
-    font-family: 'DotGothic16', monospace;
+    font-family: 'Jersey 10', monospace;
 }
 
 skins-header {
@@ -519,7 +519,7 @@ skins-header {
 }
 
 skins-header h1 {
-    font-family: 'Press Start 2P', cursive;
+    font-family: 'Jersey 10', monospace;
     font-size: 2em;
     margin: 0 0 10px;
     text-shadow: 2px 2px 0 #ff0844;
@@ -540,7 +540,7 @@ skins-header p {
     color: #00ff41;
     border: 1px solid #00ff41;
     padding: 8px 12px;
-    font-family: 'DotGothic16', monospace;
+    font-family: 'Jersey 10', monospace;
     font-size: 0.7em;
     cursor: pointer;
     transition: background 0.2s, color 0.2s;
@@ -565,7 +565,7 @@ skins-header p {
     color: #00d9ff;
     border: 1px solid #00d9ff;
     padding: 10px 20px;
-    font-family: 'Press Start 2P', cursive;
+    font-family: 'Jersey 10', monospace;
     font-size: 0.8em;
     cursor: pointer;
     transition: all 0.2s;
@@ -602,7 +602,7 @@ skins-header p {
 .fun-mode-btn {
     padding: 0.75rem 1.5rem;
     font-size: 1.5rem;
-    font-family: 'Jersey 10', monospace, sans-serif;
+    font-family: 'Jersey 10', monospace;
     border: 2px solid #ff0844;
     background: linear-gradient(180deg, #ff0844 0%, #cc0033 100%);
     color: #fff;
@@ -659,15 +659,15 @@ skins-header p {
     width: 100%;
     height: 100%;
     background:
-        linear-gradient(90deg, transparent 0%, transparent 10%, #ffd700 10%, #ffd700 90%, transparent 90%, transparent 100%),
-        linear-gradient(0deg, transparent 0%, transparent 10%, #ffd700 10%, #ffd700 90%, transparent 90%, transparent 100%);
+            linear-gradient(90deg, transparent 0%, transparent 10%, #ffd700 10%, #ffd700 90%, transparent 90%, transparent 100%),
+            linear-gradient(0deg, transparent 0%, transparent 10%, #ffd700 10%, #ffd700 90%, transparent 90%, transparent 100%);
     background-size: 100% 100%;
     box-shadow:
-        inset 0 0 0 0.3rem #ffed4e,
-        inset 0 0 0 0.6rem #ffa500,
-        inset 0.5rem 0.5rem 0 0 rgba(255, 255, 255, 0.3),
-        inset -0.5rem -0.5rem 0 0 rgba(0, 0, 0, 0.3),
-        0 0 1rem rgba(255, 215, 0, 0.5);
+            inset 0 0 0 0.3rem #ffed4e,
+            inset 0 0 0 0.6rem #ffa500,
+            inset 0.5rem 0.5rem 0 0 rgba(255, 255, 255, 0.3),
+            inset -0.5rem -0.5rem 0 0 rgba(0, 0, 0, 0.3),
+            0 0 1rem rgba(255, 215, 0, 0.5);
     border-radius: 50%;
     background-color: #ffd700;
 }
@@ -684,9 +684,9 @@ skins-header p {
     font-weight: bold;
     color: #ff8c00;
     text-shadow:
-        1px 1px 0 #ffa500,
-        -1px -1px 0 rgba(255, 255, 255, 0.5);
-    font-family: 'Press Start 2P', monospace;
+            1px 1px 0 #ffa500,
+            -1px -1px 0 rgba(255, 255, 255, 0.5);
+    font-family: 'Jersey 10', monospace;
 }
 
 .shop-btn-special:hover .coin-icon {
@@ -701,4 +701,3 @@ skins-header p {
         transform: rotateY(360deg);
     }
 }
-
