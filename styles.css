@@ -24,7 +24,7 @@ canvas {
 body {
     margin: 0;
     min-height: 100vh;
-    font-family: 'Jersey 10', monospace;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     background: #000814;
     color: #00d9ff; display: flex;
     flex-direction: column;
@@ -41,7 +41,7 @@ homepage-galaga {
     height: 100vh;
     overflow: hidden;
     position: relative;
-    font-family: 'Jersey 10', monospace;
+    font-family: "Jersey 10", sans-serif;
 }
 
 homepage-galaga h1{
@@ -147,7 +147,7 @@ homepage-galaga p{
 
 
 .difficulty-header {
-    font-family: 'Jersey 10', monospace;
+    font-family: "Jersey 10", sans-serif;
     font-size: 8rem;
     color: #00d9ff;
     text-shadow: 0 0 2rem #00d9ff, 0.3rem 0.3rem 0 rgba(0,0,0,0.8);
@@ -166,12 +166,12 @@ difficulty-buttons {
 
 
 .jersey-10-regular {
-    font-family: 'Jersey 10', monospace;
+    font-family: "Jersey 10", sans-serif;
     font-weight: 400;
     font-style: normal;
 }
 difficulty-buttons button{
-    font-family: 'Jersey 10', monospace;
+    font-family: "Jersey 10", sans-serif;
     background: #000814;
     color:#ff0844;
     font-size: 7rem;
@@ -234,7 +234,7 @@ difficulty-buttons button:hover {
 }
 
 .pause-menu-content h2 {
-    font-family: 'Jersey 10', monospace;
+    font-family: 'Jersey 10', monospace, sans-serif;
     font-size: 4.5rem;
     color: #00d9ff;
     margin-bottom: 1.5rem;
@@ -243,7 +243,7 @@ difficulty-buttons button:hover {
 }
 
 .pause-menu-button {
-    font-family: 'Jersey 10', monospace;
+    font-family: 'Jersey 10', monospace, sans-serif;
     display: block;
     width: 100%;
     margin: 1.5rem 0;
@@ -349,7 +349,7 @@ settings-modal {
 
 
 .settings-content h2 {
-    font-family: 'Jersey 10', monospace;
+    font-family: 'Jersey 10', monospace, sans-serif;
     font-size: 3rem;
     color: #00d9ff;
     text-shadow: 0 0 1rem #00d9ff;
@@ -392,84 +392,87 @@ settings-modal {
     background: #00ff41;
 }
 
-/* Shop Styles - RetroGa */
+/* Shop Styles - RetroGa (now BIGGER & in rem) */
 shop-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 20px;
+    padding: 2rem;                  /* was 1.25rem → 2rem */
     min-height: 100vh;
     background: #000814;
     color: #00d9ff;
-    font-family: 'Jersey 10', monospace;
+    font-family: 'DotGothic16', monospace;
 }
 
 shop-header {
     text-align: center;
-    margin-bottom: 30px;
+    margin-bottom: 3rem;            /* was 1.875rem → 3rem */
 }
 
 shop-header h1 {
-    font-family: 'Jersey 10', monospace;
-    font-size: 2em;
-    margin: 0 0 10px;
-    text-shadow: 2px 2px 0 #ff0844;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 2.5em;               /* was 2em → 2.5em */
+    margin: 0 0 1rem;               /* was 0.625rem → 1rem */
+    text-shadow: 0.25rem 0.25rem 0 #ff0844; /* was 0.125rem → 0.25rem */
     color: #00d9ff;
 }
 
 shop-header p {
-    font-size: 0.9em;
-    opacity: 0.8;
-    margin: 0;
+    font-size: 1.1em;               /* was 0.9em → 1.1em */
+    opacity: 0.9;
 }
 
 .skins-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-    max-width: 900px;
-    margin-bottom: 30px;
+    gap: 2rem;                      /* was 1.25rem → 2rem */
+    max-width: 70rem;               /* was 56.25rem → 70rem */
+    margin-bottom: 3rem;            /* was 1.875rem → 3rem */
 }
 
 .skin-card {
     background: rgba(0, 8, 20, 0.7);
-    border: 2px solid #00d9ff;
-    border-radius: 8px;
-    padding: 15px;
+    border: 0.1875rem solid #00d9ff; /* was 0.125rem → 0.1875rem */
+    border-radius: 0.75rem;         /* was 0.5rem → 0.75rem */
+    padding: 1.5rem;                /* was 0.9375rem → 1.5rem */
     text-align: center;
     transition: transform 0.2s, box-shadow 0.2s;
-    box-shadow: 0 0 10px rgba(0, 217, 255, 0.3);
+    box-shadow: 0 0 1.25rem rgba(0, 217, 255, 0.4); /* was 0.625rem → 1.25rem */
 }
 
 .skin-card:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 20px rgba(0, 255, 65, 0.5);
+    transform: scale(1.08);
+    box-shadow: 0 0 2.5rem rgba(0, 255, 65, 0.7); /* was 1.25rem → 2.5rem */
     border-color: #00ff41;
 }
 
 .skin-card h3 {
-    font-family: 'Jersey 10', monospace;
-    font-size: 0.8em;
-    margin: 0 0 8px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 1em;                 /* was 0.8em → 1em */
+    margin: 0 0 0.75rem;            /* was 0.5rem → 0.75rem */
     color: #ffdd00;
 }
 
 .skin-card p {
-    font-size: 0.7em;
-    margin: 0 0 12px;
-    opacity: 0.7;
-    line-height: 1.3;
+    font-size: 0.9em;               /* was 0.7em → 0.9em */
+    margin: 0 0 1rem;               /* was 0.75rem → 1rem */
+    opacity: 0.8;
+    line-height: 1.4;
+}
+
+.purchase-btn,
+.equip-btn {
+    font-family: 'DotGothic16', monospace;
+    padding: 0.75rem 1.25rem;       /* was 0.5rem 0.75rem → 0.75rem 1.25rem */
+    font-size: 0.9em;               /* was 0.7em → 0.9em */
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
 }
 
 .purchase-btn {
     background: #001a33;
     color: #00d9ff;
-    border: 1px solid #00d9ff;
-    padding: 8px 12px;
-    font-family: 'Jersey 10', monospace;
-    font-size: 0.7em;
-    cursor: pointer;
-    transition: background 0.2s, color 0.2s;
+    border: 0.125rem solid #00d9ff; /* was 0.0625rem → 0.125rem */
 }
 
 .purchase-btn:hover:not(:disabled) {
@@ -480,70 +483,13 @@ shop-header p {
 .purchase-btn:disabled {
     background: #002244;
     color: #004466;
-    cursor: not-allowed;
     border-color: #003355;
 }
 
-#back-homepage {
-    background: #001a33;
-    color: #00d9ff;
-    border: 1px solid #00d9ff;
-    padding: 10px 20px;
-    font-family: 'Jersey 10', monospace;
-    font-size: 0.8em;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-#back-homepage:hover {
-    background: #00d9ff;
-    color: #000;
-    box-shadow: 0 0 10px #00d9ff;
-}
-
-/* Skins Library Styles - RetroGa (New additions) */
-skins-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-    min-height: 100vh;
-    background: #000814;
-    color: #00d9ff;
-    font-family: 'Jersey 10', monospace;
-}
-
-skins-header {
-    text-align: center;
-    margin-bottom: 30px;
-}
-
-skins-header h1 {
-    font-family: 'Jersey 10', monospace;
-    font-size: 2em;
-    margin: 0 0 10px;
-    text-shadow: 2px 2px 0 #ff0844;
-    color: #00d9ff;
-}
-
-skins-header p {
-    font-size: 0.9em;
-    opacity: 0.8;
-    margin: 0;
-}
-
-/* Reuse .skins-grid and .skin-card from shop - no changes needed */
-
-/* Equip button styles (similar to purchase, but green tint for equipped state) */
 .equip-btn {
     background: #001a33;
     color: #00ff41;
-    border: 1px solid #00ff41;
-    padding: 8px 12px;
-    font-family: 'Jersey 10', monospace;
-    font-size: 0.7em;
-    cursor: pointer;
-    transition: background 0.2s, color 0.2s;
+    border: 0.125rem solid #00ff41;
 }
 
 .equip-btn:hover:not(:disabled) {
@@ -554,31 +500,61 @@ skins-header p {
 .equip-btn:disabled {
     background: #00ff41;
     color: #000;
-    cursor: not-allowed;
     border-color: #00ff41;
     font-weight: bold;
 }
 
-/* Back buttons for skins page */
+#back-homepage,
 #back-shop {
     background: #001a33;
     color: #00d9ff;
-    border: 1px solid #00d9ff;
-    padding: 10px 20px;
-    font-family: 'Jersey 10', monospace;
-    font-size: 0.8em;
+    border: 0.125rem solid #00d9ff;
+    padding: 1rem 2rem;             /* was 0.625rem 1.25rem → 1rem 2rem */
+    font-family: 'Press Start 2P', cursive;
+    font-size: 1em;                 /* was 0.8em → 1em */
     cursor: pointer;
     transition: all 0.2s;
-    margin: 5px;
+    margin: 0.5rem;                 /* was 0.3125rem → 0.5rem */
 }
 
+#back-homepage:hover,
 #back-shop:hover {
     background: #00d9ff;
     color: #000;
-    box-shadow: 0 0 10px #00d9ff;
+    box-shadow: 0 0 1.25rem #00d9ff; /* was 0.625rem → 1.25rem */
 }
 
-/* Fun Mode Container and Label */
+/* Skins Library - also bigger */
+skins-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;                  /* was 1.25rem → 2rem */
+    min-height: 100vh;
+    background: #000814;
+    color: #00d9ff;
+    font-family: 'DotGothic16', monospace;
+}
+
+skins-header {
+    text-align: center;
+    margin-bottom: 3rem;            /* was 1.875rem → 3rem */
+}
+
+skins-header h1 {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 2.5em;               /* was 2em → 2.5em */
+    margin: 0 0 1rem;               /* was 0.625rem → 1rem */
+    text-shadow: 0.25rem 0.25rem 0 #ff0844;
+    color: #00d9ff;
+}
+
+skins-header p {
+    font-size: 1.1em;               /* was 0.9em → 1.1em */
+    opacity: 0.9;
+}
+
+/* Fun Mode (kept original - not part of shop/skins) */
 .fun-mode-container {
     display: flex;
     flex-direction: column;
@@ -598,11 +574,10 @@ skins-header p {
     text-shadow: 0 0 10px rgba(0, 217, 255, 0.5);
 }
 
-/* Fun Mode Toggle Button */
 .fun-mode-btn {
     padding: 0.75rem 1.5rem;
     font-size: 1.5rem;
-    font-family: 'Jersey 10', monospace;
+    font-family: 'Jersey 10', monospace, sans-serif;
     border: 2px solid #ff0844;
     background: linear-gradient(180deg, #ff0844 0%, #cc0033 100%);
     color: #fff;
@@ -633,7 +608,6 @@ skins-header p {
     box-shadow: 0 0 30px rgba(0, 255, 65, 0.9);
 }
 
-/* Fun Mode Pulse Animation */
 @keyframes funPulse {
     0%, 100% {
         box-shadow: 0 0 20px rgba(0, 255, 65, 0.6);
@@ -643,7 +617,7 @@ skins-header p {
     }
 }
 
-/* Retro Pixel Coin Icon */
+/* Coin Icon - untouched */
 .coin-icon {
     position: relative;
     width: 3rem;
@@ -686,7 +660,7 @@ skins-header p {
     text-shadow:
             1px 1px 0 #ffa500,
             -1px -1px 0 rgba(255, 255, 255, 0.5);
-    font-family: 'Jersey 10', monospace;
+    font-family: 'Press Start 2P', monospace;
 }
 
 .shop-btn-special:hover .coin-icon {
