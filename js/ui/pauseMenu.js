@@ -22,7 +22,7 @@ export function initPauseMenu(game) {
         });
 
         document.getElementById('restartButton').addEventListener('click', () => {
-            window.location.href = 'index.html';
+            window.location.href = 'game.html';
         });
 
         document.getElementById('exitButton').addEventListener('click', () => {

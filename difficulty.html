@@ -26,24 +26,24 @@
     <script>
         // Stop intro audio when difficulty is selected
         function stopIntroAudio() {
-            // Signal to stop intro audio (will be picked up by index.html)
+            // Signal to stop intro audio (will be picked up by game.html)
             sessionStorage.setItem('stopIntroAudio', 'true');
         }
 
         document.getElementById('easy-difficulty').addEventListener('click', () => {
             stopIntroAudio();
             localStorage.setItem('gameDifficulty', 'easy');
-            location.href = 'index.html';
+            location.href = 'game.html';
         });
         document.getElementById('medium-difficulty').addEventListener('click', () => {
             stopIntroAudio();
             localStorage.setItem('gameDifficulty', 'medium');
-            location.href = 'index.html';
+            location.href = 'game.html';
         });
         document.getElementById('hard-difficulty').addEventListener('click', () => {
             stopIntroAudio();
             localStorage.setItem('gameDifficulty', 'hard');
-            location.href = 'index.html';
+            location.href = 'game.html';
         });
     </script>
 </body>

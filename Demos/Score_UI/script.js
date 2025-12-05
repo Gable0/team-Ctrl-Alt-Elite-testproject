@@ -16,7 +16,7 @@ window.addEventListener('DOMContentLoaded', () => {
 document.getElementById('restartLevelButton')?.addEventListener('click', () => {
     localStorage.removeItem('finalScore');
     localStorage.removeItem('finalLevel');
-    window.location.href = '../../index.html';
+    window.location.href = '../../game.html';
 });
 
 // Handle levels button
