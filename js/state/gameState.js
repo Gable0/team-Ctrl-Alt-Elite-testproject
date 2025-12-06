@@ -15,6 +15,9 @@ export function createInitialGame() {
         playerShots: [],
         enemyShots: [],
         powerUps: [],
+        coins: [],
+        // persisted coin total across sessions
+        coinCount: Number(localStorage.getItem('coinCount') || 0),
         lastTime: 0,
         attackTimer: { current: 3 },
         globalEnemyShotTimer: 0,

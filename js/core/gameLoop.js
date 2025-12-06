@@ -23,6 +23,7 @@ import {
 import { drawHUD, drawLevelTransition } from '../ui/hud.js';
 import { initPauseMenu } from '../ui/pauseMenu.js';
 import { spawnPowerUp, updatePowerUps, drawPowerUps } from '../systems/powerUps.js';
+import { spawnCoin, updateCoins, drawCoins } from '../systems/coins.js';
 import { initBackground, updateBackground, drawBackground } from './background.js';
 import { initAudio } from '../systems/audioManager.js';
 
@@ -58,6 +59,7 @@ function update(delta) {
     updatePlayerShots(Game, delta);
     updateEnemyShots(Game, delta);
     updatePowerUps(Game, delta, canvas);
+    updateCoins(Game, delta, canvas);
 
     if (Game.playerShootingUnlocked) {
         Game.attackTimer = scheduleEnemyAttacks(Game.enemies, Game.player, delta, Game.attackTimer);
@@ -71,6 +73,7 @@ function update(delta) {
     checkPlayerShotCollisions(Game, (enemy) => {
         handleEnemyKilled(Game, enemy);
         spawnPowerUp(Game, enemy);
+        spawnCoin(Game, enemy);
     });
 
     if (Game.invincibilityTimer <= 0) {
@@ -92,6 +95,7 @@ function draw() {
         drawEnemyShots(ctx, Game.enemyShots);
         drawPlayerShots(ctx, Game.playerShots);
         drawPowerUps(ctx, Game.powerUps);
+        drawCoins(ctx, Game.coins);
         drawPlayer(ctx, Game.player, Game.invincibilityTimer, Game);
     }
 
