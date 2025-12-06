@@ -1,7 +1,9 @@
 # _Project Name TBD_
+
 ## Ctrl+Alt+Elite
 
 ### Basic Galaga Skeleton (key files)
+
 - `index.html` &rarr; bare-bones page with a canvas plus quick instructions.
 - `styles.css` &rarr; minimal styling so the canvas is visible against a black background.
 - `js/core/gameLoop.js` &rarr; orchestrates input, entities, systems, collisions, and rendering.

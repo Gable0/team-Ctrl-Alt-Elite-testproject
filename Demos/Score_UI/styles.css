@@ -13,417 +13,421 @@
 
 /* Base font size for rem calculations */
 html {
-    font-size: 100%; /* 1rem = 16px (browser default) */
+  font-size: 100%; /* 1rem = 16px (browser default) */
 }
 
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-    font-family: "Jersey 10", sans-serif;
-    background-color: #000;
-    overflow: hidden;
-    cursor: crosshair;
+  font-family: 'Jersey 10', sans-serif;
+  background-color: #000;
+  overflow: hidden;
+  cursor: crosshair;
 }
 
 /* Canvas */
 #gameCanvas {
-    display: block;
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 1;
-    max-width: 100%;
-    height: auto;
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  max-width: 100%;
+  height: auto;
 }
 
 /* Top Left Display */
 #scoreUI {
-    position: absolute;
-    top: 1.25rem; /* 20px */
-    left: 1.25rem; /* 20px */
-    color: #fff;
-    z-index: 10;
-    text-shadow: 0.125rem 0.125rem 0.25rem rgba(0, 0, 0, 0.8);
+  position: absolute;
+  top: 1.25rem; /* 20px */
+  left: 1.25rem; /* 20px */
+  color: #fff;
+  z-index: 10;
+  text-shadow: 0.125rem 0.125rem 0.25rem rgba(0, 0, 0, 0.8);
 }
 
 #scoreDisplay {
-    font-size: 1.5rem; /* 24px */
-    font-weight: bold;
-    letter-spacing: 0.125rem; /* 2px */
-    margin-bottom: 0.625rem; /* 10px */
+  font-size: 1.5rem; /* 24px */
+  font-weight: bold;
+  letter-spacing: 0.125rem; /* 2px */
+  margin-bottom: 0.625rem; /* 10px */
 }
 
 .score-value {
-    color: #00ffff;
+  color: #00ffff;
 }
 
 #livesDisplay {
-    font-size: 1.25rem; /* 20px */
+  font-size: 1.25rem; /* 20px */
 }
 
 .heart {
-    color: #ff0000;
-    font-size: 1.25rem; /* 20px */
-    margin-left: 0.3125rem; /* 5px */
+  color: #ff0000;
+  font-size: 1.25rem; /* 20px */
+  margin-left: 0.3125rem; /* 5px */
 }
 
 /* Game Over Screen */
 #gameOverScreen {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: 
-        linear-gradient(180deg, 
-            rgba(0, 0, 0, 0.95) 0%, 
-            rgba(20, 0, 40, 0.95) 100%);
-    display: none;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    z-index: 20;
-    padding: 2.5rem 1.25rem; /* 40px 20px */
-    overflow: hidden;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.95) 0%,
+    rgba(20, 0, 40, 0.95) 100%
+  );
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 20;
+  padding: 2.5rem 1.25rem; /* 40px 20px */
+  overflow: hidden;
 }
 
 #gameOverScreen::before {
-    content: '';
-    position: fixed;
-    top: -50%;
-    left: -50%;
-    width: 200vw;
-    height: 200vh;
-    background-image: 
-        repeating-linear-gradient(
-            0deg,
-            rgba(255, 255, 255, 0.15) 0px,
-            transparent 1px,
-            transparent 2px,
-            rgba(255, 255, 255, 0.15) 3px
-        ),
-        repeating-linear-gradient(
-            90deg,
-            rgba(255, 255, 255, 0.15) 0px,
-            transparent 1px,
-            transparent 2px,
-            rgba(255, 255, 255, 0.15) 3px
-        );
-    background-size: 3px 3px;
-    pointer-events: none;
-    z-index: 1;
-    opacity: 1;
-    animation: staticNoise 0.15s infinite steps(10);
+  content: '';
+  position: fixed;
+  top: -50%;
+  left: -50%;
+  width: 200vw;
+  height: 200vh;
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      rgba(255, 255, 255, 0.15) 0px,
+      transparent 1px,
+      transparent 2px,
+      rgba(255, 255, 255, 0.15) 3px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.15) 0px,
+      transparent 1px,
+      transparent 2px,
+      rgba(255, 255, 255, 0.15) 3px
+    );
+  background-size: 3px 3px;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 1;
+  animation: staticNoise 0.15s infinite steps(10);
 }
 
 #gameOverScreen::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: 
-        repeating-linear-gradient(
-            0deg,
-            rgba(0, 0, 0, 0.5) 0px,
-            rgba(0, 0, 0, 0.5) 2px,
-            transparent 2px,
-            transparent 4px
-        ),
-        radial-gradient(ellipse at center, transparent 0%, rgba(0, 0, 0, 0.6) 100%);
-    pointer-events: none;
-    z-index: 3;
-    animation: scanline 8s linear infinite;
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.5) 0px,
+      rgba(0, 0, 0, 0.5) 2px,
+      transparent 2px,
+      transparent 4px
+    ),
+    radial-gradient(ellipse at center, transparent 0%, rgba(0, 0, 0, 0.6) 100%);
+  pointer-events: none;
+  z-index: 3;
+  animation: scanline 8s linear infinite;
 }
 
 #gameOverScreen > * {
-    position: relative;
-    z-index: 5;
+  position: relative;
+  z-index: 5;
 }
 
 #gameOverScreen.active {
-    display: flex;
-    animation: fadeIn 0.5s ease-in;
+  display: flex;
+  animation: fadeIn 0.5s ease-in;
 }
 
 #gameOverScreen.active ~ #scoreUI {
-    display: none;
+  display: none;
 }
 
 #gameOverTitle {
-    font-family: 'Jersey 10', sans-serif;
-    font-size: 12.5rem; /* 200px */
-    color: #ff0040;
-    font-weight: normal;
-    margin-bottom: 3.75rem; /* 60px */
-    text-shadow: 
-        0 0 1.25rem #ff0040,
-        0 0 2.5rem #ff0040,
-        0 0 3.75rem #ff0040,
-        0.25rem 0.25rem 0px rgba(0, 0, 0, 0.8);
-    animation: pulse 2s ease-in-out infinite, glitch 3s infinite;
-    letter-spacing: 0.5rem; /* 8px */
-    text-align: center;
-    width: 100%;
-    padding: 0 1.25rem; /* 20px */
-    box-sizing: border-box;
+  font-family: 'Jersey 10', sans-serif;
+  font-size: 12.5rem; /* 200px */
+  color: #ff0040;
+  font-weight: normal;
+  margin-bottom: 3.75rem; /* 60px */
+  text-shadow:
+    0 0 1.25rem #ff0040,
+    0 0 2.5rem #ff0040,
+    0 0 3.75rem #ff0040,
+    0.25rem 0.25rem 0px rgba(0, 0, 0, 0.8);
+  animation:
+    pulse 2s ease-in-out infinite,
+    glitch 3s infinite;
+  letter-spacing: 0.5rem; /* 8px */
+  text-align: center;
+  width: 100%;
+  padding: 0 1.25rem; /* 20px */
+  box-sizing: border-box;
 }
 
 /* Final score display */
 #finalScore {
-    font-family: 'Jersey 10', sans-serif;
-    font-size: 2.5rem; /* 40px */
-    color: #00ffff;
-    text-align: center;
-    margin-bottom: 3.75rem; /* 60px */
-    text-shadow: 
-        0 0 0.625rem #00ffff,
-        0 0 1.25rem #00ffff,
-        0.125rem 0.125rem 0px rgba(0, 0, 0, 0.8);
-    line-height: 1.8;
-    letter-spacing: 0.25rem; /* 4px */
-    width: 100%;
-    padding: 0 1.25rem; /* 20px */
-    box-sizing: border-box;
+  font-family: 'Jersey 10', sans-serif;
+  font-size: 2.5rem; /* 40px */
+  color: #00ffff;
+  text-align: center;
+  margin-bottom: 3.75rem; /* 60px */
+  text-shadow:
+    0 0 0.625rem #00ffff,
+    0 0 1.25rem #00ffff,
+    0.125rem 0.125rem 0px rgba(0, 0, 0, 0.8);
+  line-height: 1.8;
+  letter-spacing: 0.25rem; /* 4px */
+  width: 100%;
+  padding: 0 1.25rem; /* 20px */
+  box-sizing: border-box;
 }
 
 #finalScoreValue {
-    font-size: 4.5rem; /* 72px */
-    color: #ffff00;
-    display: block;
-    margin-top: 0.625rem; /* 10px */
-    text-shadow: 
-        0 0 0.9375rem #ffff00,
-        0 0 1.875rem #ffff00,
-        0.1875rem 0.1875rem 0px rgba(0, 0, 0, 0.8);
-    animation: scoreFlash 1.5s ease-in-out infinite;
+  font-size: 4.5rem; /* 72px */
+  color: #ffff00;
+  display: block;
+  margin-top: 0.625rem; /* 10px */
+  text-shadow:
+    0 0 0.9375rem #ffff00,
+    0 0 1.875rem #ffff00,
+    0.1875rem 0.1875rem 0px rgba(0, 0, 0, 0.8);
+  animation: scoreFlash 1.5s ease-in-out infinite;
 }
 
 #restartLevelButton {
-    font-family: 'Jersey 10', sans-serif;
-    padding: 1.25rem 3.75rem; /* 20px 60px */
-    font-size: 2.625rem; /* 42px */
-    font-weight: normal;
-    background: linear-gradient(180deg, #00ffff 0%, #00cccc 100%);
-    color: #000;
-    border: 0.25rem solid #00ffff; /* 4px */
-    border-radius: 0;
-    cursor: pointer;
-    text-transform: uppercase;
-    letter-spacing: 0.25rem; /* 4px */
-    box-shadow: 
-        0 0 1.25rem #00ffff,
-        0 0.5rem 0 #008888, /* 8px */
-        0 0.5rem 1.25rem rgba(0, 0, 0, 0.5);
-    transition: all 0.1s;
-    position: relative;
-    top: 0;
-    margin-bottom: 1.25rem; /* 20px */
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
+  font-family: 'Jersey 10', sans-serif;
+  padding: 1.25rem 3.75rem; /* 20px 60px */
+  font-size: 2.625rem; /* 42px */
+  font-weight: normal;
+  background: linear-gradient(180deg, #00ffff 0%, #00cccc 100%);
+  color: #000;
+  border: 0.25rem solid #00ffff; /* 4px */
+  border-radius: 0;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.25rem; /* 4px */
+  box-shadow:
+    0 0 1.25rem #00ffff,
+    0 0.5rem 0 #008888,
+    /* 8px */ 0 0.5rem 1.25rem rgba(0, 0, 0, 0.5);
+  transition: all 0.1s;
+  position: relative;
+  top: 0;
+  margin-bottom: 1.25rem; /* 20px */
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 #restartLevelButton:hover {
-    background: linear-gradient(180deg, #00ffff 0%, #00eeee 100%);
-    box-shadow: 
-        0 0 1.875rem #00ffff,
-        0 0.5rem 0 #008888,
-        0 0.5rem 1.875rem rgba(0, 255, 255, 0.5);
-    transform: scale(1.05);
+  background: linear-gradient(180deg, #00ffff 0%, #00eeee 100%);
+  box-shadow:
+    0 0 1.875rem #00ffff,
+    0 0.5rem 0 #008888,
+    0 0.5rem 1.875rem rgba(0, 255, 255, 0.5);
+  transform: scale(1.05);
 }
 
 #restartLevelButton:active {
-    top: 0.25rem; /* 4px */
-    box-shadow: 
-        0 0 1.25rem #00ffff,
-        0 0.25rem 0 #008888,
-        0 0.25rem 0.625rem rgba(0, 0, 0, 0.5);
+  top: 0.25rem; /* 4px */
+  box-shadow:
+    0 0 1.25rem #00ffff,
+    0 0.25rem 0 #008888,
+    0 0.25rem 0.625rem rgba(0, 0, 0, 0.5);
 }
 
 #levelsButton {
-    font-family: 'Jersey 10', sans-serif;
-    padding: 1.25rem 3.75rem; /* 20px 60px */
-    font-size: 2.625rem; /* 42px */
-    font-weight: normal;
-    background: linear-gradient(180deg, #ffff00 0%, #cccc00 100%);
-    color: #000;
-    border: 0.25rem solid #ffff00; /* 4px */
-    border-radius: 0;
-    cursor: pointer;
-    text-transform: uppercase;
-    letter-spacing: 0.25rem; /* 4px */
-    box-shadow: 
-        0 0 1.25rem #ffff00,
-        0 0.5rem 0 #888800, /* 8px */
-        0 0.5rem 1.25rem rgba(0, 0, 0, 0.5);
-    transition: all 0.1s;
-    position: relative;
-    top: 0;
-    margin-bottom: 1.25rem; /* 20px */
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
+  font-family: 'Jersey 10', sans-serif;
+  padding: 1.25rem 3.75rem; /* 20px 60px */
+  font-size: 2.625rem; /* 42px */
+  font-weight: normal;
+  background: linear-gradient(180deg, #ffff00 0%, #cccc00 100%);
+  color: #000;
+  border: 0.25rem solid #ffff00; /* 4px */
+  border-radius: 0;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.25rem; /* 4px */
+  box-shadow:
+    0 0 1.25rem #ffff00,
+    0 0.5rem 0 #888800,
+    /* 8px */ 0 0.5rem 1.25rem rgba(0, 0, 0, 0.5);
+  transition: all 0.1s;
+  position: relative;
+  top: 0;
+  margin-bottom: 1.25rem; /* 20px */
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 #levelsButton:hover {
-    background: linear-gradient(180deg, #ffff44 0%, #eeee00 100%);
-    box-shadow: 
-        0 0 1.875rem #ffff00,
-        0 0.5rem 0 #888800,
-        0 0.5rem 1.875rem rgba(255, 255, 0, 0.5);
-    transform: scale(1.05);
+  background: linear-gradient(180deg, #ffff44 0%, #eeee00 100%);
+  box-shadow:
+    0 0 1.875rem #ffff00,
+    0 0.5rem 0 #888800,
+    0 0.5rem 1.875rem rgba(255, 255, 0, 0.5);
+  transform: scale(1.05);
 }
 
 #levelsButton:active {
-    top: 0.25rem; /* 4px */
-    box-shadow: 
-        0 0 1.25rem #ffff00,
-        0 0.25rem 0 #888800,
-        0 0.25rem 0.625rem rgba(0, 0, 0, 0.5);
+  top: 0.25rem; /* 4px */
+  box-shadow:
+    0 0 1.25rem #ffff00,
+    0 0.25rem 0 #888800,
+    0 0.25rem 0.625rem rgba(0, 0, 0, 0.5);
 }
 
 /* Bottom Center Instructions */
 #instructions {
-    position: absolute;
-    bottom: 1.25rem; /* 20px */
-    left: 50%;
-    transform: translateX(-50%);
-    color: #888;
-    text-align: center;
-    z-index: 10;
-    padding: 0 1rem;
-    width: 90%;
+  position: absolute;
+  bottom: 1.25rem; /* 20px */
+  left: 50%;
+  transform: translateX(-50%);
+  color: #888;
+  text-align: center;
+  z-index: 10;
+  padding: 0 1rem;
+  width: 90%;
 }
 
 #instructions p:first-child {
-    font-size: 1.125rem; /* 18px */
-    margin-bottom: 0.625rem; /* 10px */
+  font-size: 1.125rem; /* 18px */
+  margin-bottom: 0.625rem; /* 10px */
 }
 
 #instructions p:last-child {
-    font-size: 0.875rem; /* 14px */
+  font-size: 0.875rem; /* 14px */
 }
 
 /* Home Button - Below Restart Button */
 #homeButton {
-    font-family: 'Jersey 10', sans-serif;
-    padding: 1.25rem 3.75rem; /* 20px 60px */
-    font-size: 2.625rem; /* 42px */
-    font-weight: normal;
-    background: linear-gradient(180deg, #888 0%, #666 100%);
-    color: #fff;
-    border: 0.25rem solid #aaa; /* 4px */
+  font-family: 'Jersey 10', sans-serif;
+  padding: 1.25rem 3.75rem; /* 20px 60px */
+  font-size: 2.625rem; /* 42px */
+  font-weight: normal;
+  background: linear-gradient(180deg, #888 0%, #666 100%);
+  color: #fff;
+  border: 0.25rem solid #aaa; /* 4px */
 }
 
 /* Animations */
 @keyframes pulse {
-    0%, 100% { 
-        opacity: 1; 
-    }
-    50% { 
-        opacity: 0.5; 
-    }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
 }
 
 /* TV Static/Noise Animation */
 @keyframes staticNoise {
-    0% {
-        transform: translate(0, 0);
-    }
-    10% {
-        transform: translate(-5%, -5%);
-    }
-    20% {
-        transform: translate(-10%, 5%);
-    }
-    30% {
-        transform: translate(7%, -10%);
-    }
-    40% {
-        transform: translate(-5%, 0%);
-    }
-    50% {
-        transform: translate(-10%, 5%);
-    }
-    60% {
-        transform: translate(12%, 3%);
-    }
-    70% {
-        transform: translate(0%, -8%);
-    }
-    80% {
-        transform: translate(-12%, -5%);
-    }
-    90% {
-        transform: translate(5%, 8%);
-    }
-    100% {
-        transform: translate(0, 0);
-    }
+  0% {
+    transform: translate(0, 0);
+  }
+  10% {
+    transform: translate(-5%, -5%);
+  }
+  20% {
+    transform: translate(-10%, 5%);
+  }
+  30% {
+    transform: translate(7%, -10%);
+  }
+  40% {
+    transform: translate(-5%, 0%);
+  }
+  50% {
+    transform: translate(-10%, 5%);
+  }
+  60% {
+    transform: translate(12%, 3%);
+  }
+  70% {
+    transform: translate(0%, -8%);
+  }
+  80% {
+    transform: translate(-12%, -5%);
+  }
+  90% {
+    transform: translate(5%, 8%);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
 }
 
 /* Scanline Animation */
 @keyframes scanline {
-    0% {
-        background-position: 0 0;
-    }
-    100% {
-        background-position: 0 100%;
-    }
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 0 100%;
+  }
 }
 
 /* Glitch effect for Game Over title */
 @keyframes glitch {
-    0%, 90%, 100% {
-        text-shadow: 
-            0 0 1.25rem #ff0040,
-            0 0 2.5rem #ff0040,
-            0 0 3.75rem #ff0040,
-            0.25rem 0.25rem 0px rgba(0, 0, 0, 0.8);
-    }
-    92% {
-        text-shadow: 
-            -0.125rem 0 1.25rem #ff0040,
-            0.125rem 0.125rem 2.5rem #00ffff,
-            0 0 3.75rem #ff0040,
-            0.25rem 0.25rem 0px rgba(0, 0, 0, 0.8);
-    }
-    94% {
-        text-shadow: 
-            0.125rem 0 1.25rem #ff0040,
-            -0.125rem -0.125rem 2.5rem #ffff00,
-            0 0 3.75rem #ff0040,
-            0.25rem 0.25rem 0px rgba(0, 0, 0, 0.8);
-    }
+  0%,
+  90%,
+  100% {
+    text-shadow:
+      0 0 1.25rem #ff0040,
+      0 0 2.5rem #ff0040,
+      0 0 3.75rem #ff0040,
+      0.25rem 0.25rem 0px rgba(0, 0, 0, 0.8);
+  }
+  92% {
+    text-shadow:
+      -0.125rem 0 1.25rem #ff0040,
+      0.125rem 0.125rem 2.5rem #00ffff,
+      0 0 3.75rem #ff0040,
+      0.25rem 0.25rem 0px rgba(0, 0, 0, 0.8);
+  }
+  94% {
+    text-shadow:
+      0.125rem 0 1.25rem #ff0040,
+      -0.125rem -0.125rem 2.5rem #ffff00,
+      0 0 3.75rem #ff0040,
+      0.25rem 0.25rem 0px rgba(0, 0, 0, 0.8);
+  }
 }
 
 /* Score flash animation */
 @keyframes scoreFlash {
-    0%, 100% {
-        opacity: 1;
-        transform: scale(1);
-    }
-    50% {
-        opacity: 0.7;
-        transform: scale(1.1);
-    }
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.1);
+  }
 }
 
 /* Fade in animation for game over screen */
 @keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
-
-
-  

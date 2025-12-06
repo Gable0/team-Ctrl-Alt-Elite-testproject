@@ -1,89 +1,89 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
+  <head>
     <title>Rect Ship Demo</title>
     <style>
-        body {
-            margin: 0;
-            background: #fff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        canvas {
-            background: #fff;
-            border: 1px solid #000;
-        }
+      body {
+        margin: 0;
+        background: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+      canvas {
+        background: #fff;
+        border: 1px solid #000;
+      }
     </style>
-</head>
-<body>
-<canvas id="c" width="600" height="400"></canvas>
-<script>
-    const c = document.getElementById('c'),
+  </head>
+  <body>
+    <canvas id="c" width="600" height="400"></canvas>
+    <script>
+      const c = document.getElementById('c'),
         ctx = c.getContext('2d');
 
-    class S {
+      class S {
         constructor(x, y) {
-            this.x = x;
-            this.y = y;
-            this.vx = 0;
-            this.vy = 0;
-            this.a = 0;
-            this.t = .2;
-            this.f = .99;
-            this.rs = .1;
-            this.sz = 10;
+          this.x = x;
+          this.y = y;
+          this.vx = 0;
+          this.vy = 0;
+          this.a = 0;
+          this.t = 0.2;
+          this.f = 0.99;
+          this.rs = 0.1;
+          this.sz = 10;
         }
         update(k) {
-            if (k.ArrowLeft || k.KeyA) this.a -= this.rs;
-            if (k.ArrowRight || k.KeyD) this.a += this.rs;
-            if (k.ArrowUp || k.KeyW) {
-                this.vx += Math.cos(this.a) * this.t;
-                this.vy += Math.sin(this.a) * this.t;
-            }
-            this.vx *= this.f;
-            this.vy *= this.f;
-            this.x += this.vx;
-            this.y += this.vy;
-            if (this.x > c.width + this.sz) this.x = -this.sz;
-            if (this.x < -this.sz) this.x = c.width + this.sz;
-            if (this.y > c.height + this.sz) this.y = -this.sz;
-            if (this.y < -this.sz) this.y = c.height + this.sz;
+          if (k.ArrowLeft || k.KeyA) this.a -= this.rs;
+          if (k.ArrowRight || k.KeyD) this.a += this.rs;
+          if (k.ArrowUp || k.KeyW) {
+            this.vx += Math.cos(this.a) * this.t;
+            this.vy += Math.sin(this.a) * this.t;
+          }
+          this.vx *= this.f;
+          this.vy *= this.f;
+          this.x += this.vx;
+          this.y += this.vy;
+          if (this.x > c.width + this.sz) this.x = -this.sz;
+          if (this.x < -this.sz) this.x = c.width + this.sz;
+          if (this.y > c.height + this.sz) this.y = -this.sz;
+          if (this.y < -this.sz) this.y = c.height + this.sz;
         }
         draw() {
-            ctx.save();
-            ctx.translate(this.x, this.y);
-            ctx.rotate(this.a);
-            ctx.fillStyle = '#f00';
-            ctx.fillRect(-this.sz, -5, this.sz * 2, 10);
-            ctx.restore();
+          ctx.save();
+          ctx.translate(this.x, this.y);
+          ctx.rotate(this.a);
+          ctx.fillStyle = '#f00';
+          ctx.fillRect(-this.sz, -5, this.sz * 2, 10);
+          ctx.restore();
         }
         hyperspace() {
-            this.x = Math.random() * c.width;
-            this.y = Math.random() * c.height;
-            this.vx = 0;
-            this.vy = 0;
+          this.x = Math.random() * c.width;
+          this.y = Math.random() * c.height;
+          this.vx = 0;
+          this.vy = 0;
         }
-    }
+      }
 
-    const s = new S(c.width / 2, c.height / 2),
+      const s = new S(c.width / 2, c.height / 2),
         k = {};
 
-    window.addEventListener('keydown', e => k[e.code] = true);
-    window.addEventListener('keyup', e => k[e.code] = false);
+      window.addEventListener('keydown', e => (k[e.code] = true));
+      window.addEventListener('keyup', e => (k[e.code] = false));
 
-    const a = () => {
+      const a = () => {
         ctx.clearRect(0, 0, c.width, c.height);
         s.update(k);
         if (k.Space) {
-            s.hyperspace();
-            k.Space = false;
+          s.hyperspace();
+          k.Space = false;
         }
         s.draw();
         requestAnimationFrame(a);
-    };
-    a();
-</script>
-</body>
+      };
+      a();
+    </script>
+  </body>
 </html>
