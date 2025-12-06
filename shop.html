@@ -19,15 +19,14 @@
     <section class="skins-grid" id="skins-grid">
     </section>
 
-    <div id="shop-coins" aria-live="polite" style="display:flex;align-items:center;gap:10px;margin-top:18px;">
-        <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(180deg,#ffd54f,#bf8f00);display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,0.25);">
-            <span style="font-weight:700;color:#6b3d00;">¢</span>
+    <shop-coins class="shop-coins" aria-live="polite">
+        <div class="shop-coin-icon">
+            <span class="shop-coin-symbol">¢</span>
         </div>
         <div>
-            <div style="font-size:14px;color:#ddd;">Coins</div>
-            <div id="coin-count" style="font-size:20px;font-weight:700;color:#ffdd57;">0</div>
+            <div id="coin-count">0</div>
         </div>
-    </div>
+    </shop-coins>
 
     <button id="back-homepage" onclick="location.href='homepage.html'">Back to Home</button>
 </shop-container>

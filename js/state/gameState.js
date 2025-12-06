@@ -55,16 +55,23 @@ export function handlePlayerHit(game) {
 
     if (game.lives <= 0) {
         game.gameOver = true;
-        
+
         // Play game over sound
         audioManager.playGameOverSound();
-        
+
         // Save score and redirect after a delay to let sound play
-        localStorage.setItem('finalScore', game.score);
-        localStorage.setItem('finalLevel', game.level);
-        
+        try {
+            localStorage.setItem('finalScore', String(game.score));
+            localStorage.setItem('finalLevel', String(game.level));
+            // recentScore will be read by leaderboard page so player can save the run
+            localStorage.setItem('recentScore', JSON.stringify({ score: game.score, difficulty: game.difficulty }));
+        } catch (e) {
+            // ignore storage errors
+        }
+
         setTimeout(() => {
-            window.location.href = 'Demos/Score_UI/index.html';
+            // Redirect to the leaderboard page (will prompt to save recent run)
+            window.location.href = 'leaderboard.html';
         }, 2000); // 2 second delay for game over sound
     }
 
