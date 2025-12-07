@@ -249,7 +249,6 @@
       var style = elementStyle(dimension, size, gutSize, i);
 
       Object.keys(style).forEach(function (prop) {
-         
         el.style[prop] = style[prop];
       });
     }
@@ -258,7 +257,6 @@
       var style = gutterStyle(dimension, gutSize, i);
 
       Object.keys(style).forEach(function (prop) {
-         
         gutterElement.style[prop] = style[prop];
       });
     }
@@ -728,7 +726,6 @@
         if (expandToMin) {
           adjustToMin(element);
         } else {
-           
           element.minSize = computedSize;
         }
       }
