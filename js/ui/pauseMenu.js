@@ -1,6 +1,8 @@
 // js/ui/pauseMenu.js
 // Handles creation and toggling of the in-game pause menu.
 
+
+import { translate, applyTranslations } from "./translations.js";
 let isPaused = false;
 let pauseMenuElement = null;
 
@@ -28,6 +30,8 @@ export function initPauseMenu(game) {
     `;
     document.body.appendChild(pauseMenuElement);
 
+    applyTranslations(pauseMenuElement);
+
     // Button actions
     document.getElementById('resumeButton').addEventListener('click', () => {
       togglePause(game);
@@ -38,9 +42,12 @@ export function initPauseMenu(game) {
     });
 
     document.getElementById('exitButton').addEventListener('click', () => {
-      if (confirm('Are you sure you want to exit? Progress will be lost.')) {
-        window.location.href = 'homepage.html';
-      }
+      window.alert(translate("confirmExit"));
+      window.location.href = 'homepage.html';
+    });
+
+    window.addEventListener("languagechange", () => {
+      applyTranslations(pauseMenuElement);
     });
   }
 
