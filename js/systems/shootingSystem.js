@@ -1,4 +1,4 @@
-// js/systems/shootingSystem.js
+/// js/systems/shootingSystem.js
 import { audioManager } from './audioManager.js';
 
 let canvasRef = null;
@@ -7,10 +7,12 @@ export function initShooting(canvas) {
   canvasRef = canvas;
 }
 
-export function createPlayerShot(x, y, angle = 0) {
-  // Play shooting sound (will automatically use fun mode if enabled)
-  console.log('🎯 createPlayerShot called - about to play shoot sound');
-  audioManager.playShootSound();
+export function createPlayerShot(x, y, angle = 0, playSound = true) {
+  // Only play shooting sound if playSound is true (for the first bullet in a burst)
+  if (playSound) {
+    console.log('🎯 createPlayerShot called - about to play shoot sound');
+    audioManager.playShootSound();
+  }
 
   const speed = 800;
   return {
@@ -92,7 +94,7 @@ export function updateEnemyShots(game, delta) {
   game.enemyShots = game.enemyShots.filter(shot => {
     shot.x += shot.vx * delta;
     shot.y += shot.vy * delta;
-    return shot.y <= canvasRef.height + 50; // ← CHANGED < TO <=
+    return shot.y <= canvasRef.height + 50;
   });
 }
 
