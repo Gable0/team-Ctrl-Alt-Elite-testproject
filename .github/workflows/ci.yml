@@ -1,29 +1,33 @@
-
-name: CI/CD
+name: CI – Lint & Format
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [main, master]
   pull_request:
-    branches: [ main, master ]
+    branches: [main, master]
 
 jobs:
-  test:
+  lint-and-format:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
+      - name: Setup Node.js 20
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm'
+          cache: 'npm'           # caches node_modules automatically
 
       - name: Install dependencies
-        run: npm ci
+        run: npm ci                     # clean install from package-lock.json
 
-      - name: Run unit + integration tests
-        run: npx vitest run --coverage
+      - name: Check code formatting (Prettier)
+        run: npm run format
+        # → fails if any file is not formatted
+
+      - name: Lint JavaScript (ESLint)
+        run: npm run lint
+        # → fails on any lint error
 

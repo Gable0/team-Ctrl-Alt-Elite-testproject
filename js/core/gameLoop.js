@@ -1,30 +1,49 @@
-import { initEnemyModule, spawnEnemyWave, updateEnemies, drawEnemies } from '../entities/enemyManager.js';
+import {
+  initEnemyModule,
+  spawnEnemyWave,
+  updateEnemies,
+  drawEnemies,
+} from '../entities/enemyManager.js';
 import { createPlayer, updatePlayer, drawPlayer } from '../entities/player.js';
 import { initInput } from './input.js';
 import {
-    initShooting,
-    updatePlayerShots,
-    updateEnemyShots,
-    drawPlayerShots,
-    drawEnemyShots,
-    createPlayerShot
+  initShooting,
+  updatePlayerShots,
+  updateEnemyShots,
+  drawPlayerShots,
+  drawEnemyShots,
+  createPlayerShot,
 } from '../systems/shootingSystem.js';
-import { checkPlayerShotCollisions, checkEnemyShotCollisions } from '../systems/collision/shotCollisions.js';
+import {
+  checkPlayerShotCollisions,
+  checkEnemyShotCollisions,
+} from '../systems/collision/shotCollisions.js';
 import { checkPlayerEnemyCollision } from '../systems/collision/entityCollisions.js';
-import { initEnemyAttack, scheduleEnemyAttacks, updateAttackingEnemy } from '../systems/enemyAttack.js';
+import {
+  initEnemyAttack,
+  scheduleEnemyAttacks,
+  updateAttackingEnemy,
+} from '../systems/enemyAttack.js';
 import {
     createInitialGame,
     handleEnemyKilled,
     handlePlayerHit,
     handleLevelProgression,
     updateInvincibility,
-    updateLevelTransition,
-    checkEnemiesFullySetup
+    updateLevelTransition
 } from '../state/gameState.js';
 import { drawHUD, drawLevelTransition } from '../ui/hud.js';
 import { initPauseMenu } from '../ui/pauseMenu.js';
-import { spawnPowerUp, updatePowerUps, drawPowerUps } from '../systems/powerUps.js';
-import { initBackground, updateBackground, drawBackground } from './background.js';
+import {
+  spawnPowerUp,
+  updatePowerUps,
+  drawPowerUps,
+} from '../systems/powerUps.js';
+import {
+  initBackground,
+  updateBackground,
+  drawBackground,
+} from './background.js';
 import { initAudio } from '../systems/audioManager.js';
 
 const canvas = document.getElementById('game');
@@ -45,13 +64,13 @@ Game.player = createPlayer(canvas);
 initPauseMenu(Game);
 
 function update(delta) {
-    if (Game.gameOver || Game.paused) return;
+  if (Game.gameOver || Game.paused) return;
 
-    updateInvincibility(Game, delta);
+  updateInvincibility(Game, delta);
 
-    if (updateLevelTransition(Game, delta)) {
-        return;
-    }
+  if (updateLevelTransition(Game, delta)) {
+    return;
+  }
 
     updateBackground(delta, canvas);
     updateEnemies(Game, delta);
@@ -60,60 +79,63 @@ function update(delta) {
     updateEnemyShots(Game, delta);
     updatePowerUps(Game, delta, canvas);
 
-    // Check if all enemies are fully set up (transition from start-game sound to intro music)
-    checkEnemiesFullySetup(Game);
-
-    if (Game.playerShootingUnlocked) {
-        Game.attackTimer = scheduleEnemyAttacks(Game.enemies, Game.player, delta, Game.attackTimer);
+  if (Game.playerShootingUnlocked) {
+    Game.attackTimer = scheduleEnemyAttacks(
+      Game.enemies,
+      Game.player,
+      delta,
+      Game.attackTimer
+    );
+  }
+  for (const enemy of Game.enemies) {
+    if (enemy.state === 'attacking') {
+      updateAttackingEnemy(enemy, delta);
     }
-    for (const enemy of Game.enemies) {
-        if (enemy.state === 'attacking') {
-            updateAttackingEnemy(enemy, delta);
-        }
-    }
+  }
 
-    checkPlayerShotCollisions(Game, (enemy) => {
-        handleEnemyKilled(Game, enemy);
-        spawnPowerUp(Game, enemy);
-    });
+  checkPlayerShotCollisions(Game, enemy => {
+    handleEnemyKilled(Game, enemy);
+    spawnPowerUp(Game, enemy);
+  });
 
-    if (Game.invincibilityTimer <= 0) {
-        checkEnemyShotCollisions(Game, () => handlePlayerHit(Game));
-        checkPlayerEnemyCollision(Game, () => handlePlayerHit(Game));
-    }
+  if (Game.invincibilityTimer <= 0) {
+    checkEnemyShotCollisions(Game, () => handlePlayerHit(Game));
+    checkPlayerEnemyCollision(Game, () => handlePlayerHit(Game));
+  }
 
-    handleLevelProgression(Game, delta, spawnEnemyWave);
+  handleLevelProgression(Game, delta, spawnEnemyWave);
 }
 
 function draw() {
-    drawBackground(ctx, canvas);
+  drawBackground(ctx, canvas);
 
-    if (Game.showingLevelTransition) {
-        drawPlayer(ctx, Game.player, Game.invincibilityTimer, Game);
-        drawLevelTransition(ctx, canvas, Game);
-    } else {
-        drawEnemies(Game.enemies, Game);
-        drawEnemyShots(ctx, Game.enemyShots);
-        drawPlayerShots(ctx, Game.playerShots);
-        drawPowerUps(ctx, Game.powerUps);
-        drawPlayer(ctx, Game.player, Game.invincibilityTimer, Game);
-    }
+  if (Game.showingLevelTransition) {
+    drawPlayer(ctx, Game.player, Game.invincibilityTimer, Game);
+    drawLevelTransition(ctx, canvas, Game);
+  } else {
+    drawEnemies(Game.enemies, Game);
+    drawEnemyShots(ctx, Game.enemyShots);
+    drawPlayerShots(ctx, Game.playerShots);
+    drawPowerUps(ctx, Game.powerUps);
+    drawPlayer(ctx, Game.player, Game.invincibilityTimer, Game);
+  }
 
-    drawHUD(ctx, canvas, Game);
+  drawHUD(ctx, canvas, Game);
 }
 
 function loop(timestamp) {
-    const delta = (timestamp - Game.lastTime) / 1000 || 0;
-    Game.lastTime = timestamp;
-    update(delta);
-    draw();
-    requestAnimationFrame(loop);
+  const delta = (timestamp - Game.lastTime) / 1000 || 0;
+  Game.lastTime = timestamp;
+  update(delta);
+  draw();
+  requestAnimationFrame(loop);
 }
 
 function start() {
-    Game.lastTime = performance.now();
-    requestAnimationFrame(loop);
+  Game.lastTime = performance.now();
+  requestAnimationFrame(loop);
 }
 
 spawnEnemyWave(Game);
 start();
+
