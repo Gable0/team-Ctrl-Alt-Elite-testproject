@@ -12,35 +12,27 @@ export function injectSettings() {
   modal.className = 'settings-modal hidden';
   modal.innerHTML = `
     <div class="settings-content">
-      <h2 style="font-family: 'Jersey 10', monospace !important;">Settings</h2>
+      <h2 translate="settings">Settings</h2>
 
-      <label style="font-family: 'Jersey 10', monospace !important;">
-        Audio Volume
-        <input type="range" min="0" max="100" value="50" id="audio-volume">
-      </label>
+      <label translate="audioVolume">Audio Volume</label>
+      <input type="range" min="0" max="100" value="50" id="audio-volume">
 
-      <label style="font-family: 'Jersey 10', monospace !important;">
-        SFX Volume
-        <input type="range" min="0" max="100" value="50" id="sfx-volume">
-      </label>
+      <label translate="sfxVolume">SFX Volume</label>
+      <input type="range" min="0" max="100" value="50" id="sfx-volume">
 
-      <label style="font-family: 'Jersey 10', monospace !important;">
-        Language
-        <select id="language-select">
-          <option value="en">English</option>
-          <option value="es">Español</option>
-          <option value="fr">Français</option>
-        </select>
-      </label>
+      <label translate="language">Language</label>
+      <select id="language-select"></select>
 
       <div class="fun-mode-container">
-        <label class="fun-mode-label" style="font-family: 'Jersey 10', monospace !important;">
-          Fun Mode (Chloe's Shooting Sound) Party 🎉
+        <label class="fun-mode-label" translate="funModeLabel">
+          Fun Mode (Chloe's Shooting Sound) Party
         </label>
-        <button class="fun-mode-btn" id="fun-mode-toggle">Have Some Fun!</button>
+        <button class="fun-mode-btn" id="fun-mode-toggle" translate="funModeOff">
+          Have Some Fun!
+        </button>
       </div>
 
-      <button class="close-settings">Close</button>
+      <button class="close-settings" translate="close">Close</button>
     </div>
   `;
 
