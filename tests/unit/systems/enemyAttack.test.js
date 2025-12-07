@@ -1,48 +1,48 @@
-import { test, assert } from "vitest";
+import { test, assert } from 'vitest';
 import {
   initEnemyAttack,
   selectAttackingEnemy,
   startEnemyAttack,
   updateAttackingEnemy,
-} from "../../../js/systems/enemyAttack.js";
+} from '../../../js/systems/enemyAttack.js';
 
 beforeAll(() => {
   initEnemyAttack({ width: 800, height: 600 });
 });
 
-test("selectAttackingEnemy picks valid enemy", () => {
+test('selectAttackingEnemy picks valid enemy', () => {
   const enemies = [
-    { state: "formation", isAttacking: false },
-    { state: "formation", isAttacking: true },
-    { state: "formation", isAttacking: false },
+    { state: 'formation', isAttacking: false },
+    { state: 'formation', isAttacking: true },
+    { state: 'formation', isAttacking: false },
   ];
   const chosen = selectAttackingEnemy(enemies);
   assert.notEqual(chosen, null);
   assert.isFalse(chosen.isAttacking);
 });
 
-test("selectAttackingEnemy returns null when none available", () => {
+test('selectAttackingEnemy returns null when none available', () => {
   const enemies = [
-    { state: "dying" },
-    { state: "formation", isAttacking: true },
+    { state: 'dying' },
+    { state: 'formation', isAttacking: true },
   ];
   assert.isNull(selectAttackingEnemy(enemies));
 });
 
-test("startEnemyAttack creates 5-point path and sets state", () => {
+test('startEnemyAttack creates 5-point path and sets state', () => {
   const enemy = { x: 400, y: 100, finalX: 400, finalY: 200 };
   const player = { x: 420, y: 500 };
 
   startEnemyAttack(enemy, player);
 
   assert.isTrue(enemy.isAttacking);
-  assert.equal(enemy.state, "attacking");
+  assert.equal(enemy.state, 'attacking');
   assert.equal(enemy.attackPath.length, 5);
   assert.equal(enemy.attackPathIndex, 0);
   assert.equal(enemy.attackSpeed, 250);
 });
 
-test("updateAttackingEnemy moves along path correctly", () => {
+test('updateAttackingEnemy moves along path correctly', () => {
   const enemy = {
     x: 400,
     y: 100,

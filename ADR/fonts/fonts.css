@@ -1,45 +1,45 @@
 .nabla-style-font {
-  font-family: "Nabla", system-ui;
+  font-family: 'Nabla', system-ui;
   font-optical-sizing: auto;
   font-weight: 400;
   font-style: normal;
   font-variation-settings:
-    "EDPT" 100,
-    "EHLT" 12;
+    'EDPT' 100,
+    'EHLT' 12;
 }
 .press-start-2p-regular {
-  font-family: "Press Start 2P", system-ui;
+  font-family: 'Press Start 2P', system-ui;
   font-weight: 400;
   font-style: normal;
 }
 
 .tourney-style-font {
-  font-family: "Tourney", sans-serif;
+  font-family: 'Tourney', sans-serif;
   font-optical-sizing: auto;
   font-weight: 400;
   font-style: normal;
-  font-variation-settings: "wdth" 100;
+  font-variation-settings: 'wdth' 100;
 }
 .dotgothic16-regular {
-  font-family: "DotGothic16", sans-serif;
+  font-family: 'DotGothic16', sans-serif;
   font-weight: 400;
   font-style: normal;
 }
 
 .doto-style-font {
-  font-family: "Doto", sans-serif;
+  font-family: 'Doto', sans-serif;
   font-optical-sizing: auto;
   font-weight: 400;
   font-style: normal;
-  font-variation-settings: "ROND" 0;
+  font-variation-settings: 'ROND' 0;
 }
 .jersey-10-regular {
-  font-family: "Jersey 10", sans-serif;
+  font-family: 'Jersey 10', sans-serif;
   font-weight: 400;
   font-style: normal;
 }
 :root {
   background: #000;
-  font-family: "Jersey 10", sans-serif;
+  font-family: 'Jersey 10', sans-serif;
   color: gold;
 }

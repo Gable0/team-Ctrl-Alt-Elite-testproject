@@ -15,16 +15,21 @@
         aria-label="Galaga playfield"
       ></canvas>
       <section id="status">
-        <p>Use Arrow Keys or WASD to move the ship.</p>
-        <p>[Space] to fire.</p>
+        <p translate="moveInstructions">Use Arrow Keys or WASD to move the ship.</p>
+        <p translate="fireInstructions">[Space] to fire.</p>
       </section>
     </main>
     <script type="module">
-      import { injectSettings } from "./js/ui/settingsComponent.js";
-      import { persistentAudio } from "./js/core/persistentAudio.js";
+      import { injectSettings } from './js/ui/settingsComponent.js';
+      import { persistentAudio } from './js/core/persistentAudio.js';
       injectSettings();
       persistentAudio.stop();
     </script>
     <script type="module" src="js/core/gameLoop.js"></script>
+    <script type="module">
+      import { applyTranslations } from "./js/ui/translations.js";
+      applyTranslations(document);
+      window.addEventListener("languagechange", () => applyTranslations(document));
+    </script>
   </body>
 </html>

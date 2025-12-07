@@ -1,13 +1,15 @@
 // js/systems/powerUps.js
 // Handles power-up spawning, collection, triple-shot timer and visual rendering.
 
+import { audioManager } from './audioManager.js';
+
 export function spawnPowerUp(game, enemy) {
   // Base drop chance varies by difficulty
   let dropChance = 0.1; // 10% on medium
 
-  if (game.difficulty === "easy") {
+  if (game.difficulty === 'easy') {
     dropChance = 0.25; // 25% on easy
-  } else if (game.difficulty === "hard") {
+  } else if (game.difficulty === 'hard') {
     dropChance = 0.05; // 5% on hard
   }
 
@@ -24,7 +26,7 @@ export function spawnPowerUp(game, enemy) {
 
 export function updatePowerUps(game, delta, canvas) {
   // Single-pass update: move, check collection, remove off-screen/collected
-  game.powerUps = game.powerUps.filter((powerUp) => {
+  game.powerUps = game.powerUps.filter(powerUp => {
     // Move downward
     powerUp.y += powerUp.speed * delta;
 
@@ -39,6 +41,10 @@ export function updatePowerUps(game, delta, canvas) {
     if (distance < game.player.size + powerUp.size) {
       // Grant triple-shot for 30 seconds
       game.tripleShotTimer = 30;
+
+      // Play power-up collection sound
+      audioManager.playPowerUpSound();
+
       return false; // collected → remove
     }
 
@@ -58,16 +64,16 @@ export function drawPowerUps(ctx, powerUps) {
     ctx.translate(powerUp.x, powerUp.y);
 
     // Outer glowing circle
-    ctx.fillStyle = "#ffdd00";
+    ctx.fillStyle = '#ffdd00';
     ctx.shadowBlur = 15;
-    ctx.shadowColor = "#ffdd00";
+    ctx.shadowColor = '#ffdd00';
     ctx.beginPath();
     ctx.arc(0, 0, powerUp.size, 0, Math.PI * 2);
     ctx.fill();
     ctx.shadowBlur = 0;
 
     // Inner darker circle for depth
-    ctx.fillStyle = "#cc9900";
+    ctx.fillStyle = '#cc9900';
     ctx.beginPath();
     ctx.arc(0, 0, powerUp.size * 0.85, 0, Math.PI * 2);
     ctx.fill();
@@ -75,9 +81,9 @@ export function drawPowerUps(ctx, powerUps) {
     // Triple-shot icon (three white laser lines)
     const iconSize = powerUp.size * 0.7;
 
-    ctx.strokeStyle = "#ffffff";
+    ctx.strokeStyle = '#ffffff';
     ctx.lineWidth = 2.5;
-    ctx.lineCap = "round";
+    ctx.lineCap = 'round';
 
     // Left laser
     ctx.beginPath();

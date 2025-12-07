@@ -17,7 +17,7 @@ export function initSharedAudio() {
     return globalAudioElement;
   }
 
-  const introAudio = document.getElementById("intro-audio");
+  const introAudio = document.getElementById('intro-audio');
   if (!introAudio) return null;
 
   globalAudioElement = introAudio;
@@ -30,7 +30,7 @@ export function initSharedAudio() {
   function startIntroAudio() {
     if (audioStarted) return;
 
-    const savedTime = parseFloat(localStorage.getItem("introAudioTime")) || 25;
+    const savedTime = parseFloat(localStorage.getItem('introAudioTime')) || 25;
 
     introAudio.volume = 0;
     introAudio.currentTime = savedTime;
@@ -59,8 +59,8 @@ export function initSharedAudio() {
           }
         }, stepDuration);
       })
-      .catch((error) => {
-        console.log("Audio play failed (autoplay blocked?):", error);
+      .catch(error => {
+        console.log('Audio play failed (autoplay blocked?):', error);
       });
   }
 
@@ -69,8 +69,8 @@ export function initSharedAudio() {
     setInterval(() => {
       if (introAudio && !introAudio.paused) {
         localStorage.setItem(
-          "introAudioTime",
-          introAudio.currentTime.toString(),
+          'introAudioTime',
+          introAudio.currentTime.toString()
         );
       }
     }, 500);
@@ -80,8 +80,8 @@ export function initSharedAudio() {
   startIntroAudio();
 
   // Fallback: start on first user interaction (covers browsers that block autoplay)
-  const interactionEvents = ["click", "touchstart", "mouseenter", "keydown"];
-  interactionEvents.forEach((eventType) => {
+  const interactionEvents = ['click', 'touchstart', 'mouseenter', 'keydown'];
+  interactionEvents.forEach(eventType => {
     document.body.addEventListener(eventType, startIntroAudio, {
       once: true,
       passive: true,

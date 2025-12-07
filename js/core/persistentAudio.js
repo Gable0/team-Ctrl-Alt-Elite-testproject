@@ -32,14 +32,14 @@ class PersistentAudioManager {
   init() {
     // Create audio element if it doesn't exist
     if (!this.audio) {
-      this.audio = document.createElement("audio");
-      this.audio.id = "persistent-intro-audio";
+      this.audio = document.createElement('audio');
+      this.audio.id = 'persistent-intro-audio';
       this.audio.loop = true;
-      this.audio.preload = "auto";
+      this.audio.preload = 'auto';
 
-      const source = document.createElement("source");
-      source.src = "assets/sounds/reg game sounds/intro.wav";
-      source.type = "audio/wav";
+      const source = document.createElement('source');
+      source.src = 'assets/sounds/reg game sounds/intro.wav';
+      source.type = 'audio/wav';
 
       this.audio.appendChild(source);
       document.body.appendChild(this.audio);
@@ -51,12 +51,12 @@ class PersistentAudioManager {
 
       // Fallback for autoplay restrictions – but only if not manually stopped
       const interactionEvents = [
-        "click",
-        "touchstart",
-        "mouseenter",
-        "keydown",
+        'click',
+        'touchstart',
+        'mouseenter',
+        'keydown',
       ];
-      interactionEvents.forEach((eventType) => {
+      interactionEvents.forEach(eventType => {
         document.addEventListener(
           eventType,
           () => {
@@ -64,7 +64,7 @@ class PersistentAudioManager {
               this.start();
             }
           },
-          { once: true, passive: true },
+          { once: true, passive: true }
         );
       });
     }
@@ -87,12 +87,12 @@ class PersistentAudioManager {
     this.audio
       .play()
       .then(() => {
-        console.log("Persistent audio started");
+        console.log('Persistent audio started');
         this.started = true;
         this.fadeIn();
       })
-      .catch((error) => {
-        console.log("Audio autoplay blocked:", error.message);
+      .catch(error => {
+        console.log('Audio autoplay blocked:', error.message);
       });
   }
 
@@ -133,7 +133,7 @@ class PersistentAudioManager {
       this.started = false;
       this.fadingIn = false;
       this.manuallyStopped = true; // Mark as manually stopped
-      console.log("Persistent audio stopped and muted");
+      console.log('Persistent audio stopped and muted');
     }
   }
 
@@ -147,36 +147,36 @@ class PersistentAudioManager {
 
     // Intercept all link clicks
     document.addEventListener(
-      "click",
-      (e) => {
-        const link = e.target.closest("a");
+      'click',
+      e => {
+        const link = e.target.closest('a');
         if (link && link.href) {
           const url = new URL(link.href);
           if (
             url.origin === window.location.origin &&
-            url.pathname.endsWith(".html")
+            url.pathname.endsWith('.html')
           ) {
             e.preventDefault();
             this.navigateTo(url.pathname);
           }
         }
       },
-      true,
+      true
     );
 
     // Intercept button clicks that set location.href
     document.addEventListener(
-      "click",
-      (e) => {
-        const button = e.target.closest("button");
+      'click',
+      e => {
+        const button = e.target.closest('button');
         if (button) {
           // Check onclick attribute
-          const onclickAttr = button.getAttribute("onclick");
-          if (onclickAttr && onclickAttr.includes("location.href")) {
+          const onclickAttr = button.getAttribute('onclick');
+          if (onclickAttr && onclickAttr.includes('location.href')) {
             const match = onclickAttr.match(
-              /location\.href\s*=\s*['"]([^'"]+)['"]/,
+              /location\.href\s*=\s*['"]([^'"]+)['"]/
             );
-            if (match && match[1].endsWith(".html")) {
+            if (match && match[1].endsWith('.html')) {
               e.preventDefault();
               e.stopPropagation();
               button.onclick = null; // Remove original handler
@@ -188,11 +188,11 @@ class PersistentAudioManager {
           // Check if button has onclick function
           if (button.onclick) {
             const onclickStr = button.onclick.toString();
-            if (onclickStr.includes("location.href")) {
+            if (onclickStr.includes('location.href')) {
               const match = onclickStr.match(
-                /location\.href\s*=\s*['"]([^'"]+)['"]/,
+                /location\.href\s*=\s*['"]([^'"]+)['"]/
               );
-              if (match && match[1].endsWith(".html")) {
+              if (match && match[1].endsWith('.html')) {
                 e.preventDefault();
                 e.stopPropagation();
                 this.navigateTo(match[1]);
@@ -202,11 +202,11 @@ class PersistentAudioManager {
           }
         }
       },
-      true,
+      true
     );
 
     // Handle browser back/forward
-    window.addEventListener("popstate", (e) => {
+    window.addEventListener('popstate', e => {
       this.loadPage(window.location.pathname);
     });
 
@@ -214,8 +214,8 @@ class PersistentAudioManager {
     if (!window.history.state) {
       window.history.replaceState(
         { path: window.location.pathname },
-        "",
-        window.location.pathname,
+        '',
+        window.location.pathname
       );
     }
   }
@@ -226,7 +226,7 @@ class PersistentAudioManager {
    * @param {string} path - Destination pathname (e.g. "/shop.html")
    */
   async navigateTo(path) {
-    window.history.pushState({ path: path }, "", path);
+    window.history.pushState({ path: path }, '', path);
     await this.loadPage(path);
   }
 
@@ -243,7 +243,7 @@ class PersistentAudioManager {
 
       // Parse HTML
       const parser = new DOMParser();
-      const doc = parser.parseFromString(html, "text/html");
+      const doc = parser.parseFromString(html, 'text/html');
 
       // Replace body content (keep our audio element)
       const newBodyContent = doc.body.innerHTML;
@@ -261,9 +261,9 @@ class PersistentAudioManager {
       document.title = doc.title;
 
       // Execute scripts from new page
-      const scripts = doc.querySelectorAll("script");
+      const scripts = doc.querySelectorAll('script');
       for (const oldScript of scripts) {
-        const newScript = document.createElement("script");
+        const newScript = document.createElement('script');
 
         if (oldScript.src) {
           newScript.src = oldScript.src;
@@ -278,8 +278,8 @@ class PersistentAudioManager {
         document.body.appendChild(newScript);
 
         // Wait for module scripts to load
-        if (oldScript.type === "module") {
-          await new Promise((resolve) => {
+        if (oldScript.type === 'module') {
+          await new Promise(resolve => {
             newScript.onload = resolve;
             newScript.onerror = resolve;
           });
@@ -289,9 +289,9 @@ class PersistentAudioManager {
       // Re-intercept navigation on new page
       this.interceptNavigation();
 
-      console.log("Page loaded:", path);
+      console.log('Page loaded:', path);
     } catch (error) {
-      console.error("Error loading page:", error);
+      console.error('Error loading page:', error);
     }
   }
 
@@ -311,9 +311,9 @@ class PersistentAudioManager {
 export const persistentAudio = new PersistentAudioManager();
 
 // Auto-initialize when the DOM is ready
-if (typeof window !== "undefined") {
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", () => persistentAudio.init());
+if (typeof window !== 'undefined') {
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => persistentAudio.init());
   } else {
     persistentAudio.init();
   }

@@ -20,7 +20,7 @@ export function initEnemyAttack(canvas) {
  */
 export function selectAttackingEnemy(enemies) {
   const availableEnemies = enemies.filter(
-    (enemy) => enemy.state === "formation" && !enemy.isAttacking,
+    enemy => enemy.state === 'formation' && !enemy.isAttacking
   );
 
   if (availableEnemies.length === 0) return null;
@@ -39,7 +39,7 @@ export function startEnemyAttack(enemy, player) {
   if (!canvasRef || !player) return;
 
   enemy.isAttacking = true;
-  enemy.state = "attacking";
+  enemy.state = 'attacking';
   enemy.attackPath = generateAttackPath(enemy, player);
   enemy.attackPathIndex = 0;
   enemy.attackSpeed = 250;
@@ -97,7 +97,7 @@ export function updateAttackingEnemy(enemy, delta) {
   ) {
     // Attack finished – return to formation
     enemy.isAttacking = false;
-    enemy.state = "formation";
+    enemy.state = 'formation';
     enemy.x = enemy.finalX;
     enemy.y = enemy.finalY;
     return;

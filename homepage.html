@@ -18,24 +18,28 @@
         <h1>RetroGa</h1>
       </homepage-text>
 
-      <a class="start-btn" href="difficulty.html">Start Game</a>
-      <a class="go-to-leaderboard" href="leaderboard.html">Leaderboard</a>
+      <a class="start-btn" href="difficulty.html" translate="startGame">Start Game</a>
+      <a class="go-to-leaderboard" href="leaderboard.html" translate="leaderboard">Leaderboard</a>
 
       <div class="options-container">
         <a class="option-btn shop-btn-special" href="shop.html">
           <span class="option-icon coin-icon"></span>
-          <span class="option-text">Shop</span>
+          <span class="option-text" translate="shop">Shop</span>
         </a>
         <a class="option-btn" href="skins.html">
-          <span class="option-icon">👕</span>
-          <span class="option-text">Skins</span>
+          <span class="option-icon">Clothes</span>
+          <span class="option-text" translate="skins">Skins</span>
         </a>
       </div>
     </homepage-galaga>
     <script type="module">
-      import { injectSettings } from "./js/ui/settingsComponent.js";
-      import { persistentAudio } from "./js/core/persistentAudio.js";
+      import { injectSettings } from './js/ui/settingsComponent.js';
       injectSettings();
+    </script>
+    <script type="module">
+      import { applyTranslations } from "./js/ui/translations.js";
+      applyTranslations(document);
+      window.addEventListener("languagechange", () => applyTranslations(document));
     </script>
   </body>
 </html>

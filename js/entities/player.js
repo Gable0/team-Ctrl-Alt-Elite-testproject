@@ -1,6 +1,6 @@
 // js/entities/player.js
 
-import { isKeyPressed } from "../core/input.js";
+import { isKeyPressed } from '../core/input.js';
 
 /**
  * Creates the player ship object with default position and properties.
@@ -31,45 +31,45 @@ export function updatePlayer(game, delta, canvas, barrierY, createPlayerShot) {
   if (!player) return;
 
   // Horizontal movement
-  if (isKeyPressed("ArrowLeft") || isKeyPressed("KeyA"))
+  if (isKeyPressed('ArrowLeft') || isKeyPressed('KeyA'))
     player.x -= player.speed * delta;
-  if (isKeyPressed("ArrowRight") || isKeyPressed("KeyD"))
+  if (isKeyPressed('ArrowRight') || isKeyPressed('KeyD'))
     player.x += player.speed * delta;
 
   // Vertical movement
-  if (isKeyPressed("ArrowUp") || isKeyPressed("KeyW"))
+  if (isKeyPressed('ArrowUp') || isKeyPressed('KeyW'))
     player.y -= player.speed * delta;
-  if (isKeyPressed("ArrowDown") || isKeyPressed("KeyS"))
+  if (isKeyPressed('ArrowDown') || isKeyPressed('KeyS'))
     player.y += player.speed * delta;
 
   // Keep player inside canvas bounds
   player.x = Math.max(
     player.size,
-    Math.min(canvas.width - player.size, player.x),
+    Math.min(canvas.width - player.size, player.x)
   );
   player.y = Math.max(
     barrierY + player.size,
-    Math.min(canvas.height - player.size, player.y),
+    Math.min(canvas.height - player.size, player.y)
   );
 
   // Shooting (only when shooting is unlocked and cooldown elapsed)
-  if (game.playerShootingUnlocked && isKeyPressed("Space") && game.canShoot) {
+  if (game.playerShootingUnlocked && isKeyPressed('Space') && game.canShoot) {
     if (game.tripleShotTimer > 0) {
       // Triple-shot power-up active
       const angleOffset = Math.PI / 10; // ~18 degrees
       game.playerShots.push(
-        createPlayerShot(player.x, player.y - player.size, -angleOffset),
+        createPlayerShot(player.x, player.y - player.size, -angleOffset)
       );
       game.playerShots.push(
-        createPlayerShot(player.x, player.y - player.size, 0),
+        createPlayerShot(player.x, player.y - player.size, 0)
       );
       game.playerShots.push(
-        createPlayerShot(player.x, player.y - player.size, angleOffset),
+        createPlayerShot(player.x, player.y - player.size, angleOffset)
       );
     } else {
       // Normal single shot
       game.playerShots.push(
-        createPlayerShot(player.x, player.y - player.size, 0),
+        createPlayerShot(player.x, player.y - player.size, 0)
       );
     }
 
@@ -104,14 +104,14 @@ export function drawPlayer(ctx, player, invincibilityTimer, game) {
     }
   }
 
-  ctx.fillStyle = "#00d9ff";
+  ctx.fillStyle = '#00d9ff';
   ctx.shadowBlur = 20;
-  ctx.shadowColor = "#00d9ff";
+  ctx.shadowColor = '#00d9ff';
 
-  if (game.activeSkin === "squarePack") {
+  if (game.activeSkin === 'squarePack') {
     // Square skin
     ctx.fillRect(-player.size / 2, -player.size / 2, player.size, player.size);
-  } else if (game.activeSkin === "starPack") {
+  } else if (game.activeSkin === 'starPack') {
     // Star skin (simple 5-point star)
     const r1 = player.size;
     const r2 = player.size * 0.4;
@@ -121,7 +121,7 @@ export function drawPlayer(ctx, player, invincibilityTimer, game) {
       ctx.lineTo(Math.cos(angle) * r1, Math.sin(angle) * r1);
       ctx.lineTo(
         Math.cos(angle + Math.PI / 5) * r2,
-        Math.sin(angle + Math.PI / 5) * r2,
+        Math.sin(angle + Math.PI / 5) * r2
       );
     }
     ctx.closePath();

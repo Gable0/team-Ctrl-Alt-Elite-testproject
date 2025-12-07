@@ -25,7 +25,7 @@
       // =====================
       // PERSISTENT AUDIO SETUP
       // =====================
-      const introAudio = document.getElementById("intro-audio");
+      const introAudio = document.getElementById('intro-audio');
       let audioStarted = false;
 
       function startIntroAudio() {
@@ -52,7 +52,7 @@
                 }
               }, stepDuration);
             })
-            .catch((error) => console.log("Audio play failed:", error));
+            .catch(error => console.log('Audio play failed:', error));
         }
       }
 
@@ -60,7 +60,7 @@
       startIntroAudio();
 
       // Fallback for autoplay restrictions
-      ["click", "touchstart", "mouseenter", "keydown"].forEach((eventType) => {
+      ['click', 'touchstart', 'mouseenter', 'keydown'].forEach(eventType => {
         document.body.addEventListener(eventType, startIntroAudio, {
           once: true,
           passive: true,
@@ -77,16 +77,16 @@
 
           // Parse the HTML
           const parser = new DOMParser();
-          const doc = parser.parseFromString(html, "text/html");
+          const doc = parser.parseFromString(html, 'text/html');
 
           // Extract just the body content
           const bodyContent = doc.body.innerHTML;
-          document.getElementById("page-container").innerHTML = bodyContent;
+          document.getElementById('page-container').innerHTML = bodyContent;
 
           // Re-execute any scripts in the loaded content
-          const scripts = doc.querySelectorAll("script");
-          scripts.forEach((oldScript) => {
-            const newScript = document.createElement("script");
+          const scripts = doc.querySelectorAll('script');
+          scripts.forEach(oldScript => {
+            const newScript = document.createElement('script');
             if (oldScript.src) {
               newScript.src = oldScript.src;
             } else {
@@ -96,7 +96,7 @@
             document.body.appendChild(newScript);
           });
         } catch (error) {
-          console.error("Error loading page:", error);
+          console.error('Error loading page:', error);
         }
       }
 
@@ -104,9 +104,9 @@
       // INTERCEPT NAVIGATION
       // =====================
       function interceptClicks() {
-        document.addEventListener("click", (e) => {
+        document.addEventListener('click', e => {
           // Check if clicked element or parent is a link
-          const link = e.target.closest("a");
+          const link = e.target.closest('a');
           if (link && link.href) {
             const url = new URL(link.href);
             const currentOrigin = window.location.origin;
@@ -114,11 +114,11 @@
             // Only intercept internal links to .html files
             if (
               url.origin === currentOrigin &&
-              url.pathname.endsWith(".html")
+              url.pathname.endsWith('.html')
             ) {
               e.preventDefault();
               loadPage(url.pathname);
-              window.history.pushState({}, "", url.pathname);
+              window.history.pushState({}, '', url.pathname);
             }
           }
         });
@@ -126,13 +126,13 @@
         // Also intercept location.href changes
         const originalLocationSetter = Object.getOwnPropertyDescriptor(
           window,
-          "location",
+          'location'
         ).set;
-        Object.defineProperty(window, "location", {
+        Object.defineProperty(window, 'location', {
           set(value) {
-            if (typeof value === "string" && value.endsWith(".html")) {
+            if (typeof value === 'string' && value.endsWith('.html')) {
               loadPage(value);
-              window.history.pushState({}, "", value);
+              window.history.pushState({}, '', value);
             } else {
               originalLocationSetter.call(window, value);
             }
@@ -141,14 +141,19 @@
       }
 
       // Handle browser back/forward
-      window.addEventListener("popstate", () => {
+      window.addEventListener('popstate', () => {
         loadPage(window.location.pathname);
       });
 
       // Start by loading the homepage
-      loadPage("homepage.html").then(() => {
+      loadPage('homepage.html').then(() => {
         interceptClicks();
       });
+    </script>
+    <script type="module">
+      import { applyTranslations } from "./js/ui/translations.js";
+      applyTranslations(document);
+      window.addEventListener("languagechange", () => applyTranslations(document));
     </script>
   </body>
 </html>

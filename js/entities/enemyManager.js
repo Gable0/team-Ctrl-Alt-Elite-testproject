@@ -15,10 +15,10 @@ const formationConfig = {
  * Enemy type definitions – each row uses the corresponding type (top to bottom).
  */
 const enemyTypes = [
-  { color: "#ff0844", size: 14, enterSpeed: 210 },
-  { color: "#ff3366", size: 15, enterSpeed: 205 },
-  { color: "#ff5588", size: 16, enterSpeed: 200 },
-  { color: "#ff88aa", size: 18, enterSpeed: 195 },
+  { color: '#ff0844', size: 14, enterSpeed: 210 },
+  { color: '#ff3366', size: 15, enterSpeed: 205 },
+  { color: '#ff5588', size: 16, enterSpeed: 200 },
+  { color: '#ff88aa', size: 18, enterSpeed: 195 },
 ];
 
 /** @type {HTMLCanvasElement|null} */
@@ -72,7 +72,7 @@ export function spawnEnemyWave(game) {
           fromLeft,
           entryDelay,
           col,
-        }),
+        })
       );
     }
   }
@@ -104,7 +104,7 @@ function createEnemy({ id, finalX, finalY, type, fromLeft, entryDelay, col }) {
     color: type.color,
     size: type.size,
     enterSpeed: type.enterSpeed,
-    state: "waiting",
+    state: 'waiting',
     entryDelay,
     path,
     pathIndex: 0,
@@ -174,7 +174,7 @@ function advanceEnemyAlongPath(enemy, delta) {
   }
 
   if (enemy.pathIndex >= enemy.path.length - 1) {
-    enemy.state = "formation";
+    enemy.state = 'formation';
     enemy.x = enemy.finalX;
     enemy.y = enemy.finalY;
   }
@@ -201,8 +201,8 @@ function moveEnemyInFormation(enemy, delta) {
  * @param {Object} enemy
  */
 export function killEnemy(enemy) {
-  if (enemy.state === "dying") return;
-  enemy.state = "dying";
+  if (enemy.state === 'dying') return;
+  enemy.state = 'dying';
   enemy.dyingTimer = 0.3;
   enemy.isAttacking = false;
 }
@@ -220,21 +220,21 @@ export function updateEnemies(game, delta) {
 
   const alive = [];
   for (const enemy of game.enemies) {
-    if (enemy.state === "waiting") {
+    if (enemy.state === 'waiting') {
       enemy.entryDelay -= delta;
       if (enemy.entryDelay <= 0) {
-        enemy.state = "entering";
+        enemy.state = 'entering';
       }
-    } else if (enemy.state === "entering") {
+    } else if (enemy.state === 'entering') {
       advanceEnemyAlongPath(enemy, delta);
-    } else if (enemy.state === "formation") {
+    } else if (enemy.state === 'formation') {
       moveEnemyInFormation(enemy, delta);
-    } else if (enemy.state === "dying") {
+    } else if (enemy.state === 'dying') {
       enemy.dyingTimer -= delta;
     }
     // Note: 'attacking' state is handled by systems/enemyAttack module
 
-    if (enemy.state !== "dying" || enemy.dyingTimer > 0) {
+    if (enemy.state !== 'dying' || enemy.dyingTimer > 0) {
       alive.push(enemy);
     }
   }
@@ -243,7 +243,7 @@ export function updateEnemies(game, delta) {
 
   if (!game.playerShootingUnlocked && game.enemies.length > 0) {
     const allEnemiesReady = game.enemies.every(
-      (enemy) => enemy.state !== "waiting" && enemy.state !== "entering",
+      enemy => enemy.state !== 'waiting' && enemy.state !== 'entering'
     );
 
     if (allEnemiesReady) {
@@ -266,10 +266,10 @@ export function drawEnemies(enemies, game) {
     ctxRef.save();
     ctxRef.translate(enemy.x, enemy.y);
 
-    if (enemy.state === "dying") {
+    if (enemy.state === 'dying') {
       const progress = Math.max(enemy.dyingTimer / 0.3, 0);
       ctxRef.globalAlpha = progress;
-      ctxRef.fillStyle = "#fef08a";
+      ctxRef.fillStyle = '#fef08a';
       ctxRef.beginPath();
       ctxRef.arc(0, 0, enemy.size * (1.5 - progress), 0, Math.PI * 2);
       ctxRef.fill();
@@ -278,8 +278,8 @@ export function drawEnemies(enemies, game) {
     }
 
     // Visual indicator for attacking enemies
-    if (enemy.state === "attacking") {
-      ctxRef.fillStyle = "#ff0000";
+    if (enemy.state === 'attacking') {
+      ctxRef.fillStyle = '#ff0000';
       ctxRef.globalAlpha = 0.3;
       ctxRef.beginPath();
       ctxRef.arc(0, 0, enemy.size * 1.5, 0, Math.PI * 2);
@@ -288,10 +288,10 @@ export function drawEnemies(enemies, game) {
     }
 
     ctxRef.fillStyle = enemy.color;
-    if (game.activeSkin === "squarePack") {
+    if (game.activeSkin === 'squarePack') {
       // Square skin
       ctxRef.fillRect(-enemy.size / 2, -enemy.size / 2, enemy.size, enemy.size);
-    } else if (game.activeSkin === "starPack") {
+    } else if (game.activeSkin === 'starPack') {
       // Star skin (simple 5-point star)
       const r1 = enemy.size * 0.8;
       const r2 = enemy.size * 0.32;
@@ -301,7 +301,7 @@ export function drawEnemies(enemies, game) {
         ctxRef.lineTo(Math.cos(angle) * r1, Math.sin(angle) * r1);
         ctxRef.lineTo(
           Math.cos(angle + Math.PI / 5) * r2,
-          Math.sin(angle + Math.PI / 5) * r2,
+          Math.sin(angle + Math.PI / 5) * r2
         );
       }
       ctxRef.closePath();
@@ -316,7 +316,7 @@ export function drawEnemies(enemies, game) {
       ctxRef.fill();
     }
 
-    ctxRef.fillStyle = "#ffffff";
+    ctxRef.fillStyle = '#ffffff';
     ctxRef.fillRect(-enemy.size * 0.4, 0, enemy.size * 0.3, 3);
     ctxRef.fillRect(enemy.size * 0.1, 0, enemy.size * 0.3, 3);
     ctxRef.restore();

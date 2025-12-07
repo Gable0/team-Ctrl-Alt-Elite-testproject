@@ -9,9 +9,9 @@ import {
   spawnEnemyWave,
   updateEnemies,
   drawEnemies,
-} from "../entities/enemyManager.js";
-import { createPlayer, updatePlayer, drawPlayer } from "../entities/player.js";
-import { initInput } from "./input.js";
+} from '../entities/enemyManager.js';
+import { createPlayer, updatePlayer, drawPlayer } from '../entities/player.js';
+import { initInput } from './input.js';
 import {
   initShooting,
   updatePlayerShots,
@@ -19,17 +19,17 @@ import {
   drawPlayerShots,
   drawEnemyShots,
   createPlayerShot,
-} from "../systems/shootingSystem.js";
+} from '../systems/shootingSystem.js';
 import {
   checkPlayerShotCollisions,
   checkEnemyShotCollisions,
-} from "../systems/collision/shotCollisions.js";
-import { checkPlayerEnemyCollision } from "../systems/collision/entityCollisions.js";
+} from '../systems/collision/shotCollisions.js';
+import { checkPlayerEnemyCollision } from '../systems/collision/entityCollisions.js';
 import {
   initEnemyAttack,
   scheduleEnemyAttacks,
   updateAttackingEnemy,
-} from "../systems/enemyAttack.js";
+} from '../systems/enemyAttack.js';
 import {
   createInitialGame,
   handleEnemyKilled,
@@ -37,26 +37,26 @@ import {
   handleLevelProgression,
   updateInvincibility,
   updateLevelTransition,
-} from "../state/gameState.js";
-import { drawHUD, drawLevelTransition } from "../ui/hud.js";
-import { initPauseMenu } from "../ui/pauseMenu.js";
+} from '../state/gameState.js';
+import { drawHUD, drawLevelTransition } from '../ui/hud.js';
+import { initPauseMenu } from '../ui/pauseMenu.js';
 import {
   spawnPowerUp,
   updatePowerUps,
   drawPowerUps,
-} from "../systems/powerUps.js";
+} from '../systems/powerUps.js';
 import {
   initBackground,
   updateBackground,
   drawBackground,
-} from "./background.js";
-import { initAudio } from "../systems/audioManager.js";
+} from './background.js';
+import { initAudio } from '../systems/audioManager.js';
 
 /** @type {HTMLCanvasElement} */
-const canvas = document.getElementById("game");
+const canvas = document.getElementById('game');
 
 /** @type {CanvasRenderingContext2D} */
-const ctx = canvas.getContext("2d");
+const ctx = canvas.getContext('2d');
 
 /** Y-position that acts as a movement barrier for the player (75% of canvas height) */
 const barrierY = canvas.height * 0.75;
@@ -105,27 +105,30 @@ function update(delta) {
       Game.enemies,
       Game.player,
       delta,
-      Game.attackTimer,
+      Game.attackTimer
     );
   }
 
   // Update any enemies currently performing a dive attack
   for (const enemy of Game.enemies) {
-    if (enemy.state === "attacking") {
+    if (enemy.state === 'attacking') {
       updateAttackingEnemy(enemy, delta);
     }
   }
 
   // Player bullet → enemy collision
-  checkPlayerShotCollisions(Game, (enemy) => {
+  checkPlayerShotCollisions(Game, enemy => {
     handleEnemyKilled(Game, enemy);
     spawnPowerUp(Game, enemy);
   });
 
   // Player can only be hit when not invincible
   if (Game.invincibilityTimer <= 0) {
-    checkEnemyShotCollisions(Game, () => handlePlayerHit(Game));
-    checkPlayerEnemyCollision(Game, () => handlePlayerHit(Game));
+    // Check enemy laser hits (pass hit type to handlePlayerHit)
+    checkEnemyShotCollisions(Game, hitType => handlePlayerHit(Game, hitType));
+
+    // Check enemy collision (pass hit type to handlePlayerHit)
+    checkPlayerEnemyCollision(Game, hitType => handlePlayerHit(Game, hitType));
   }
 
   // Handles wave completion → next level progression
@@ -179,3 +182,6 @@ function start() {
 // Begin the game
 spawnEnemyWave(Game);
 start();
+
+// Expose Game object globally for debugging
+window.Game = Game;

@@ -14,50 +14,54 @@
   </head>
   <body>
     <difficulty-buttons>
-      <h1 class="difficulty-header">Choose a Game Mode</h1>
-      <button id="easy-difficulty">Easy</button>
-      <button id="medium-difficulty">Medium</button>
-      <button id="hard-difficulty">Hard</button>
+      <h1 class="difficulty-header" translate="chooseDifficulty">Choose a Game Mode</h1>
 
-      <button id="back-homepage" onclick="location.href = 'homepage.html'">
-        Back
-      </button>
+      <button id="easy-difficulty"   translate="easy">Easy</button>
+      <button id="medium-difficulty" translate="medium">Medium</button>
+      <button id="hard-difficulty"   translate="hard">Hard</button>
+
+      <button id="back-homepage" onclick="location.href='homepage.html'" translate="back">Back</button>
     </difficulty-buttons>
     <script type="module">
-      import { injectSettings } from "./js/ui/settingsComponent.js";
-      import { persistentAudio } from "./js/core/persistentAudio.js";
+      import { injectSettings } from './js/ui/settingsComponent.js';
+      import { persistentAudio } from './js/core/persistentAudio.js';
       injectSettings();
 
-      document.getElementById("easy-difficulty").addEventListener(
-        "click",
+      document.getElementById('easy-difficulty').addEventListener(
+        'click',
         () => {
           persistentAudio.stop();
-          sessionStorage.setItem("stopIntroAudio", "true");
-          localStorage.setItem("gameDifficulty", "easy");
-          window.location.href = "game.html";
+          sessionStorage.setItem('stopIntroAudio', 'true');
+          localStorage.setItem('gameDifficulty', 'easy');
+          window.location.href = 'game.html';
         },
-        true,
+        true
       );
-      document.getElementById("medium-difficulty").addEventListener(
-        "click",
+      document.getElementById('medium-difficulty').addEventListener(
+        'click',
         () => {
           persistentAudio.stop();
-          sessionStorage.setItem("stopIntroAudio", "true");
-          localStorage.setItem("gameDifficulty", "medium");
-          window.location.href = "game.html";
+          sessionStorage.setItem('stopIntroAudio', 'true');
+          localStorage.setItem('gameDifficulty', 'medium');
+          window.location.href = 'game.html';
         },
-        true,
+        true
       );
-      document.getElementById("hard-difficulty").addEventListener(
-        "click",
+      document.getElementById('hard-difficulty').addEventListener(
+        'click',
         () => {
           persistentAudio.stop();
-          sessionStorage.setItem("stopIntroAudio", "true");
-          localStorage.setItem("gameDifficulty", "hard");
-          window.location.href = "game.html";
+          sessionStorage.setItem('stopIntroAudio', 'true');
+          localStorage.setItem('gameDifficulty', 'hard');
+          window.location.href = 'game.html';
         },
-        true,
+        true
       );
+    </script>
+    <script type="module">
+      import { applyTranslations } from "./js/ui/translations.js";
+      applyTranslations(document);
+      window.addEventListener("languagechange", () => applyTranslations(document));
     </script>
   </body>
 </html>

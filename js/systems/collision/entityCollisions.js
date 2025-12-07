@@ -1,7 +1,7 @@
 // js/systems/collision/entityCollisions.js
 
-import { getEnemyHitbox, getPlayerHitbox } from "./hitboxes.js";
-import { boxesOverlap } from "./detection.js";
+import { getEnemyHitbox, getPlayerHitbox } from './hitboxes.js';
+import { boxesOverlap } from './detection.js';
 
 /**
  * Checks for collisions between the player ship and any active enemy.
@@ -19,16 +19,16 @@ export function checkPlayerEnemyCollision(game, onPlayerHit) {
 
   for (const enemy of game.enemies) {
     // Skip enemies that are already dying or still waiting to enter the screen
-    if (enemy.state === "dying" || enemy.state === "waiting") continue;
+    if (enemy.state === 'dying' || enemy.state === 'waiting') continue;
 
     const enemyBox = getEnemyHitbox(enemy);
     if (boxesOverlap(playerBox, enemyBox)) {
       // Kill the enemy immediately
-      enemy.state = "dying";
+      enemy.state = 'dying';
       enemy.dyingTimer = 0.3;
 
-      // Notify that the player was hit
-      if (typeof onPlayerHit === "function") onPlayerHit();
+      // Notify that the player was hit by an enemy (not a laser)
+      if (typeof onPlayerHit === 'function') onPlayerHit('enemy'); // Pass "enemy" as hit type
 
       // Return true to indicate a collision happened
       return true;

@@ -1,7 +1,7 @@
 // js/systems/shootingSystem.js
 // Handles creation, movement, firing logic, and rendering of all projectiles.
 
-import { audioManager } from "./audioManager.js";
+import { audioManager } from './audioManager.js';
 
 /** @type {HTMLCanvasElement|null} */
 let canvasRef = null;
@@ -108,7 +108,7 @@ export function updateEnemyShots(game, delta) {
   // Formation enemies fire on a global timer
   game.globalEnemyShotTimer -= delta;
   if (game.globalEnemyShotTimer <= 0) {
-    const shooters = game.enemies.filter((e) => e.state === "formation");
+    const shooters = game.enemies.filter(e => e.state === 'formation');
     if (shooters.length > 0 && Math.random() < 0.8) {
       const shooter = shooters[Math.floor(Math.random() * shooters.length)];
       fireEnemyShot(shooter, game);
@@ -119,16 +119,16 @@ export function updateEnemyShots(game, delta) {
   // Dive-attacking enemies fire more aggressively
   for (const enemy of game.enemies) {
     let diveFireChance = 0.04;
-    if (game.difficulty === "easy") diveFireChance = 0.01;
-    else if (game.difficulty === "hard") diveFireChance = 0.08;
+    if (game.difficulty === 'easy') diveFireChance = 0.01;
+    else if (game.difficulty === 'hard') diveFireChance = 0.08;
 
-    if (enemy.state === "attacking" && Math.random() < diveFireChance) {
+    if (enemy.state === 'attacking' && Math.random() < diveFireChance) {
       fireEnemyShot(enemy, game);
     }
   }
 
   // Update positions and remove off-screen shots
-  game.enemyShots = game.enemyShots.filter((shot) => {
+  game.enemyShots = game.enemyShots.filter(shot => {
     shot.x += shot.vx * delta;
     shot.y += shot.vy * delta;
     return shot.y <= canvasRef.height + 50;
@@ -142,9 +142,9 @@ export function updateEnemyShots(game, delta) {
  * @param {Array<Object>} shots - Array of player shot objects.
  */
 export function drawPlayerShots(ctx, shots) {
-  ctx.fillStyle = "#00ff41";
+  ctx.fillStyle = '#00ff41';
   ctx.shadowBlur = 18;
-  ctx.shadowColor = "#00ff41";
+  ctx.shadowColor = '#00ff41';
   for (const shot of shots) {
     if (shot.active !== false) {
       ctx.fillRect(shot.x - 2.5, shot.y - 13, 5, 26);
@@ -160,9 +160,9 @@ export function drawPlayerShots(ctx, shots) {
  * @param {Array<Object>} shots - Array of enemy shot objects.
  */
 export function drawEnemyShots(ctx, shots) {
-  ctx.fillStyle = "#ff0844";
+  ctx.fillStyle = '#ff0844';
   ctx.shadowBlur = 10;
-  ctx.shadowColor = "#ff0844";
+  ctx.shadowColor = '#ff0844';
   for (const shot of shots) {
     ctx.beginPath();
     ctx.arc(shot.x, shot.y, shot.size, 0, Math.PI * 2);
