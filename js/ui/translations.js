@@ -253,22 +253,34 @@ export const languages = {
 // 2. Helper functions
 // ------------------------------------------------------------------
 export function getCurrentLanguage() {
-  const saved = localStorage.getItem('gameLanguage');
-  return languages[saved] ? saved : 'en';
+  const saved = localStorage.getItem("gameLanguage");
+  return languages[saved] ? saved : "en";
 }
 
 export function setLanguage(langCode) {
-  if (languages[langCode]) {
-    localStorage.setItem('gameLanguage', langCode);
-    document.documentElement.lang = langCode;
-    document.documentElement.dir = languages[langCode].dir;
-    // Fire event so UI can update without reload
-    window.dispatchEvent(new CustomEvent('languagechange'));
-  }
+  if (!languages[langCode]) return;
+
+  localStorage.setItem("gameLanguage", langCode);
+  document.documentElement.lang = langCode;
+  document.documentElement.dir = languages[langCode].dir;
+
+  // Notify all UI components
+  window.dispatchEvent(new CustomEvent("languagechange"));
 }
 
-// Quick getter for current texts (used everywhere)
-export function t = (key) => {
+// ---------- 3. Translate a single key ----------
+export function translate(key) {
   const lang = languages[getCurrentLanguage()]?.texts || languages.en.texts;
-  return lang[key] ?? key; // fallback to key if missing
-};
+  return lang[key] ?? key;
+}
+
+// ---------- 4. Auto-translate all UI elements ----------
+export function applyTranslations(root = document) {
+  root.querySelectorAll("[translate]").forEach((el) => {
+    const key = el.getAttribute("translate");
+    el.textContent = translate(key);
+  });
+}
+
+// ---------- 5. Translate everything on language change ----------
+window.addEventListener("languagechange", () => applyTranslations());
