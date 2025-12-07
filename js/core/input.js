@@ -20,11 +20,11 @@ let initialized = false;
 export function initInput() {
   if (initialized) return;
 
-  window.addEventListener("keydown", (event) => {
+  window.addEventListener('keydown', event => {
     pressedKeys.add(event.code);
   });
 
-  window.addEventListener("keyup", (event) => {
+  window.addEventListener('keyup', event => {
     pressedKeys.delete(event.code);
   });
 

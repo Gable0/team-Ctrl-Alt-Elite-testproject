@@ -1,8 +1,8 @@
 // js/state/gameState.js
 
-import { getActiveSkin } from "../skins/skinsManager.js";
-import { audioManager } from "../systems/audioManager.js";
-import { persistentAudio } from "../core/persistentAudio.js";
+import { getActiveSkin } from '../skins/skinsManager.js';
+import { audioManager } from '../systems/audioManager.js';
+import { persistentAudio } from '../core/persistentAudio.js';
 
 /**
  * Creates and returns a fresh game state object with default values.
@@ -11,14 +11,14 @@ import { persistentAudio } from "../core/persistentAudio.js";
  * @returns {Object} The initial game state.
  */
 export function createInitialGame() {
-  const difficulty = localStorage.getItem("gameDifficulty") || "medium";
+  const difficulty = localStorage.getItem('gameDifficulty') || 'medium';
 
   // Play start game sound and begin level music shortly after initialization
   setTimeout(() => {
     audioManager.playStartGameSound();
     // Start level 1 music with fade-in after the start sound
     setTimeout(() => {
-      console.log("🎮 Starting Level 1 music with fade-in");
+      console.log('🎮 Starting Level 1 music with fade-in');
       audioManager.playLevelMusic(1, true); // true = fade in
     }, 1500); // Wait 1.5 seconds for start-game sound to finish
   }, 100);
@@ -73,14 +73,14 @@ export function handleEnemyKilled(game, enemy, points = 100) {
  * @param {string} [hitType="laser"] - Type of hit: "laser" or "enemy"
  * @returns {boolean} `true` if the player actually took damage, `false` if invincible.
  */
-export function handlePlayerHit(game, hitType = "laser") {
+export function handlePlayerHit(game, hitType = 'laser') {
   if (game.invincibilityTimer > 0) return false;
 
   game.lives--;
   game.invincibilityTimer = 1.0;
 
   // Play appropriate hit sound based on what hit the player
-  if (hitType === "enemy") {
+  if (hitType === 'enemy') {
     audioManager.playEnemyHitsPlayerSound();
   } else {
     audioManager.playLaserHitsPlayerSound();
@@ -89,17 +89,17 @@ export function handlePlayerHit(game, hitType = "laser") {
   if (game.lives <= 0) {
     game.gameOver = true;
 
-    console.log("💀 Game Over - Playing game over sequence");
+    console.log('💀 Game Over - Playing game over sequence');
     // Play game over sound (which will also start game over background music)
     audioManager.playGameOverSound();
 
     // Persist final score/level for the results screen
-    localStorage.setItem("finalScore", game.score);
-    localStorage.setItem("finalLevel", game.level);
+    localStorage.setItem('finalScore', game.score);
+    localStorage.setItem('finalLevel', game.level);
 
     // Redirect to score screen after a short delay (lets sound finish)
     setTimeout(() => {
-      window.location.href = "Demos/Score_UI/index.html";
+      window.location.href = 'Demos/Score_UI/index.html';
     }, 2000);
   }
 
@@ -140,7 +140,7 @@ export function startNextLevel(game, spawnWaveCallback) {
   audioManager.playLevelMusic(game.level, false);
 
   setTimeout(() => {
-    if (typeof spawnWaveCallback === "function") {
+    if (typeof spawnWaveCallback === 'function') {
       spawnWaveCallback(game);
     }
   }, 2000);

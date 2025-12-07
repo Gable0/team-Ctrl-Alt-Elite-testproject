@@ -1,22 +1,22 @@
-import { chromium } from "playwright";
+import { chromium } from 'playwright';
 
 (async () => {
   const browser = await chromium.launch({ headless: false });
   const page = await browser.newPage();
-  await page.goto("http://localhost:3000/game.html");
+  await page.goto('http://localhost:3000/game.html');
 
   // Wait for your canvas
-  await page.waitForSelector("#game", { timeout: 15000 });
+  await page.waitForSelector('#game', { timeout: 15000 });
 
-  console.log("Game loaded – measuring FPS for 5 seconds...");
+  console.log('Game loaded – measuring FPS for 5 seconds...');
 
   const fpsSamples = await page.evaluate(() => {
     const samples = [];
     let lastTime = performance.now();
 
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       let frames = 0;
-      const measure = (now) => {
+      const measure = now => {
         frames++;
         const delta = now - lastTime;
         if (delta >= 1000) {
@@ -36,17 +36,17 @@ import { chromium } from "playwright";
 
   const minFps = Math.min(...fpsSamples);
   const avgFps = Math.round(
-    fpsSamples.reduce((a, b) => a + b) / fpsSamples.length,
+    fpsSamples.reduce((a, b) => a + b) / fpsSamples.length
   );
 
-  console.log(`FPS samples: ${fpsSamples.join(", ")}`);
+  console.log(`FPS samples: ${fpsSamples.join(', ')}`);
   console.log(`Lowest: ${minFps} FPS | Average: ${avgFps} FPS`);
 
   if (minFps < 60) {
-    console.error("FAIL: FPS dropped below 60");
+    console.error('FAIL: FPS dropped below 60');
     process.exit(1);
   } else {
-    console.log("PASS: FPS stayed at 60+");
+    console.log('PASS: FPS stayed at 60+');
     process.exit(0);
   }
 

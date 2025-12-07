@@ -1,11 +1,11 @@
-import { test, assert } from "vitest";
-import { spawnPowerUp, updatePowerUps } from "../../../js/systems/powerUps.js";
+import { test, assert } from 'vitest';
+import { spawnPowerUp, updatePowerUps } from '../../../js/systems/powerUps.js';
 
-test("spawnPowerUp uses difficulty-based drop chance", () => {
+test('spawnPowerUp uses difficulty-based drop chance', () => {
   const enemy = { x: 400, y: 100 };
 
   // EASY: 25%
-  const gameEasy = { powerUps: [], difficulty: "easy" };
+  const gameEasy = { powerUps: [], difficulty: 'easy' };
   let dropsEasy = 0;
   for (let i = 0; i < 1000; i++) {
     gameEasy.powerUps = [];
@@ -17,7 +17,7 @@ test("spawnPowerUp uses difficulty-based drop chance", () => {
   assert.isAtMost(rateEasy, 0.3);
 
   // MEDIUM: 10%
-  const gameMedium = { powerUps: [], difficulty: "medium" };
+  const gameMedium = { powerUps: [], difficulty: 'medium' };
   let dropsMedium = 0;
   for (let i = 0; i < 1000; i++) {
     gameMedium.powerUps = [];
@@ -29,7 +29,7 @@ test("spawnPowerUp uses difficulty-based drop chance", () => {
   assert.isAtMost(rateMedium, 0.14);
 
   // HARD: 5%
-  const gameHard = { powerUps: [], difficulty: "hard" };
+  const gameHard = { powerUps: [], difficulty: 'hard' };
   let dropsHard = 0;
   for (let i = 0; i < 1000; i++) {
     gameHard.powerUps = [];
@@ -41,8 +41,8 @@ test("spawnPowerUp uses difficulty-based drop chance", () => {
   assert.isAtMost(rateHard, 0.08);
 });
 
-test("spawnPowerUp adds power-up at enemy position (force drop)", () => {
-  const game = { powerUps: [], difficulty: "easy" };
+test('spawnPowerUp adds power-up at enemy position (force drop)', () => {
+  const game = { powerUps: [], difficulty: 'easy' };
   const enemy = { x: 420, y: 150 };
 
   const originalRandom = Math.random;
@@ -57,7 +57,7 @@ test("spawnPowerUp adds power-up at enemy position (force drop)", () => {
   global.Math.random = originalRandom;
 });
 
-test("updatePowerUps moves power-ups down and removes off-screen", () => {
+test('updatePowerUps moves power-ups down and removes off-screen', () => {
   const game = {
     player: { x: 400, y: 500, speed: 0, size: 20 },
     powerUps: [
@@ -71,7 +71,7 @@ test("updatePowerUps moves power-ups down and removes off-screen", () => {
   assert.equal(game.powerUps.length, 1);
 });
 
-test("player collects one power-up when touching it (single)", () => {
+test('player collects one power-up when touching it (single)', () => {
   const game = {
     player: { x: 400, y: 300, size: 20 },
     powerUps: [{ x: 400, y: 300, size: 12, speed: 80, active: true }],
@@ -84,12 +84,12 @@ test("player collects one power-up when touching it (single)", () => {
   assert.closeTo(game.tripleShotTimer, 30, 0.2); // allow small floating-point error
 });
 
-test("player collects only the power-up they touch when multiple exist", () => {
+test('player collects only the power-up they touch when multiple exist', () => {
   const game = {
     player: { x: 400, y: 300, size: 20 },
     powerUps: [
-      { x: 400, y: 300, size: 12, speed: 0, active: true, id: "touched" }, // this one
-      { x: 600, y: 300, size: 12, speed: 0, active: true, id: "far" }, // this one is 200px away
+      { x: 400, y: 300, size: 12, speed: 0, active: true, id: 'touched' }, // this one
+      { x: 600, y: 300, size: 12, speed: 0, active: true, id: 'far' }, // this one is 200px away
     ],
     tripleShotTimer: 0,
   };
@@ -98,10 +98,10 @@ test("player collects only the power-up they touch when multiple exist", () => {
 
   assert.closeTo(game.tripleShotTimer, 30, 0.2); // allow small floating-point error
   assert.equal(game.powerUps.length, 1);
-  assert.equal(game.powerUps[0].id, "far"); // only the far one remains
+  assert.equal(game.powerUps[0].id, 'far'); // only the far one remains
 });
 
-test("triple shot timer decreases and stops at 0", () => {
+test('triple shot timer decreases and stops at 0', () => {
   const game = {
     player: { x: 400, y: 500, size: 20 },
     powerUps: [],

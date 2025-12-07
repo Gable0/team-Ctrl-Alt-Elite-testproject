@@ -16,20 +16,20 @@ canvas {
   border: 1px solid #00d9ff;
 }
 #status {
-    margin-top: 1.5rem;
-    text-align: center;
-    font-family: 'Jersey 10', monospace !important;
-    font-size: 1.8rem;
-    color: #00d9ff;
-    text-shadow: 0 0 1rem #00d9ff;
-    letter-spacing: 0.15rem;
-    line-height: 1.4;
+  margin-top: 1.5rem;
+  text-align: center;
+  font-family: 'Jersey 10', monospace !important;
+  font-size: 1.8rem;
+  color: #00d9ff;
+  text-shadow: 0 0 1rem #00d9ff;
+  letter-spacing: 0.15rem;
+  line-height: 1.4;
 }
 
 body {
   margin: 0;
   min-height: 100vh;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   background: #000814;
   color: #00d9ff;
   display: flex;
@@ -47,7 +47,7 @@ homepage-galaga {
   height: 100vh;
   overflow: hidden;
   position: relative;
-  font-family: "Jersey 10", sans-serif;
+  font-family: 'Jersey 10', sans-serif;
 }
 
 homepage-galaga h1 {
@@ -156,7 +156,7 @@ homepage-galaga p {
 }
 
 .difficulty-header {
-  font-family: "Jersey 10", sans-serif;
+  font-family: 'Jersey 10', sans-serif;
   font-size: 8rem;
   color: #00d9ff;
   text-shadow:
@@ -175,12 +175,12 @@ difficulty-buttons {
 }
 
 .jersey-10-regular {
-  font-family: "Jersey 10", sans-serif;
+  font-family: 'Jersey 10', sans-serif;
   font-weight: 400;
   font-style: normal;
 }
 difficulty-buttons button {
-  font-family: "Jersey 10", sans-serif;
+  font-family: 'Jersey 10', sans-serif;
   background: #000814;
   color: #ff0844;
   font-size: 7rem;
@@ -245,7 +245,7 @@ difficulty-buttons button:hover {
 }
 
 .pause-menu-content h2 {
-  font-family: "Jersey 10", monospace, sans-serif;
+  font-family: 'Jersey 10', monospace, sans-serif;
   font-size: 4.5rem;
   color: #00d9ff;
   margin-bottom: 1.5rem;
@@ -257,7 +257,7 @@ difficulty-buttons button:hover {
 }
 
 .pause-menu-button {
-  font-family: "Jersey 10", monospace, sans-serif;
+  font-family: 'Jersey 10', monospace, sans-serif;
   display: block;
   width: 100%;
   margin: 1.5rem 0;
@@ -356,7 +356,7 @@ settings-modal {
 }
 
 .settings-content h2 {
-  font-family: "Jersey 10", monospace, sans-serif;
+  font-family: 'Jersey 10', monospace, sans-serif;
   font-size: 3rem;
   color: #00d9ff;
   text-shadow: 0 0 1rem #00d9ff;
@@ -404,7 +404,7 @@ shop-container {
   min-height: 100vh;
   background: #000814;
   color: #00d9ff;
-  font-family: "DotGothic16", monospace;
+  font-family: 'DotGothic16', monospace;
 }
 
 shop-header {
@@ -413,7 +413,7 @@ shop-header {
 }
 
 shop-header h1 {
-  font-family: "Press Start 2P", cursive;
+  font-family: 'Press Start 2P', cursive;
   font-size: 2.5em; /* was 2em → 2.5em */
   margin: 0 0 1rem; /* was 0.625rem → 1rem */
   text-shadow: 0.25rem 0.25rem 0 #ff0844; /* was 0.125rem → 0.25rem */
@@ -452,7 +452,7 @@ shop-header p {
 }
 
 .skin-card h3 {
-  font-family: "Press Start 2P", cursive;
+  font-family: 'Press Start 2P', cursive;
   font-size: 1em; /* was 0.8em → 1em */
   margin: 0 0 0.75rem; /* was 0.5rem → 0.75rem */
   color: #ffdd00;
@@ -467,7 +467,7 @@ shop-header p {
 
 .purchase-btn,
 .equip-btn {
-  font-family: "DotGothic16", monospace;
+  font-family: 'DotGothic16', monospace;
   padding: 0.75rem 1.25rem; /* was 0.5rem 0.75rem → 0.75rem 1.25rem */
   font-size: 0.9em; /* was 0.7em → 0.9em */
   cursor: pointer;
@@ -517,7 +517,7 @@ shop-header p {
   color: #00d9ff;
   border: 0.125rem solid #00d9ff;
   padding: 1rem 2rem; /* was 0.625rem 1.25rem → 1rem 2rem */
-  font-family: "Press Start 2P", cursive;
+  font-family: 'Press Start 2P', cursive;
   font-size: 1em; /* was 0.8em → 1em */
   cursor: pointer;
   transition: all 0.2s;
@@ -540,7 +540,7 @@ skins-container {
   min-height: 100vh;
   background: #000814;
   color: #00d9ff;
-  font-family: "DotGothic16", monospace;
+  font-family: 'DotGothic16', monospace;
 }
 
 skins-header {
@@ -549,7 +549,7 @@ skins-header {
 }
 
 skins-header h1 {
-  font-family: "Press Start 2P", cursive;
+  font-family: 'Press Start 2P', cursive;
   font-size: 2.5em; /* was 2em → 2.5em */
   margin: 0 0 1rem; /* was 0.625rem → 1rem */
   text-shadow: 0.25rem 0.25rem 0 #ff0844;
@@ -584,7 +584,7 @@ skins-header p {
 .fun-mode-btn {
   padding: 0.75rem 1.5rem;
   font-size: 1.5rem;
-  font-family: "Jersey 10", monospace, sans-serif;
+  font-family: 'Jersey 10', monospace, sans-serif;
   border: 2px solid #ff0844;
   background: linear-gradient(180deg, #ff0844 0%, #cc0033 100%);
   color: #fff;
@@ -636,7 +636,7 @@ skins-header p {
 }
 
 .coin-icon::before {
-  content: "";
+  content: '';
   position: absolute;
   width: 100%;
   height: 100%;
@@ -671,7 +671,7 @@ skins-header p {
 }
 
 .coin-icon::after {
-  content: "$";
+  content: '$';
   position: absolute;
   width: 100%;
   height: 100%;
@@ -684,7 +684,7 @@ skins-header p {
   text-shadow:
     1px 1px 0 #ffa500,
     -1px -1px 0 rgba(255, 255, 255, 0.5);
-  font-family: "Press Start 2P", monospace;
+  font-family: 'Press Start 2P', monospace;
 }
 
 .shop-btn-special:hover .coin-icon {

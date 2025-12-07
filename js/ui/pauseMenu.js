@@ -13,9 +13,9 @@ let pauseMenuElement = null;
 export function initPauseMenu(game) {
   // Create the pause menu only once
   if (!pauseMenuElement) {
-    pauseMenuElement = document.createElement("div");
-    pauseMenuElement.id = "pauseMenu";
-    pauseMenuElement.className = "pause-menu hidden";
+    pauseMenuElement = document.createElement('div');
+    pauseMenuElement.id = 'pauseMenu';
+    pauseMenuElement.className = 'pause-menu hidden';
     pauseMenuElement.innerHTML = `
       <link rel="preload" href="https://fonts.googleapis.com/css2?family=Jersey+10&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
       <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jersey+10&display=swap"></noscript>
@@ -29,24 +29,24 @@ export function initPauseMenu(game) {
     document.body.appendChild(pauseMenuElement);
 
     // Button actions
-    document.getElementById("resumeButton").addEventListener("click", () => {
+    document.getElementById('resumeButton').addEventListener('click', () => {
       togglePause(game);
     });
 
-    document.getElementById("restartButton").addEventListener("click", () => {
-      window.location.href = "game.html";
+    document.getElementById('restartButton').addEventListener('click', () => {
+      window.location.href = 'game.html';
     });
 
-    document.getElementById("exitButton").addEventListener("click", () => {
-      if (confirm("Are you sure you want to exit? Progress will be lost.")) {
-        window.location.href = "homepage.html";
+    document.getElementById('exitButton').addEventListener('click', () => {
+      if (confirm('Are you sure you want to exit? Progress will be lost.')) {
+        window.location.href = 'homepage.html';
       }
     });
   }
 
   // Global ESC key listener (only works when the game isn't over)
-  window.addEventListener("keydown", (e) => {
-    if (e.code === "Escape" && !game.gameOver) {
+  window.addEventListener('keydown', e => {
+    if (e.code === 'Escape' && !game.gameOver) {
       e.preventDefault();
       togglePause(game);
     }
@@ -63,11 +63,11 @@ export function togglePause(game) {
   game.paused = isPaused;
 
   if (isPaused) {
-    pauseMenuElement.classList.remove("hidden");
-    pauseMenuElement.classList.add("active");
+    pauseMenuElement.classList.remove('hidden');
+    pauseMenuElement.classList.add('active');
   } else {
-    pauseMenuElement.classList.remove("active");
-    pauseMenuElement.classList.add("hidden");
+    pauseMenuElement.classList.remove('active');
+    pauseMenuElement.classList.add('hidden');
   }
 }
 

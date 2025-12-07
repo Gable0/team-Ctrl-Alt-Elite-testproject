@@ -5,8 +5,8 @@ import {
   getShotHitbox,
   getEnemyShotHitbox,
   getPlayerHitbox,
-} from "./hitboxes.js";
-import { boxesOverlap } from "./detection.js";
+} from './hitboxes.js';
+import { boxesOverlap } from './detection.js';
 
 /**
  * Checks all active player shots for collisions with enemies.
@@ -29,20 +29,20 @@ export function checkPlayerShotCollisions(game, onEnemyKilled) {
 
     let hitSomething = false;
     for (const enemy of game.enemies) {
-      if (enemy.state === "dying") continue;
+      if (enemy.state === 'dying') continue;
 
       const enemyBox = getEnemyHitbox(enemy);
       if (boxesOverlap(shotBox, enemyBox)) {
         // Kill the enemy
-        enemy.state = "dying";
+        enemy.state = 'dying';
         enemy.dyingTimer = 0.3;
 
         // Deactivate the bullet (no piercing)
         shot.active = false;
         hitSomething = true;
 
-        if (typeof onEnemyKilled === "function") onEnemyKilled(enemy);
-        if (typeof shot.onHit === "function") shot.onHit(enemy);
+        if (typeof onEnemyKilled === 'function') onEnemyKilled(enemy);
+        if (typeof shot.onHit === 'function') shot.onHit(enemy);
 
         break; // One bullet = one hit
       }
@@ -50,7 +50,7 @@ export function checkPlayerShotCollisions(game, onEnemyKilled) {
   }
 
   // Clean up inactive shots
-  game.playerShots = game.playerShots.filter((s) => s && s.active !== false);
+  game.playerShots = game.playerShots.filter(s => s && s.active !== false);
 }
 
 /**
@@ -72,7 +72,7 @@ export function checkEnemyShotCollisions(game, onPlayerHit) {
 
     if (boxesOverlap(shotBox, playerBox)) {
       game.enemyShots.splice(i, 1);
-      if (typeof onPlayerHit === "function") onPlayerHit("laser"); // Pass "laser" as hit type
+      if (typeof onPlayerHit === 'function') onPlayerHit('laser'); // Pass "laser" as hit type
       return true;
     }
   }

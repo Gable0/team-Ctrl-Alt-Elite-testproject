@@ -8,7 +8,7 @@
       <source src="assets/sounds/reg game sounds/intro.wav" type="audio/wav" />
     </audio>
     <script>
-      const audio = document.getElementById("bgMusic");
+      const audio = document.getElementById('bgMusic');
       audio.volume = 1;
       audio.playbackRate = 0.9;
       audio.currentTime = 25;
@@ -16,8 +16,8 @@
       // Try to play
       audio.play().catch(() => {
         // If blocked, wait for message from parent
-        window.addEventListener("message", (e) => {
-          if (e.data === "play") {
+        window.addEventListener('message', e => {
+          if (e.data === 'play') {
             audio.play();
           }
         });

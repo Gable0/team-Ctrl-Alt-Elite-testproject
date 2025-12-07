@@ -19,9 +19,9 @@ class AudioManager {
     this.fadeInterval = null;
 
     // Load fun-mode preference once at startup
-    const savedFunMode = localStorage.getItem("funMode");
+    const savedFunMode = localStorage.getItem('funMode');
     /** @type {boolean} */
-    this.funMode = savedFunMode === "true";
+    this.funMode = savedFunMode === 'true';
     console.log(`AudioManager initialized - Fun mode: ${this.funMode}`);
   }
 
@@ -36,7 +36,7 @@ class AudioManager {
     try {
       console.log(`Loading sound: ${name} from ${path}`);
       const audio = new Audio(path);
-      audio.preload = "auto";
+      audio.preload = 'auto';
       audio.volume = isMusic ? this.musicVolume : this.volume;
 
       if (isMusic) {
@@ -47,8 +47,8 @@ class AudioManager {
       audio.addEventListener('canplaythrough', () => {
         console.log(`✓ Successfully loaded: ${name}`);
       });
-      
-      audio.addEventListener('error', (e) => {
+
+      audio.addEventListener('error', e => {
         console.error(`✗ Failed to load: ${name}`, e);
       });
 
@@ -65,13 +65,13 @@ class AudioManager {
    */
   playSound(name) {
     if (!this.enabled) {
-      console.log("Audio is disabled");
+      console.log('Audio is disabled');
       return;
     }
 
     if (!this.sounds[name]) {
       console.warn(`Sound not found: ${name}`);
-      console.log("Available sounds:", Object.keys(this.sounds));
+      console.log('Available sounds:', Object.keys(this.sounds));
       return;
     }
 
@@ -83,7 +83,7 @@ class AudioManager {
       sound
         .play()
         .then(() => console.log(`Successfully played: ${name}`))
-        .catch((err) => console.warn(`Failed to play: ${name}`, err));
+        .catch(err => console.warn(`Failed to play: ${name}`, err));
     } catch (error) {
       console.error(`Error playing sound: ${name}`, error);
     }
@@ -97,18 +97,22 @@ class AudioManager {
    */
   playMusic(name, fade = false) {
     if (!this.enabled) {
-      console.log("Audio is disabled");
+      console.log('Audio is disabled');
       return;
     }
 
     if (!this.sounds[name]) {
       console.error(`❌ Music not found: ${name}`);
-      console.log("Available music tracks:", Object.keys(this.sounds));
+      console.log('Available music tracks:', Object.keys(this.sounds));
       return;
     }
 
     // Don't restart if already playing this track
-    if (this.currentMusicName === name && this.currentMusic && !this.currentMusic.paused) {
+    if (
+      this.currentMusicName === name &&
+      this.currentMusic &&
+      !this.currentMusic.paused
+    ) {
       console.log(`Music ${name} is already playing`);
       return;
     }
@@ -121,7 +125,7 @@ class AudioManager {
       this.currentMusic = this.sounds[name];
       this.currentMusicName = name;
       this.currentMusic.currentTime = 0;
-      
+
       if (fade) {
         // Start at volume 0 and fade in
         this.currentMusic.volume = 0;
@@ -131,9 +135,11 @@ class AudioManager {
             console.log(`✓ Successfully started music: ${name}`);
             this.fadeIn();
           })
-          .catch((err) => {
+          .catch(err => {
             console.error(`✗ Failed to play music: ${name}`, err);
-            console.log("This might be due to autoplay restrictions. Try interacting with the page.");
+            console.log(
+              'This might be due to autoplay restrictions. Try interacting with the page.'
+            );
           });
       } else {
         // Normal playback at full volume
@@ -141,9 +147,11 @@ class AudioManager {
         this.currentMusic
           .play()
           .then(() => console.log(`✓ Successfully started music: ${name}`))
-          .catch((err) => {
+          .catch(err => {
             console.error(`✗ Failed to play music: ${name}`, err);
-            console.log("This might be due to autoplay restrictions. Try interacting with the page.");
+            console.log(
+              'This might be due to autoplay restrictions. Try interacting with the page.'
+            );
           });
       }
     } catch (error) {
@@ -156,7 +164,7 @@ class AudioManager {
    */
   fadeIn() {
     if (!this.currentMusic) return;
-    
+
     // Clear any existing fade
     if (this.fadeInterval) {
       clearInterval(this.fadeInterval);
@@ -175,13 +183,16 @@ class AudioManager {
       }
 
       currentStep++;
-      this.currentMusic.volume = Math.min(currentStep * volumeIncrement, this.musicVolume);
+      this.currentMusic.volume = Math.min(
+        currentStep * volumeIncrement,
+        this.musicVolume
+      );
 
       if (currentStep >= fadeSteps) {
         clearInterval(this.fadeInterval);
         this.currentMusic.volume = this.musicVolume;
         this.fadeInterval = null;
-        console.log("✓ Fade-in complete");
+        console.log('✓ Fade-in complete');
       }
     }, stepDuration);
   }
@@ -192,7 +203,7 @@ class AudioManager {
       clearInterval(this.fadeInterval);
       this.fadeInterval = null;
     }
-    
+
     if (this.currentMusic) {
       console.log(`🛑 Stopping current music: ${this.currentMusicName}`);
       this.currentMusic.pause();
@@ -204,19 +215,19 @@ class AudioManager {
 
   /**
    * Plays level-appropriate background music based on current level.
-   * 
+   *
    * @param {number} level - Current game level
    * @param {boolean} [fade=false] - Whether to fade in the music
    */
   playLevelMusic(level, fade = false) {
     let musicName;
-    
+
     if (level >= 1 && level <= 2) {
-      musicName = "background-music-1-2";
+      musicName = 'background-music-1-2';
     } else if (level >= 3 && level <= 4) {
-      musicName = "background-music-3-4";
+      musicName = 'background-music-3-4';
     } else {
-      musicName = "background-music-5";
+      musicName = 'background-music-5';
     }
 
     console.log(`🎮 Level ${level} → Playing: ${musicName}`);
@@ -225,61 +236,61 @@ class AudioManager {
 
   /** Plays the game over background music */
   playGameOverMusic() {
-    console.log("💀 Playing game over background music");
-    this.playMusic("game-over-background");
+    console.log('💀 Playing game over background music');
+    this.playMusic('game-over-background');
   }
 
   /** Plays the appropriate shoot sound – uses "chloe-shoot" when fun mode is active. */
   playShootSound() {
     // Re-read fun mode from storage each shot (in case it changed via settings)
-    const currentFunMode = localStorage.getItem("funMode") === "true";
+    const currentFunMode = localStorage.getItem('funMode') === 'true';
     this.funMode = currentFunMode;
 
-    const soundName = this.funMode ? "chloe-shoot" : "shoot";
+    const soundName = this.funMode ? 'chloe-shoot' : 'shoot';
     this.playSound(soundName);
   }
 
   /** Plays the enemy kill sound effect. */
   playKillEnemySound() {
-    this.playSound("kill-enemy");
+    this.playSound('kill-enemy');
   }
 
   /** Plays the laser hits player sound effect. */
   playLaserHitsPlayerSound() {
-    console.log("💥 Laser hit player!");
-    this.playSound("laser-hits-player");
+    console.log('💥 Laser hit player!');
+    this.playSound('laser-hits-player');
   }
 
   /** Plays the enemy hits player sound effect. */
   playEnemyHitsPlayerSound() {
-    console.log("💥 Enemy hit player!");
-    this.playSound("enemy-hits-player");
+    console.log('💥 Enemy hit player!');
+    this.playSound('enemy-hits-player');
   }
 
   /** Plays the game-over sound effect and background music. */
   playGameOverSound() {
-    console.log("💀 Playing game over sound sequence");
+    console.log('💀 Playing game over sound sequence');
     this.stopMusic();
-    
+
     // Play game over background music first
     this.playGameOverMusic();
-    
+
     // Then play game over sound effect after a short delay
     setTimeout(() => {
-      this.playSound("game-over");
+      this.playSound('game-over');
     }, 500);
   }
 
   /** Plays the start-game sound effect and stops any intro music. */
   playStartGameSound() {
-    console.log("🚀 Playing start game sound");
+    console.log('🚀 Playing start game sound');
     this.stopMusic();
-    this.playSound("start-game");
+    this.playSound('start-game');
   }
 
   /** Plays the power-up collection sound effect. */
   playPowerUpSound() {
-    this.playSound("power-up");
+    this.playSound('power-up');
   }
 
   /**
@@ -289,13 +300,13 @@ class AudioManager {
    */
   setFunMode(enabled) {
     this.funMode = enabled;
-    localStorage.setItem("funMode", String(enabled));
-    console.log(`Fun mode ${enabled ? "ENABLED" : "DISABLED"}`);
+    localStorage.setItem('funMode', String(enabled));
+    console.log(`Fun mode ${enabled ? 'ENABLED' : 'DISABLED'}`);
   }
 
   /** @returns {boolean} Current fun-mode state (reads from localStorage). */
   getFunMode() {
-    const saved = localStorage.getItem("funMode") === "true";
+    const saved = localStorage.getItem('funMode') === 'true';
     this.funMode = saved;
     return this.funMode;
   }
@@ -332,73 +343,75 @@ export const audioManager = new AudioManager();
  * Called once at game startup (e.g. from gameLoop.js).
  */
 export function initAudio() {
-  console.log("🎵 Initializing audio system...");
+  console.log('🎵 Initializing audio system...');
 
   // Sound effects
-  audioManager.loadSound("shoot", "assets/sounds/reg game sounds/shoot.wav");
-  audioManager.loadSound("chloe-shoot", "assets/sounds/Chloe-shooting.wav");
+  audioManager.loadSound('shoot', 'assets/sounds/reg game sounds/shoot.wav');
+  audioManager.loadSound('chloe-shoot', 'assets/sounds/Chloe-shooting.wav');
   audioManager.loadSound(
-    "kill-enemy",
-    "assets/sounds/reg game sounds/kill-enemy.wav",
+    'kill-enemy',
+    'assets/sounds/reg game sounds/kill-enemy.wav'
   );
   audioManager.loadSound(
-    "game-over",
-    "assets/sounds/reg game sounds/game-over.wav",
+    'game-over',
+    'assets/sounds/reg game sounds/game-over.wav'
   );
   audioManager.loadSound(
-    "start-game",
-    "assets/sounds/reg game sounds/start-game.wav",
+    'start-game',
+    'assets/sounds/reg game sounds/start-game.wav'
   );
   audioManager.loadSound(
-    "power-up",
-    "assets/sounds/reg game sounds/power-up.wav",
+    'power-up',
+    'assets/sounds/reg game sounds/power-up.wav'
   );
   audioManager.loadSound(
-    "laser-hits-player",
-    "assets/sounds/reg game sounds/laser-hits-player.wav",
+    'laser-hits-player',
+    'assets/sounds/reg game sounds/laser-hits-player.wav'
   );
   audioManager.loadSound(
-    "enemy-hits-player",
-    "assets/sounds/reg game sounds/enemy-hits-player.wav",
+    'enemy-hits-player',
+    'assets/sounds/reg game sounds/enemy-hits-player.wav'
   );
 
   // Background music (looped)
   audioManager.loadSound(
-    "intro",
-    "assets/sounds/reg game sounds/intro.wav",
-    true,
+    'intro',
+    'assets/sounds/reg game sounds/intro.wav',
+    true
   );
   audioManager.loadSound(
-    "background-music-1-2",
-    "assets/sounds/reg game sounds/background-music-1-2.wav",
-    true,
+    'background-music-1-2',
+    'assets/sounds/reg game sounds/background-music-1-2.wav',
+    true
   );
   audioManager.loadSound(
-    "background-music-3-4",
-    "assets/sounds/reg game sounds/background-music-3-4.wav",
-    true,
+    'background-music-3-4',
+    'assets/sounds/reg game sounds/background-music-3-4.wav',
+    true
   );
   audioManager.loadSound(
-    "background-music-5",
-    "assets/sounds/reg game sounds/background-music-5.wav",
-    true,
+    'background-music-5',
+    'assets/sounds/reg game sounds/background-music-5.wav',
+    true
   );
   audioManager.loadSound(
-    "game-over-background",
-    "assets/sounds/reg game sounds/game-over-background.wav",
-    true,
+    'game-over-background',
+    'assets/sounds/reg game sounds/game-over-background.wav',
+    true
   );
 
-  console.log(`✓ Audio initialized with fun mode: ${audioManager.getFunMode()}`);
-  console.log("📋 Loaded sounds:", Object.keys(audioManager.sounds));
+  console.log(
+    `✓ Audio initialized with fun mode: ${audioManager.getFunMode()}`
+  );
+  console.log('📋 Loaded sounds:', Object.keys(audioManager.sounds));
 }
 
 /** Placeholder – not currently used (intro music is handled by persistentAudio.js). */
 export function playBackgroundGameMusic() {
-  audioManager.playMusic("background-game");
+  audioManager.playMusic('background-game');
 }
 
 /** Legacy helper – kept for compatibility, but intro music is now managed by persistentAudio.js. */
 export function playIntroMusic() {
-  audioManager.playMusic("intro");
+  audioManager.playMusic('intro');
 }

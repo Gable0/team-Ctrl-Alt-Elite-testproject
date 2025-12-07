@@ -53,7 +53,7 @@ export function updateBackground(delta, canvas) {
  */
 export function drawBackground(ctx, canvas) {
   // Draw space background
-  ctx.fillStyle = "#000814";
+  ctx.fillStyle = '#000814';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   // Draw stars

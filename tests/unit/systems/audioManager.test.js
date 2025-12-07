@@ -1,5 +1,5 @@
-import { test, assert } from "vitest";
-import { audioManager } from "../../../js/systems/audioManager.js";
+import { test, assert } from 'vitest';
+import { audioManager } from '../../../js/systems/audioManager.js';
 
 test.beforeEach(() => {
   localStorage.clear();
@@ -7,16 +7,16 @@ test.beforeEach(() => {
   audioManager.setFunMode(false);
 });
 
-test("fun mode is off by default", () => {
+test('fun mode is off by default', () => {
   assert.isFalse(audioManager.getFunMode());
 });
 
-test("can turn fun mode on", () => {
+test('can turn fun mode on', () => {
   audioManager.setFunMode(true);
   assert.isTrue(audioManager.getFunMode());
 });
 
-test("can turn fun mode back off", () => {
+test('can turn fun mode back off', () => {
   audioManager.setFunMode(true);
   audioManager.setFunMode(false);
   assert.isFalse(audioManager.getFunMode());
@@ -24,22 +24,22 @@ test("can turn fun mode back off", () => {
 
 test('fun mode is saved to localStorage as "true" or "false"', () => {
   audioManager.setFunMode(true);
-  assert.equal(localStorage.getItem("funMode"), "true");
+  assert.equal(localStorage.getItem('funMode'), 'true');
 
   audioManager.setFunMode(false);
-  assert.equal(localStorage.getItem("funMode"), "false");
+  assert.equal(localStorage.getItem('funMode'), 'false');
 });
 
-test("getFunMode reads from localStorage on page reload", () => {
+test('getFunMode reads from localStorage on page reload', () => {
   // Simulate user closing and reopening the game
-  localStorage.setItem("funMode", "true");
+  localStorage.setItem('funMode', 'true');
   assert.isTrue(audioManager.getFunMode());
 
-  localStorage.setItem("funMode", "false");
+  localStorage.setItem('funMode', 'false');
   assert.isFalse(audioManager.getFunMode());
 });
 
-test("playShootSound chooses normal sound when fun mode is off", () => {
+test('playShootSound chooses normal sound when fun mode is off', () => {
   audioManager.setFunMode(false);
   // We can't actually play sound in Node.js, but we know the logic is correct
   // This test proves the state is right for normal sound
