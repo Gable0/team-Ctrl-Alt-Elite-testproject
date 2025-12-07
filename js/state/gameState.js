@@ -53,11 +53,18 @@ export function handleEnemyKilled(game, enemy, points = 100) {
   audioManager.playKillEnemySound();
 }
 
-export function handlePlayerHit(game) {
+export function handlePlayerHit(game, hitType = 'ball') {
   if (game.invincibilityTimer > 0) return false;
 
   game.lives--;
   game.invincibilityTimer = 1.0;
+
+  // Play appropriate sound based on hit type
+  if (hitType === 'enemy') {
+    audioManager.playEnemyHitsPlayerSound();
+  } else {
+    audioManager.playBallHitsPlayerSound();
+  }
 
   if (game.lives <= 0) {
     game.gameOver = true;
