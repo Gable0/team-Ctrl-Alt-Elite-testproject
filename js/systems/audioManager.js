@@ -97,6 +97,8 @@ class AudioManager {
       console.log(`🎵 Fading in music: ${name}`);
       this.fadeInMusic(newMusic, fadeDuration);
     }
+    
+    return newMusic; // Return the audio element for event listeners
   }
 
   fadeInMusic(audio, duration = 1000) {
@@ -216,8 +218,12 @@ class AudioManager {
   }
 
     playGameOverSound() {
-        this.stopMusic(); // Stop any background music
-        this.playSound('game-over');
+        // This function is no longer used, but keeping it for backwards compatibility
+        // The game over sequence is now handled in gameState.js
+        this.stopMusic(500);
+        setTimeout(() => {
+            this.playSound('game-over');
+        }, 500);
     }
 
     playStartGameSound() {
@@ -270,6 +276,9 @@ export function initAudio() {
     audioManager.loadSound('background-music-1-2', 'assets/sounds/reg game sounds/background-music-1-2.wav', true);
     audioManager.loadSound('background-music-3-4', 'assets/sounds/reg game sounds/background-music-3-4.wav', true);
     audioManager.loadSound('background-music-5', 'assets/sounds/reg game sounds/background-music-5.wav', true);
+    
+    // Load game over background music
+    audioManager.loadSound('game-over-background', 'assets/sounds/reg game sounds/game-over-background.wav', true);
     
     console.log(`Audio initialized with fun mode: ${audioManager.getFunMode()}`);
 }
