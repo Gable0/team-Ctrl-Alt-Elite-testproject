@@ -34,20 +34,21 @@ export function updatePlayer(game, delta, canvas, barrierY, createPlayerShot) {
   if (game.playerShootingUnlocked && isKeyPressed('Space') && game.canShoot) {
     if (game.tripleShotTimer > 0) {
       // Triple shot - shotgun pattern
+      // Play sound only once for all three bullets
       const angleOffset = Math.PI / 10; // 18 degrees
       game.playerShots.push(
-        createPlayerShot(player.x, player.y - player.size, -angleOffset)
+        createPlayerShot(player.x, player.y - player.size, -angleOffset, true) // First bullet plays sound
       );
       game.playerShots.push(
-        createPlayerShot(player.x, player.y - player.size, 0)
+        createPlayerShot(player.x, player.y - player.size, 0, false) // Second bullet silent
       );
       game.playerShots.push(
-        createPlayerShot(player.x, player.y - player.size, angleOffset)
+        createPlayerShot(player.x, player.y - player.size, angleOffset, false) // Third bullet silent
       );
     } else {
       // Normal single shot
       game.playerShots.push(
-        createPlayerShot(player.x, player.y - player.size, 0)
+        createPlayerShot(player.x, player.y - player.size, 0, true) // Play sound
       );
     }
     game.canShoot = false;
