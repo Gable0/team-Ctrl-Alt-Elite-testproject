@@ -307,18 +307,59 @@ export function drawEnemies(enemies, game) {
       ctxRef.closePath();
       ctxRef.fill();
     } else {
-      // Original triangle
-      ctxRef.beginPath();
-      ctxRef.moveTo(0, -enemy.size * 0.8);
-      ctxRef.lineTo(enemy.size, enemy.size * 0.9);
-      ctxRef.lineTo(-enemy.size, enemy.size * 0.9);
-      ctxRef.closePath();
-      ctxRef.fill();
+      // Pixelated alien ships - different designs based on color
+      const px = enemy.size * 0.15; // Pixel size
+      ctxRef.imageSmoothingEnabled = false;
+
+      // Determine ship type by color (different rows have different designs)
+      if (enemy.color === '#ff0844') {
+        // Type 1: Scout - small inverted U-shape
+        ctxRef.fillRect(-px * 3, -px * 2, px * 6, px); // top bar
+        ctxRef.fillRect(-px * 3, -px * 2, px, px * 4); // left side
+        ctxRef.fillRect(px * 2, -px * 2, px, px * 4); // right side
+        ctxRef.fillRect(-px * 2, px * 2, px * 4, px); // bottom bar
+        // Cockpit
+        ctxRef.fillStyle = '#ffff00';
+        ctxRef.fillRect(-px, -px, px * 2, px * 2);
+      } else if (enemy.color === '#ff3366') {
+        // Type 2: Fighter - classic space invader style
+        ctxRef.fillRect(-px * 2.5, -px * 2, px * 5, px); // top
+        ctxRef.fillRect(-px * 3.5, -px, px * 7, px * 2); // middle
+        ctxRef.fillRect(-px * 2.5, px, px, px * 2); // left leg
+        ctxRef.fillRect(px * 1.5, px, px, px * 2); // right leg
+        // Eyes
+        ctxRef.fillStyle = '#00ff00';
+        ctxRef.fillRect(-px * 1.5, -px * 0.5, px, px);
+        ctxRef.fillRect(px * 0.5, -px * 0.5, px, px);
+      } else if (enemy.color === '#ff5588') {
+        // Type 3: Cruiser - wider H-shape
+        ctxRef.fillRect(-px * 4, -px * 2, px * 1.5, px * 4); // left wing
+        ctxRef.fillRect(px * 2.5, -px * 2, px * 1.5, px * 4); // right wing
+        ctxRef.fillRect(-px * 2, -px, px * 4, px * 2); // center body
+        // Windows
+        ctxRef.fillStyle = '#00ffff';
+        ctxRef.fillRect(-px, -px * 0.5, px * 0.7, px);
+        ctxRef.fillRect(px * 0.3, -px * 0.5, px * 0.7, px);
+      } else {
+        // Type 4: Battlecruiser - large cross shape
+        ctxRef.fillRect(-px * 1.5, -px * 3, px * 3, px * 6); // vertical bar
+        ctxRef.fillRect(-px * 4, -px * 1.5, px * 8, px * 3); // horizontal bar
+        // Core
+        ctxRef.fillStyle = '#ff00ff';
+        ctxRef.fillRect(-px, -px, px * 2, px * 2);
+        // Corner details
+        ctxRef.fillStyle = enemy.color;
+        ctxRef.fillRect(-px * 3.5, -px * 1, px, px * 2);
+        ctxRef.fillRect(px * 2.5, -px * 1, px, px * 2);
+      }
+
+      ctxRef.imageSmoothingEnabled = true;
     }
 
-    ctxRef.fillStyle = '#ffffff';
-    ctxRef.fillRect(-enemy.size * 0.4, 0, enemy.size * 0.3, 3);
-    ctxRef.fillRect(enemy.size * 0.1, 0, enemy.size * 0.3, 3);
+    // Add engine glow effects (outside the pixel block to keep smooth)
+    ctxRef.fillStyle = 'rgba(255, 200, 100, 0.6)';
+    ctxRef.fillRect(-enemy.size * 0.3, enemy.size * 0.5, enemy.size * 0.2, enemy.size * 0.3);
+    ctxRef.fillRect(enemy.size * 0.1, enemy.size * 0.5, enemy.size * 0.2, enemy.size * 0.3);
     ctxRef.restore();
   }
 }
