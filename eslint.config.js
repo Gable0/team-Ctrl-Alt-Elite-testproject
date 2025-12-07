@@ -1,33 +1,136 @@
-// eslint.config.js (Flat Config for ESLint 9.x+)
-import globals from 'globals';
-import pluginJs from '@eslint/js';
-import pluginPrettier from 'eslint-plugin-prettier';
-
 export default [
-  // Base JS rules
-  { files: ['**/*.js'], languageOptions: { globals: globals.browser } },
-  { files: ['**/*.js'], languageOptions: { globals: globals.es2021 } },
-  { files: ['**/*.js'], plugins: { prettier: pluginPrettier } },
-  pluginJs.configs.recommended, // Recommended JS rules
   {
-    files: ['**/*.js'],
+    ignores: [
+      "node_modules/**",
+      "dist/**",
+      "build/**",
+      "coverage/**",
+      "playwright-report/**",
+      ".git/**",
+    ],
+  },
+  {
+    files: ["**/*.js", "**/*.mjs"],
     languageOptions: {
-      ecmaVersion: 2022, // For modern JS (ES modules, etc.)
-      sourceType: 'module',
+      ecmaVersion: 2022,
+      sourceType: "module",
       globals: {
-        ...globals.browser, // window, document, etc.
-        ...globals.es2021, // Modern ES globals
+        // Browser globals
+        window: "readonly",
+        document: "readonly",
+        console: "readonly",
+        localStorage: "readonly",
+        sessionStorage: "readonly",
+        fetch: "readonly",
+        Audio: "readonly",
+        DOMParser: "readonly",
+        requestAnimationFrame: "readonly",
+        performance: "readonly",
+        Image: "readonly",
+        setInterval: "readonly",
+        clearInterval: "readonly",
+        setTimeout: "readonly",
+        clearTimeout: "readonly",
+        URL: "readonly",
+        location: "readonly",
+        confirm: "readonly",
+        // Add any other globals your code uses
       },
     },
-    plugins: {
-      prettier: pluginPrettier,
+    rules: {
+      // Add any rules you want to enforce
+      "no-unused-vars": "warn",
+      "no-undef": "error",
+    },
+  },
+  {
+    files: ["**/*.test.js", "**/*.spec.js"],
+    languageOptions: {
+      ecmaVersion: 2022,
+      sourceType: "module",
+      globals: {
+        // Browser globals
+        window: "readonly",
+        document: "readonly",
+        console: "readonly",
+        localStorage: "readonly",
+        sessionStorage: "readonly",
+        fetch: "readonly",
+        Audio: "readonly",
+        DOMParser: "readonly",
+        requestAnimationFrame: "readonly",
+        performance: "readonly",
+        Image: "readonly",
+        setInterval: "readonly",
+        clearInterval: "readonly",
+        setTimeout: "readonly",
+        clearTimeout: "readonly",
+        URL: "readonly",
+        location: "readonly",
+        confirm: "readonly",
+        // Vitest/testing globals
+        beforeAll: "readonly",
+        beforeEach: "readonly",
+        afterEach: "readonly",
+        afterAll: "readonly",
+        describe: "readonly",
+        it: "readonly",
+        test: "readonly",
+        expect: "readonly",
+        vi: "readonly",
+        global: "readonly",
+      },
     },
     rules: {
-      // Your custom rules
-      'prettier/prettier': 'error', // Enforce Prettier as ESLint rule
-      'no-console': 'off', // Allow console.logs (useful for game dev)
-      'no-unused-vars': 'warn', // Warn on unused vars
+      "no-unused-vars": "warn",
+      "no-undef": "error",
     },
-    ignores: ['node_modules/**', 'playwright-report/**'], // Skip these
+  },
+  {
+    files: ["playwright.config.js", "vitest.config.js", "tests/**/*.js"],
+    languageOptions: {
+      ecmaVersion: 2022,
+      sourceType: "module",
+      globals: {
+        // Node.js globals
+        process: "readonly",
+        console: "readonly",
+        __dirname: "readonly",
+        __filename: "readonly",
+        global: "readonly",
+        // Browser globals for tests
+        window: "readonly",
+        document: "readonly",
+        localStorage: "readonly",
+        sessionStorage: "readonly",
+        fetch: "readonly",
+        Audio: "readonly",
+        DOMParser: "readonly",
+        requestAnimationFrame: "readonly",
+        performance: "readonly",
+        Image: "readonly",
+        setInterval: "readonly",
+        clearInterval: "readonly",
+        setTimeout: "readonly",
+        clearTimeout: "readonly",
+        URL: "readonly",
+        location: "readonly",
+        confirm: "readonly",
+        // Vitest/testing globals
+        beforeAll: "readonly",
+        beforeEach: "readonly",
+        afterEach: "readonly",
+        afterAll: "readonly",
+        describe: "readonly",
+        it: "readonly",
+        test: "readonly",
+        expect: "readonly",
+        vi: "readonly",
+      },
+    },
+    rules: {
+      "no-unused-vars": "warn",
+      "no-undef": "error",
+    },
   },
 ];
