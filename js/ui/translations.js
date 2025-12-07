@@ -49,11 +49,22 @@ export const languages = {
       backToShop: 'Back to Shop',
       backToHome: 'Back to Home',
 
-      // Settings (injected)
+      // Settings Modal
       settings: 'Settings',
+      audioVolume: 'Audio Volume',
+      sfxVolume: 'SFX Volume',
       language: 'Language',
-      apply: 'Apply',
+      funModeLabel: 'Fun Mode (Chloe\'s Shooting Sound) Party',
+      funModeOff: 'Have Some Fun!',
+      funModeOn: 'Fun Mode ON!',
       close: 'Close',
+
+      // Pause Menu
+      paused: 'PAUSED',
+      resume: 'Resume',
+      restart: 'Restart',
+      exitToMenu: 'Exit to Menu',
+      confirmExit: 'Are you sure you want to exit? Progress will be lost.',
     },
   },
 
@@ -101,9 +112,18 @@ export const languages = {
       backToHome: 'Volver al Inicio',
 
       settings: 'Ajustes',
+      audioVolume: 'Volumen Música',
+      sfxVolume: 'Volumen Efectos',
       language: 'Idioma',
-      apply: 'Aplicar',
+      funModeLabel: 'Modo Diversión (Sonido de Disparo de Chloe) Fiesta',
+      funModeOff: '¡A divertirse!', funModeOn: '¡Modo Diversión ON!',
+
       close: 'Cerrar',
+      paused: 'PAUSADO',
+      resume: 'Continuar',
+      restart: 'Reiniciar',
+      exitToMenu: 'Salir al Menú',
+      confirmExit: '¿Seguro que quieres salir? Se perderá el progreso.',
     },
   },
 
@@ -151,9 +171,20 @@ export const languages = {
       backToHome: 'Retour à l’Accueil',
 
       settings: 'Paramètres',
+      audioVolume: 'Volume Musique',
+      sfxVolume: 'Volume Effets',
       language: 'Langue',
-      apply: 'Appliquer',
+      funModeLabel: 'Mode Fun (Son Chloe) Party',
+      funModeOff: 'Activer le Fun !',
+      funModeOn: 'Mode Fun ON !',
       close: 'Fermer',
+
+      paused: 'EN PAUSE',
+      resume: 'Reprendre',
+      restart: 'Recommencer',
+      exitToMenu: 'Menu Principal',
+      confirmExit: 'Quitter ? Progression perdue.',
+
     },
   },
 
@@ -201,9 +232,19 @@ export const languages = {
       backToHome: '返回主页',
 
       settings: '设置',
+      audioVolume: '音乐音量',
+      sfxVolume: '音效音量',
       language: '语言',
-      apply: '应用',
+      funModeLabel: '娱乐模式（Chloe射击音效）派对',
+      funModeOff: '来玩吧！',
+      funModeOn: '娱乐模式已开启！',
+
       close: '关闭',
+      paused: '暂停',
+      resume: '继续游戏',
+      restart: '重新开始',
+      exitToMenu: '返回主菜单',
+      confirmExit: '确定退出？进度将丢失。',
     },
   },
 };
