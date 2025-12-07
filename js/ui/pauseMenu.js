@@ -20,10 +20,10 @@ export function initPauseMenu(game) {
       <link rel="preload" href="https://fonts.googleapis.com/css2?family=Jersey+10&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
       <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jersey+10&display=swap"></noscript>
       <div class="pause-menu-content">
-        <h2 style="font-family: 'Jersey 10', monospace;">PAUSED</h2>
-        <button id="resumeButton" class="pause-menu-button" style="font-family: 'Jersey 10', monospace;">Resume</button>
-        <button id="restartButton" class="pause-menu-button" style="font-family: 'Jersey 10', monospace;">Restart</button>
-        <button id="exitButton" class="pause-menu-button" style="font-family: 'Jersey 10', monospace;">Exit to Menu</button>
+        <h2 translate="paused">PAUSED</h2>
+        <button id="resumeButton"   class="pause-menu-button" translate="resume">Resume</button>
+        <button id="restartButton"  class="pause-menu-button" translate="restart">Restart</button>
+        <button id="exitButton"     class="pause-menu-button" translate="exitToMenu">Exit to Menu</button>
       </div>
     `;
     document.body.appendChild(pauseMenuElement);
