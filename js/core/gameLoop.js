@@ -99,8 +99,10 @@ function update(delta) {
   });
 
   if (Game.invincibilityTimer <= 0) {
-    checkEnemyShotCollisions(Game, () => handlePlayerHit(Game));
-    checkPlayerEnemyCollision(Game, () => handlePlayerHit(Game));
+    // Check enemy shot collisions - passes 'ball' as hit type
+    checkEnemyShotCollisions(Game, (hitType) => handlePlayerHit(Game, hitType));
+    // Check enemy collision - passes 'enemy' as hit type
+    checkPlayerEnemyCollision(Game, (hitType) => handlePlayerHit(Game, hitType));
   }
 
   handleLevelProgression(Game, delta, spawnEnemyWave);
@@ -138,4 +140,3 @@ function start() {
 
 spawnEnemyWave(Game);
 start();
-
