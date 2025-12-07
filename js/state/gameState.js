@@ -13,9 +13,14 @@ import { persistentAudio } from "../core/persistentAudio.js";
 export function createInitialGame() {
   const difficulty = localStorage.getItem("gameDifficulty") || "medium";
 
-  // Play start game sound shortly after initialization
+  // Play start game sound and begin level music shortly after initialization
   setTimeout(() => {
     audioManager.playStartGameSound();
+    // Start level 1 music with fade-in after the start sound
+    setTimeout(() => {
+      console.log("🎮 Starting Level 1 music with fade-in");
+      audioManager.playLevelMusic(1, true); // true = fade in
+    }, 1500); // Wait 1.5 seconds for start-game sound to finish
   }, 100);
 
   return {
@@ -65,18 +70,27 @@ export function handleEnemyKilled(game, enemy, points = 100) {
  * Ends the game if lives reach zero.
  *
  * @param {Object} game - Global game state.
+ * @param {string} [hitType="laser"] - Type of hit: "laser" or "enemy"
  * @returns {boolean} `true` if the player actually took damage, `false` if invincible.
  */
-export function handlePlayerHit(game) {
+export function handlePlayerHit(game, hitType = "laser") {
   if (game.invincibilityTimer > 0) return false;
 
   game.lives--;
   game.invincibilityTimer = 1.0;
 
+  // Play appropriate hit sound based on what hit the player
+  if (hitType === "enemy") {
+    audioManager.playEnemyHitsPlayerSound();
+  } else {
+    audioManager.playLaserHitsPlayerSound();
+  }
+
   if (game.lives <= 0) {
     game.gameOver = true;
 
-    // Play game over sound
+    console.log("💀 Game Over - Playing game over sequence");
+    // Play game over sound (which will also start game over background music)
     audioManager.playGameOverSound();
 
     // Persist final score/level for the results screen
@@ -120,6 +134,10 @@ export function startNextLevel(game, spawnWaveCallback) {
   game.playerShootingUnlocked = false;
   game.canShoot = false;
   game.globalEnemyShotTimer = game.baseFireRateDelay;
+
+  // Play appropriate background music for the new level (no fade on level transitions)
+  console.log(`🎮 Advancing to Level ${game.level}`);
+  audioManager.playLevelMusic(game.level, false);
 
   setTimeout(() => {
     if (typeof spawnWaveCallback === "function") {

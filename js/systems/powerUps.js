@@ -1,6 +1,8 @@
 // js/systems/powerUps.js
 // Handles power-up spawning, collection, triple-shot timer and visual rendering.
 
+import { audioManager } from "./audioManager.js";
+
 export function spawnPowerUp(game, enemy) {
   // Base drop chance varies by difficulty
   let dropChance = 0.1; // 10% on medium
@@ -39,6 +41,10 @@ export function updatePowerUps(game, delta, canvas) {
     if (distance < game.player.size + powerUp.size) {
       // Grant triple-shot for 30 seconds
       game.tripleShotTimer = 30;
+      
+      // Play power-up collection sound
+      audioManager.playPowerUpSound();
+      
       return false; // collected → remove
     }
 

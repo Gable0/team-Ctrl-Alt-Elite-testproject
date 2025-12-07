@@ -124,8 +124,11 @@ function update(delta) {
 
   // Player can only be hit when not invincible
   if (Game.invincibilityTimer <= 0) {
-    checkEnemyShotCollisions(Game, () => handlePlayerHit(Game));
-    checkPlayerEnemyCollision(Game, () => handlePlayerHit(Game));
+    // Check enemy laser hits (pass hit type to handlePlayerHit)
+    checkEnemyShotCollisions(Game, (hitType) => handlePlayerHit(Game, hitType));
+    
+    // Check enemy collision (pass hit type to handlePlayerHit)
+    checkPlayerEnemyCollision(Game, (hitType) => handlePlayerHit(Game, hitType));
   }
 
   // Handles wave completion → next level progression
@@ -179,3 +182,6 @@ function start() {
 // Begin the game
 spawnEnemyWave(Game);
 start();
+
+// Expose Game object globally for debugging
+window.Game = Game;

@@ -27,8 +27,8 @@ export function checkPlayerEnemyCollision(game, onPlayerHit) {
       enemy.state = "dying";
       enemy.dyingTimer = 0.3;
 
-      // Notify that the player was hit
-      if (typeof onPlayerHit === "function") onPlayerHit();
+      // Notify that the player was hit by an enemy (not a laser)
+      if (typeof onPlayerHit === "function") onPlayerHit("enemy"); // Pass "enemy" as hit type
 
       // Return true to indicate a collision happened
       return true;

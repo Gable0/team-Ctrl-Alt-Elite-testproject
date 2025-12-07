@@ -57,7 +57,7 @@ export function checkPlayerShotCollisions(game, onEnemyKilled) {
  * Checks all active enemy shots for collisions with the player.
  *
  * @param {Object} game - Global game state.
- * @param {function(): void} [onPlayerHit] - Called when the player is hit.
+ * @param {function(string): void} [onPlayerHit] - Called when the player is hit by a laser (receives hit type).
  * @returns {boolean} `true` if the player was hit this frame, otherwise `false`.
  */
 export function checkEnemyShotCollisions(game, onPlayerHit) {
@@ -72,7 +72,7 @@ export function checkEnemyShotCollisions(game, onPlayerHit) {
 
     if (boxesOverlap(shotBox, playerBox)) {
       game.enemyShots.splice(i, 1);
-      if (typeof onPlayerHit === "function") onPlayerHit();
+      if (typeof onPlayerHit === "function") onPlayerHit("laser"); // Pass "laser" as hit type
       return true;
     }
   }
