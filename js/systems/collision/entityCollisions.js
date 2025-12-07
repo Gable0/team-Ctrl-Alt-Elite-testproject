@@ -16,8 +16,8 @@ export function checkPlayerEnemyCollision(game, onPlayerHit) {
       enemy.state = 'dying';
       enemy.dyingTimer = 0.3;
 
-      // Notify that player was hit
-      if (typeof onPlayerHit === 'function') onPlayerHit();
+      // Notify that player was hit by an enemy (not a ball)
+      if (typeof onPlayerHit === 'function') onPlayerHit('enemy');
 
       // Return true to indicate collision happened
       return true;
