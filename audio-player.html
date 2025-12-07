@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Audio Player</title>
+  </head>
+  <body>
+    <audio id="bgMusic" loop>
+      <source src="assets/sounds/reg game sounds/intro.wav" type="audio/wav" />
+    </audio>
+    <script>
+      const audio = document.getElementById("bgMusic");
+      audio.volume = 1;
+      audio.playbackRate = 0.9;
+      audio.currentTime = 25;
+
+      // Try to play
+      audio.play().catch(() => {
+        // If blocked, wait for message from parent
+        window.addEventListener("message", (e) => {
+          if (e.data === "play") {
+            audio.play();
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

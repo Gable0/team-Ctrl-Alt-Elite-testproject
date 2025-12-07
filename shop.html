@@ -1,90 +1,109 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>RetroGa Shop</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Doto:wght@100..900&family=Nabla&family=Press+Start+2P&family=Tourney:ital,wght@0,100..900;1,100..900&family=Jersey+10&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-<shop-container>
-    <shop-header>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Doto:wght@100..900&family=Nabla&family=Press+Start+2P&family=Tourney:ital,wght@0,100..900;1,100..900&family=Jersey+10&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <shop-container>
+      <shop-header>
         <h1>RetroGa Shop</h1>
         <p>Unlock new looks for your ship and the enemy fleet!</p>
-    </shop-header>
+      </shop-header>
 
-    <section class="skins-grid">
-        <article class="skin-card">
-            <h3>Sample Item</h3>
-            <p>Sample Item</p>
-            <button class="purchase-btn">Buy - 500 pts</button>
-        </article>
-        <article class="skin-card">
-            <h3>Sample Item</h3>
-            <p>Sample Item</p>
-            <button class="purchase-btn">Buy - 500 pts</button>
-        </article>
-        <article class="skin-card">
-            <h3>Sample Item</h3>
-            <p>Sample Item</p>
-            <button class="purchase-btn">Buy - 500 pts</button>
-        </article>
-        <article class="skin-card">
-            <h3>Sample Item</h3>
-            <p>Sample Item</p>
-            <button class="purchase-btn">Buy - 500 pts</button>
-        </article>
-        <article class="skin-card">
-            <h3>Sample Item</h3>
-            <p>Sample Item</p>
-            <button class="purchase-btn">Buy - 500 pts</button>
-        </article>
-        <article class="skin-card">
-            <h3>Sample Item</h3>
-            <p>Sample Item</p>
-            <button class="purchase-btn">Buy - 500 pts</button>
-        </article>
-        <article class="skin-card">
-            <h3>Sample Item</h3>
-            <p>Sample Item</p>
-            <button class="purchase-btn">Buy - 500 pts</button>
-        </article>
-        <article class="skin-card">
-            <h3>Sample Item</h3>
-            <p>Sample Item</p>
-            <button class="purchase-btn">Buy - 500 pts</button>
-        </article>
-        <article class="skin-card">
-            <h3>Square Pack</h3>
-            <p>Blocky vibes for ships and foes.</p>
-            <button class="purchase-btn" id="square-pack-btn">Buy - 800 pts</button>
-        </article>
-    </section>
+      <section class="skins-grid" id="skins-grid"></section>
 
-    <button id="back-homepage" onclick="location.href='homepage.html'">Back to Home</button>
-</shop-container>
+      <button id="back-homepage" onclick="location.href = 'homepage.html'">
+        Back to Home
+      </button>
+    </shop-container>
 
-<script type="module">
-    import { injectSettings } from './js/ui/settingsComponent.js';
-    injectSettings();
-</script>
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const btn = document.getElementById('square-pack-btn');
-        if (localStorage.getItem('squarePackOwned')) {
-            btn.disabled = true;
-            btn.textContent = 'Purchased';
-        } else {
-            btn.addEventListener('click', () => {
-                localStorage.setItem('squarePackOwned', 'true');
-                btn.disabled = true;
-                btn.textContent = 'Purchased';
-            });
+    <script type="module">
+      import {
+        getActiveSkin,
+        isSkinOwned,
+        equipSkin,
+      } from "./js/skins/skinsManager.js";
+      import { injectSettings } from "./js/ui/settingsComponent.js";
+      injectSettings();
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const grid = document.getElementById("skins-grid");
+        const activeSkin = getActiveSkin();
+
+        // Default/always available option
+        const defaultCard = document.createElement("article");
+        defaultCard.className = "skin-card";
+        defaultCard.innerHTML = `
+            <h3>Default</h3>
+            <p>Classic RetroGa style.</p>
+            <button class="equip-btn" id="default-equip">${activeSkin === "default" ? "Equipped" : "Equip"}</button>
+        `;
+        grid.appendChild(defaultCard);
+
+        const defaultBtn = document.getElementById("default-equip");
+        defaultBtn.addEventListener("click", () => {
+          equipSkin("default");
+          location.reload(); // Refresh UI
+        });
+
+        // Sample owned skins (extend ownedSkins in manager for more)
+        if (isSkinOwned("squarePack")) {
+          const card = document.createElement("article");
+          card.className = "skin-card";
+          card.innerHTML = `
+                <h3>Square Pack</h3>
+                <p>Blocky vibes for ships and foes.</p>
+                <button class="equip-btn" id="square-pack-equip">${activeSkin === "squarePack" ? "Equipped" : "Equip"}</button>
+            `;
+          grid.appendChild(card);
+
+          const btn = document.getElementById("square-pack-equip");
+          btn.addEventListener("click", () => {
+            equipSkin(activeSkin === "squarePack" ? "default" : "squarePack");
+            location.reload(); // Refresh UI
+          });
         }
-    });
-</script>
-</body>
+
+        if (isSkinOwned("starPack")) {
+          const card = document.createElement("article");
+          card.className = "skin-card";
+          card.innerHTML = `
+                <h3>Star Pack</h3>
+                <p>Stellar shapes for ships and foes.</p>
+                <button class="equip-btn" id="star-pack-equip">${activeSkin === "starPack" ? "Equipped" : "Equip"}</button>
+            `;
+          grid.appendChild(card);
+
+          const btn = document.getElementById("star-pack-equip");
+          btn.addEventListener("click", () => {
+            equipSkin(activeSkin === "starPack" ? "default" : "starPack");
+            location.reload(); // Refresh UI
+          });
+        }
+
+        if (grid.children.length === 0) {
+          const emptyMsg = document.createElement("p");
+          emptyMsg.textContent = "No skins owned yet. Visit the shop!";
+          emptyMsg.style.textAlign = "center";
+          emptyMsg.style.gridColumn = "1 / -1";
+          grid.appendChild(emptyMsg);
+        }
+      });
+
+      const ownedSkins = {
+        squarePack: localStorage.getItem("squarePackOwned") === "true",
+        starPack: localStorage.getItem("starPackOwned") === "true",
+        // Add new: neonPack: localStorage.getItem('neonPackOwned') === 'true',
+      };
+    </script>
+  </body>
 </html>

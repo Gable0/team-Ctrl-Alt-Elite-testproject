@@ -1,40 +1,63 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Galaga Skeleton</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Doto:wght@100..900&family=Nabla&family=Press+Start+2P&family=Tourney:ital,wght@0,100..900;1,100..900&family=Jersey+10&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Doto:wght@100..900&family=Nabla&family=Press+Start+2P&family=Tourney:ital,wght@0,100..900;1,100..900&family=Jersey+10&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
     <difficulty-buttons>
-        <h1 class="difficulty-header">Choose a Game Mode</h1>
-        <button id="easy-difficulty">Easy</button>
-        <button id="medium-difficulty">Medium</button>
-        <button id="hard-difficulty">Hard</button>
+      <h1 class="difficulty-header">Choose a Game Mode</h1>
+      <button id="easy-difficulty">Easy</button>
+      <button id="medium-difficulty">Medium</button>
+      <button id="hard-difficulty">Hard</button>
 
-
-        <button id="back-homepage" onclick="location.href='homepage.html'">Back</button>
+      <button id="back-homepage" onclick="location.href = 'homepage.html'">
+        Back
+      </button>
     </difficulty-buttons>
     <script type="module">
-        import { injectSettings } from './js/ui/settingsComponent.js';
-        injectSettings();
+      import { injectSettings } from "./js/ui/settingsComponent.js";
+      import { persistentAudio } from "./js/core/persistentAudio.js";
+      injectSettings();
+
+      document.getElementById("easy-difficulty").addEventListener(
+        "click",
+        () => {
+          persistentAudio.stop();
+          sessionStorage.setItem("stopIntroAudio", "true");
+          localStorage.setItem("gameDifficulty", "easy");
+          window.location.href = "game.html";
+        },
+        true,
+      );
+      document.getElementById("medium-difficulty").addEventListener(
+        "click",
+        () => {
+          persistentAudio.stop();
+          sessionStorage.setItem("stopIntroAudio", "true");
+          localStorage.setItem("gameDifficulty", "medium");
+          window.location.href = "game.html";
+        },
+        true,
+      );
+      document.getElementById("hard-difficulty").addEventListener(
+        "click",
+        () => {
+          persistentAudio.stop();
+          sessionStorage.setItem("stopIntroAudio", "true");
+          localStorage.setItem("gameDifficulty", "hard");
+          window.location.href = "game.html";
+        },
+        true,
+      );
     </script>
-    <script>
-        document.getElementById('easy-difficulty').addEventListener('click', () => {
-            localStorage.setItem('gameDifficulty', 'easy');
-            location.href = 'index.html';
-        });
-        document.getElementById('medium-difficulty').addEventListener('click', () => {
-            localStorage.setItem('gameDifficulty', 'medium');
-            location.href = 'index.html';
-        });
-        document.getElementById('hard-difficulty').addEventListener('click', () => {
-            localStorage.setItem('gameDifficulty', 'hard');
-            location.href = 'index.html';
-        });
-    </script>
-</body>
+  </body>
+</html>

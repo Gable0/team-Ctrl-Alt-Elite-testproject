@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RetroGa</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main>
+      <canvas
+        id="game"
+        width="800"
+        height="600"
+        aria-label="Galaga playfield"
+      ></canvas>
+      <section id="status">
+        <p>Use Arrow Keys or WASD to move the ship.</p>
+        <p>[Space] to fire.</p>
+      </section>
+    </main>
+    <script type="module">
+      import { injectSettings } from "./js/ui/settingsComponent.js";
+      import { persistentAudio } from "./js/core/persistentAudio.js";
+      injectSettings();
+      persistentAudio.stop();
+    </script>
+    <script type="module" src="js/core/gameLoop.js"></script>
+  </body>
+</html>

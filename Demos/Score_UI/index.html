@@ -1,41 +1,38 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Galaga Score UI Demo</title>
 
-    <link rel="stylesheet" href="styles.css">
-
-</head>
-<body>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
     <!-- Score UI - Top Left Corner-->
-     <section id="scoreUI">
-        <p id="scoreDisplay">
-            SCORE: <span class="score-value" id="scoreValue">000000</span>
-        </p>
-        <p id="livesDisplay">
-            LIVES: <span id="heartsContainer"></span>
-        </p>
-     </section>
+    <section id="scoreUI">
+      <p id="scoreDisplay">
+        SCORE: <span class="score-value" id="scoreValue">000000</span>
+      </p>
+      <p id="livesDisplay">LIVES: <span id="heartsContainer"></span></p>
+    </section>
 
-     <!-- Game Over Screen Overlay-->
-      <section id="gameOverScreen" class="active">
-        <h1 id="gameOverTitle">GAME OVER</h1>
-        <p id="finalScore">
-            FINAL SCORE: <span id="finalScoreValue">000000</span>
-        </p>
-        <button id="restartLevelButton">RESTART LEVEL</button>
-        <button id="levelsButton">LEVELS</button>
-      </section>
-    
-      <!-- Player Instructions-->
-       <footer id="instructions">
-        <p>Click enemies to destroy them!</p>
-        <p>+100 points per kill - Score persists until Game Over</p>
-       </footer>
+    <!-- Game Over Screen Overlay-->
+    <section id="gameOverScreen" class="active">
+      <h1 id="gameOverTitle">GAME OVER</h1>
+      <p id="finalScore">
+        FINAL SCORE: <span id="finalScoreValue">000000</span>
+      </p>
+      <button id="restartLevelButton">RESTART LEVEL</button>
+      <button id="levelsButton">LEVELS</button>
+    </section>
 
-       <canvas id="gameCanvas"></canvas>
-       <script src="script.js"></script>
-</body>
+    <!-- Player Instructions-->
+    <footer id="instructions">
+      <p>Click enemies to destroy them!</p>
+      <p>+100 points per kill - Score persists until Game Over</p>
+    </footer>
+
+    <canvas id="gameCanvas"></canvas>
+    <script src="script.js"></script>
+  </body>
 </html>

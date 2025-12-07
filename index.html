@@ -1,24 +1,154 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>RetroGa</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-<main>
-    <canvas id="game" width="800" height="600" aria-label="Galaga playfield"></canvas>
-    <section id="status">
-        <p>Use Arrow Keys or WASD to move the ship.</p>
-        <p>Space to fire (todo), enemies incoming (todo).</p>
-    </section>
-</main>
-<script type="module">
-    import { injectSettings } from './js/ui/settingsComponent.js';
-    injectSettings();
-</script>
-<script type="module" src="js/core/gameLoop.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Doto:wght@100..900&family=Nabla&family=Press+Start+2P&family=Tourney:ital,wght@0,100..900;1,100..900&family=Jersey+10&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <!-- Content Container - loads other pages here -->
+    <div id="page-container"></div>
 
-</body>
+    <!-- Persistent Audio - stays loaded forever -->
+    <audio id="intro-audio" loop preload="auto">
+      <source src="assets/sounds/reg game sounds/intro.wav" type="audio/wav" />
+    </audio>
+
+    <script type="module">
+      // =====================
+      // PERSISTENT AUDIO SETUP
+      // =====================
+      const introAudio = document.getElementById("intro-audio");
+      let audioStarted = false;
+
+      function startIntroAudio() {
+        if (!audioStarted) {
+          introAudio.volume = 0;
+          introAudio.currentTime = 25;
+          introAudio.playbackRate = 0.9;
+          introAudio
+            .play()
+            .then(() => {
+              audioStarted = true;
+              // Fade in
+              const fadeInDuration = 1500;
+              const fadeInSteps = 50;
+              const volumeIncrement = 1 / fadeInSteps;
+              const stepDuration = fadeInDuration / fadeInSteps;
+              let currentStep = 0;
+              const fadeInInterval = setInterval(() => {
+                currentStep++;
+                introAudio.volume = Math.min(currentStep * volumeIncrement, 1);
+                if (currentStep >= fadeInSteps) {
+                  clearInterval(fadeInInterval);
+                  introAudio.volume = 1;
+                }
+              }, stepDuration);
+            })
+            .catch((error) => console.log("Audio play failed:", error));
+        }
+      }
+
+      // Try to start immediately
+      startIntroAudio();
+
+      // Fallback for autoplay restrictions
+      ["click", "touchstart", "mouseenter", "keydown"].forEach((eventType) => {
+        document.body.addEventListener(eventType, startIntroAudio, {
+          once: true,
+          passive: true,
+        });
+      });
+
+      // =====================
+      // SIMPLE PAGE LOADER
+      // =====================
+      async function loadPage(url) {
+        try {
+          const response = await fetch(url);
+          const html = await response.text();
+
+          // Parse the HTML
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(html, "text/html");
+
+          // Extract just the body content
+          const bodyContent = doc.body.innerHTML;
+          document.getElementById("page-container").innerHTML = bodyContent;
+
+          // Re-execute any scripts in the loaded content
+          const scripts = doc.querySelectorAll("script");
+          scripts.forEach((oldScript) => {
+            const newScript = document.createElement("script");
+            if (oldScript.src) {
+              newScript.src = oldScript.src;
+            } else {
+              newScript.textContent = oldScript.textContent;
+            }
+            if (oldScript.type) newScript.type = oldScript.type;
+            document.body.appendChild(newScript);
+          });
+        } catch (error) {
+          console.error("Error loading page:", error);
+        }
+      }
+
+      // =====================
+      // INTERCEPT NAVIGATION
+      // =====================
+      function interceptClicks() {
+        document.addEventListener("click", (e) => {
+          // Check if clicked element or parent is a link
+          const link = e.target.closest("a");
+          if (link && link.href) {
+            const url = new URL(link.href);
+            const currentOrigin = window.location.origin;
+
+            // Only intercept internal links to .html files
+            if (
+              url.origin === currentOrigin &&
+              url.pathname.endsWith(".html")
+            ) {
+              e.preventDefault();
+              loadPage(url.pathname);
+              window.history.pushState({}, "", url.pathname);
+            }
+          }
+        });
+
+        // Also intercept location.href changes
+        const originalLocationSetter = Object.getOwnPropertyDescriptor(
+          window,
+          "location",
+        ).set;
+        Object.defineProperty(window, "location", {
+          set(value) {
+            if (typeof value === "string" && value.endsWith(".html")) {
+              loadPage(value);
+              window.history.pushState({}, "", value);
+            } else {
+              originalLocationSetter.call(window, value);
+            }
+          },
+        });
+      }
+
+      // Handle browser back/forward
+      window.addEventListener("popstate", () => {
+        loadPage(window.location.pathname);
+      });
+
+      // Start by loading the homepage
+      loadPage("homepage.html").then(() => {
+        interceptClicks();
+      });
+    </script>
+  </body>
 </html>

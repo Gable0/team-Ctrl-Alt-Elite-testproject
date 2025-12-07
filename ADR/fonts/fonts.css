@@ -13,14 +13,12 @@
   font-style: normal;
 }
 
-
 .tourney-style-font {
   font-family: "Tourney", sans-serif;
   font-optical-sizing: auto;
   font-weight: 400;
   font-style: normal;
-  font-variation-settings:
-    "wdth" 100;
+  font-variation-settings: "wdth" 100;
 }
 .dotgothic16-regular {
   font-family: "DotGothic16", sans-serif;
@@ -33,16 +31,15 @@
   font-optical-sizing: auto;
   font-weight: 400;
   font-style: normal;
-  font-variation-settings:
-    "ROND" 0;
+  font-variation-settings: "ROND" 0;
 }
 .jersey-10-regular {
   font-family: "Jersey 10", sans-serif;
   font-weight: 400;
   font-style: normal;
 }
-:root{
-    background: #000;
-    font-family: "Jersey 10", sans-serif;
-    color:gold;
+:root {
+  background: #000;
+  font-family: "Jersey 10", sans-serif;
+  color: gold;
 }
