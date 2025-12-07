@@ -25,36 +25,33 @@
     </difficulty-buttons>
     <script type="module">
       import { injectSettings } from './js/ui/settingsComponent.js';
+      import { persistentAudio } from './js/core/persistentAudio.js';
       injectSettings();
-    </script>
-    <script>
-      // Stop intro audio when difficulty is selected
-      function stopIntroAudio() {
-        // Signal to stop intro audio (will be picked up by game.html)
-        sessionStorage.setItem('stopIntroAudio', 'true');
-      }
 
       document
         .getElementById('easy-difficulty')
         .addEventListener('click', () => {
-          stopIntroAudio();
+          persistentAudio.stop();
+          sessionStorage.setItem('stopIntroAudio', 'true');
           localStorage.setItem('gameDifficulty', 'easy');
-          location.href = 'game.html';
-        });
+          window.location.href = 'game.html';
+        }, true);
       document
         .getElementById('medium-difficulty')
         .addEventListener('click', () => {
-          stopIntroAudio();
+          persistentAudio.stop();
+          sessionStorage.setItem('stopIntroAudio', 'true');
           localStorage.setItem('gameDifficulty', 'medium');
-          location.href = 'game.html';
-        });
+          window.location.href = 'game.html';
+        }, true);
       document
         .getElementById('hard-difficulty')
         .addEventListener('click', () => {
-          stopIntroAudio();
+          persistentAudio.stop();
+          sessionStorage.setItem('stopIntroAudio', 'true');
           localStorage.setItem('gameDifficulty', 'hard');
-          location.href = 'game.html';
-        });
+          window.location.href = 'game.html';
+        }, true);
     </script>
   </body>
 </html>
