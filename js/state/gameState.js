@@ -1,13 +1,21 @@
 import { getActiveSkin } from '../skins/skinsManager.js';
-import { audioManager } from '../systems/audioManager.js';
+import { audioManager, playLevelMusic } from '../systems/audioManager.js';
 import { persistentAudio } from '../core/persistentAudio.js';
 
 export function createInitialGame() {
     const difficulty = localStorage.getItem('gameDifficulty') || 'medium';
     
-    // Play start game sound when game initializes
+    // Stop the intro audio when game starts
+    persistentAudio.stop();
+    
+    // Play start game sound, then background music for level 1
     setTimeout(() => {
         audioManager.playStartGameSound();
+        
+        // Start background music after start sound plays
+        setTimeout(() => {
+            playLevelMusic(1); // Start with level 1 music
+        }, 2000);
     }, 100);
     
     return {
@@ -54,7 +62,8 @@ export function handlePlayerHit(game) {
   if (game.lives <= 0) {
     game.gameOver = true;
 
-    // Play game over sound
+    // Stop background music and play game over sound
+    audioManager.stopMusic();
     audioManager.playGameOverSound();
 
     // Save score and redirect after a delay to let sound play
@@ -85,6 +94,13 @@ export function startNextLevel(game, spawnWaveCallback) {
     game.playerShootingUnlocked = false;
     game.canShoot = false;
     game.globalEnemyShotTimer = game.baseFireRateDelay;
+
+    // Change music based on new level
+    // Level 3: switch from 1-2 music to 3-4 music
+    // Level 5: switch from 3-4 music to 5 music
+    if (game.level === 3 || game.level === 5) {
+        playLevelMusic(game.level);
+    }
 
   setTimeout(() => {
     if (typeof spawnWaveCallback === 'function') {

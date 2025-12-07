@@ -7,6 +7,7 @@ class AudioManager {
         this.volume = 0.5;
         this.musicVolume = 0.3; // Lower volume for background music
         this.currentMusic = null;
+        this.isFading = false;
         
         // Read fun mode from localStorage on initialization
         const savedFunMode = localStorage.getItem('funMode');
@@ -24,6 +25,17 @@ class AudioManager {
       if (isMusic) {
         audio.loop = true;
       }
+
+      // Add error handler to catch loading issues
+      audio.addEventListener('error', (e) => {
+        console.error(`❌ Failed to load audio file: ${name}`, e);
+        console.error(`Path: ${path}`);
+        console.error(`Error code: ${audio.error?.code}, Message: ${audio.error?.message}`);
+      });
+
+      audio.addEventListener('canplaythrough', () => {
+        console.log(`✅ Audio loaded successfully: ${name}`);
+      });
 
       this.sounds[name] = audio;
     } catch (error) {
@@ -57,7 +69,7 @@ class AudioManager {
     }
   }
 
-  playMusic(name) {
+  playMusic(name, fadeDuration = 1000) {
     if (!this.enabled) {
       console.log('Audio is disabled');
       return;
@@ -68,30 +80,121 @@ class AudioManager {
       return;
     }
 
-    // Stop current music if playing
-    this.stopMusic();
+    // If same music is already playing, don't restart it
+    if (this.currentMusic === this.sounds[name] && !this.currentMusic.paused) {
+      console.log(`🎵 Music already playing: ${name}`);
+      return;
+    }
 
-    console.log(`🎵 Playing music: ${name}`);
+    const newMusic = this.sounds[name];
 
-    try {
-      this.currentMusic = this.sounds[name];
-      this.currentMusic.currentTime = 0;
-      this.currentMusic.volume = this.musicVolume;
-      this.currentMusic
-        .play()
-        .then(() => console.log(`✅ Successfully started music: ${name}`))
-        .catch(err => console.warn(`❌ Failed to play music: ${name}`, err));
-    } catch (error) {
-      console.error(`Error playing music: ${name}`, error);
+    // If there's current music playing, fade it out
+    if (this.currentMusic && !this.currentMusic.paused) {
+      console.log(`🎵 Cross-fading to: ${name}`);
+      this.crossFadeMusic(this.currentMusic, newMusic, fadeDuration);
+    } else {
+      // No current music, just fade in the new music
+      console.log(`🎵 Fading in music: ${name}`);
+      this.fadeInMusic(newMusic, fadeDuration);
     }
   }
 
-  stopMusic() {
+  fadeInMusic(audio, duration = 1000) {
+    audio.volume = 0;
+    audio.currentTime = 0;
+    
+    audio.play()
+      .then(() => {
+        this.currentMusic = audio;
+        console.log(`✅ Started fading in music`);
+        
+        const steps = 60; // 60 steps for smooth fade
+        const stepDuration = duration / steps;
+        const volumeIncrement = this.musicVolume / steps;
+        let currentStep = 0;
+
+        const fadeInterval = setInterval(() => {
+          currentStep++;
+          audio.volume = Math.min(currentStep * volumeIncrement, this.musicVolume);
+
+          if (currentStep >= steps) {
+            clearInterval(fadeInterval);
+            audio.volume = this.musicVolume;
+            this.isFading = false;
+            console.log(`✅ Fade in complete`);
+          }
+        }, stepDuration);
+      })
+      .catch(err => console.warn(`❌ Failed to play music`, err));
+  }
+
+  crossFadeMusic(oldAudio, newAudio, duration = 1000) {
+    this.isFading = true;
+    
+    const steps = 60;
+    const stepDuration = duration / steps;
+    const volumeDecrement = oldAudio.volume / steps;
+    const volumeIncrement = this.musicVolume / steps;
+    let currentStep = 0;
+
+    // Start new music at volume 0
+    newAudio.volume = 0;
+    newAudio.currentTime = 0;
+    
+    newAudio.play()
+      .then(() => {
+        this.currentMusic = newAudio;
+        
+        const crossFadeInterval = setInterval(() => {
+          currentStep++;
+          
+          // Fade out old music
+          oldAudio.volume = Math.max(oldAudio.volume - volumeDecrement, 0);
+          
+          // Fade in new music
+          newAudio.volume = Math.min(currentStep * volumeIncrement, this.musicVolume);
+
+          if (currentStep >= steps) {
+            clearInterval(crossFadeInterval);
+            
+            // Stop and reset old music
+            oldAudio.pause();
+            oldAudio.currentTime = 0;
+            oldAudio.volume = this.musicVolume;
+            
+            // Ensure new music is at correct volume
+            newAudio.volume = this.musicVolume;
+            
+            this.isFading = false;
+            console.log(`✅ Cross-fade complete`);
+          }
+        }, stepDuration);
+      })
+      .catch(err => console.warn(`❌ Failed to cross-fade music`, err));
+  }
+
+  stopMusic(fadeDuration = 500) {
     if (this.currentMusic) {
-      console.log('⏹️ Stopping current music');
-      this.currentMusic.pause();
-      this.currentMusic.currentTime = 0;
-      this.currentMusic = null;
+      console.log('⏹️ Fading out and stopping current music');
+      
+      const steps = 30;
+      const stepDuration = fadeDuration / steps;
+      const volumeDecrement = this.currentMusic.volume / steps;
+      let currentStep = 0;
+      
+      const fadeOutInterval = setInterval(() => {
+        currentStep++;
+        this.currentMusic.volume = Math.max(this.currentMusic.volume - volumeDecrement, 0);
+
+        if (currentStep >= steps || this.currentMusic.volume === 0) {
+          clearInterval(fadeOutInterval);
+          this.currentMusic.pause();
+          this.currentMusic.currentTime = 0;
+          this.currentMusic.volume = this.musicVolume; // Reset for next time
+          this.currentMusic = null;
+          console.log(`✅ Music stopped`);
+        }
+      }, stepDuration);
     }
   }
 
@@ -163,12 +266,34 @@ export function initAudio() {
     // Load background music (intro) - marked as music for looping
     audioManager.loadSound('intro', 'assets/sounds/reg game sounds/intro.wav', true);
     
+    // Load level-specific background music (with renamed files)
+    audioManager.loadSound('background-music-1-2', 'assets/sounds/reg game sounds/background-music-1-2.wav', true);
+    audioManager.loadSound('background-music-3-4', 'assets/sounds/reg game sounds/background-music-3-4.wav', true);
+    audioManager.loadSound('background-music-5', 'assets/sounds/reg game sounds/background-music-5.wav', true);
+    
     console.log(`Audio initialized with fun mode: ${audioManager.getFunMode()}`);
 }
 
-// Play background game music
+// Play background music based on level
+export function playLevelMusic(level) {
+    let musicName;
+    
+    if (level <= 2) {
+        musicName = 'background-music-1-2';
+    } else if (level <= 4) {
+        musicName = 'background-music-3-4';
+    } else {
+        musicName = 'background-music-5';
+    }
+    
+    console.log(`Playing music for level ${level}: ${musicName}`);
+    // Use 1500ms (1.5 seconds) fade duration for smooth level transitions
+    audioManager.playMusic(musicName, 1500);
+}
+
+// Keep the old function for backwards compatibility
 export function playBackgroundGameMusic() {
-    audioManager.playMusic('background-game');
+    audioManager.playMusic('background-music-1-2');
 }
 
 // Function to play intro music on homepage - NOT USED, handled by persistentAudio.js
