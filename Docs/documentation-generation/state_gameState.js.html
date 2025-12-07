@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: state/gameState.js</title>
+
+    <script src="../scripts/prettify/prettify.js"> </script>
+    <script src="../scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="../styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="../styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: state/gameState.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>// js/state/gameState.js
+
+import { getActiveSkin } from '../skins/skinsManager.js';
+import { audioManager } from '../systems/audioManager.js';
+import { persistentAudio } from '../core/persistentAudio.js';
+
+/**
+ * Creates and returns a fresh game state object with default values.
+ * This is called once when a new game session starts.
+ *
+ * @returns {Object} The initial game state.
+ */
+export function createInitialGame() {
+    const difficulty = localStorage.getItem('gameDifficulty') || 'medium';
+
+    // Play start game sound shortly after initialization
+    setTimeout(() => {
+        audioManager.playStartGameSound();
+    }, 100);
+
+    return {
+        player: null,
+        enemies: [],
+        playerShots: [],
+        enemyShots: [],
+        powerUps: [],
+        lastTime: 0,
+        attackTimer: { current: 3 },
+        globalEnemyShotTimer: 0,
+        canShoot: false,
+        playerShootingUnlocked: false,
+        score: 0,
+        lives: 3,
+        level: 1,
+        pendingWaveTimer: 0,
+        showingLevelTransition: false,
+        levelTransitionTimer: 0,
+        baseFireRateDelay: 1.2,
+        baseFireRateVariance: 0.8,
+        gameOver: false,
+        invincibilityTimer: 0,
+        paused: false,
+        activeSkin: getActiveSkin(),
+        difficulty: difficulty,
+        tripleShotTimer: 0
+    };
+}
+
+/**
+ * Called when an enemy is destroyed. Increases score and plays sound effect.
+ *
+ * @param {Object} game - Global game state.
+ * @param {Object} enemy - The enemy that was killed (unused here but kept for consistency).
+ * @param {number} [points=100] - Points awarded for killing the enemy.
+ */
+export function handleEnemyKilled(game, enemy, points = 100) {
+    game.score += points;
+
+    // Play kill enemy sound
+    audioManager.playKillEnemySound();
+}
+
+/**
+ * Handles the player taking damage. Reduces lives and triggers invincibility.
+ * Ends the game if lives reach zero.
+ *
+ * @param {Object} game - Global game state.
+ * @returns {boolean} `true` if the player actually took damage, `false` if invincible.
+ */
+export function handlePlayerHit(game) {
+    if (game.invincibilityTimer > 0) return false;
+
+    game.lives--;
+    game.invincibilityTimer = 1.0;
+
+    if (game.lives &lt;= 0) {
+        game.gameOver = true;
+
+        // Play game over sound
+        audioManager.playGameOverSound();
+
+        // Persist final score/level for the results screen
+        localStorage.setItem('finalScore', game.score);
+        localStorage.setItem('finalLevel', game.level);
+
+        // Redirect to score screen after a short delay (lets sound finish)
+        setTimeout(() => {
+            window.location.href = 'Demos/Score_UI/index.html';
+        }, 2000);
+    }
+
+    return true;
+}
+
+/**
+ * Decrements the player's invincibility timer each frame.
+ *
+ * @param {Object} game - Global game state.
+ * @param {number} delta - Time elapsed since last frame (seconds).
+ */
+export function updateInvincibility(game, delta) {
+    if (game.invincibilityTimer > 0) {
+        game.invincibilityTimer = Math.max(0, game.invincibilityTimer - delta);
+    }
+}
+
+/**
+ * Begins the transition to the next level.
+ *
+ * @param {Object} game - Global game state.
+ * @param {Function} spawnWaveCallback - Function to spawn the next enemy wave.
+ */
+export function startNextLevel(game, spawnWaveCallback) {
+    game.level++;
+    game.showingLevelTransition = true;
+    game.levelTransitionTimer = 2.0;
+    game.enemyShots = [];
+    game.powerUps = [];
+    game.tripleShotTimer = 0;
+    game.playerShootingUnlocked = false;
+    game.canShoot = false;
+    game.globalEnemyShotTimer = game.baseFireRateDelay;
+
+    setTimeout(() => {
+        if (typeof spawnWaveCallback === 'function') {
+            spawnWaveCallback(game);
+        }
+    }, 2000);
+}
+
+/**
+ * Checks for level completion and manages the delay before starting the next level.
+ *
+ * @param {Object} game - Global game state.
+ * @param {number} delta - Time elapsed since last frame (seconds).
+ * @param {Function} spawnWaveCallback - Function to spawn the next enemy wave.
+ */
+export function handleLevelProgression(game, delta, spawnWaveCallback) {
+    if (game.enemies.length === 0 &amp;&amp; !game.showingLevelTransition) {
+        if (game.pendingWaveTimer > 0) {
+            game.pendingWaveTimer -= delta;
+            if (game.pendingWaveTimer &lt;= 0) {
+                startNextLevel(game, spawnWaveCallback);
+            }
+        } else {
+            game.pendingWaveTimer = 1.5;
+        }
+    }
+}
+
+/**
+ * Updates the level transition timer and clears the transition flag when finished.
+ *
+ * @param {Object} game - Global game state.
+ * @param {number} delta - Time elapsed since last frame (seconds).
+ * @returns {boolean} `true` while the level transition screen is active.
+ */
+export function updateLevelTransition(game, delta) {
+    if (!game.showingLevelTransition) return false;
+
+    game.levelTransitionTimer -= delta;
+    if (game.levelTransitionTimer &lt;= 0) {
+        game.showingLevelTransition = false;
+    }
+
+    return game.showingLevelTransition;
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="PersistentAudioManager.html">PersistentAudioManager</a></li></ul><h3>Global</h3><ul><li><a href="global.html#Game">Game</a></li><li><a href="global.html#advanceEnemyAlongPath">advanceEnemyAlongPath</a></li><li><a href="global.html#audioManager">audioManager</a></li><li><a href="global.html#barrierY">barrierY</a></li><li><a href="global.html#boxesOverlap">boxesOverlap</a></li><li><a href="global.html#canvas">canvas</a></li><li><a href="global.html#canvasRef">canvasRef</a></li><li><a href="global.html#checkEnemyShotCollisions">checkEnemyShotCollisions</a></li><li><a href="global.html#checkPlayerEnemyCollision">checkPlayerEnemyCollision</a></li><li><a href="global.html#checkPlayerShotCollisions">checkPlayerShotCollisions</a></li><li><a href="global.html#createEnemy">createEnemy</a></li><li><a href="global.html#createInitialGame">createInitialGame</a></li><li><a href="global.html#createPlayer">createPlayer</a></li><li><a href="global.html#createPlayerShot">createPlayerShot</a></li><li><a href="global.html#ctx">ctx</a></li><li><a href="global.html#ctxRef">ctxRef</a></li><li><a href="global.html#draw">draw</a></li><li><a href="global.html#drawBackground">drawBackground</a></li><li><a href="global.html#drawEnemies">drawEnemies</a></li><li><a href="global.html#drawEnemyShots">drawEnemyShots</a></li><li><a href="global.html#drawPlayer">drawPlayer</a></li><li><a href="global.html#drawPlayerShots">drawPlayerShots</a></li><li><a href="global.html#enemyTypes">enemyTypes</a></li><li><a href="global.html#equipSkin">equipSkin</a></li><li><a href="global.html#fireEnemyShot">fireEnemyShot</a></li><li><a href="global.html#formationConfig">formationConfig</a></li><li><a href="global.html#generateAttackPath">generateAttackPath</a></li><li><a href="global.html#generateEntryPath">generateEntryPath</a></li><li><a href="global.html#getActiveSkin">getActiveSkin</a></li><li><a href="global.html#getEnemyHitbox">getEnemyHitbox</a></li><li><a href="global.html#getEnemyShotHitbox">getEnemyShotHitbox</a></li><li><a href="global.html#getPlayerHitbox">getPlayerHitbox</a></li><li><a href="global.html#getShotHitbox">getShotHitbox</a></li><li><a href="global.html#handleEnemyKilled">handleEnemyKilled</a></li><li><a href="global.html#handleLevelProgression">handleLevelProgression</a></li><li><a href="global.html#handlePlayerHit">handlePlayerHit</a></li><li><a href="global.html#initAudio">initAudio</a></li><li><a href="global.html#initBackground">initBackground</a></li><li><a href="global.html#initEnemyAttack">initEnemyAttack</a></li><li><a href="global.html#initEnemyModule">initEnemyModule</a></li><li><a href="global.html#initInput">initInput</a></li><li><a href="global.html#initPauseMenu">initPauseMenu</a></li><li><a href="global.html#initSharedAudio">initSharedAudio</a></li><li><a href="global.html#initShooting">initShooting</a></li><li><a href="global.html#initialized">initialized</a></li><li><a href="global.html#isGamePaused">isGamePaused</a></li><li><a href="global.html#isKeyPressed">isKeyPressed</a></li><li><a href="global.html#isSkinOwned">isSkinOwned</a></li><li><a href="global.html#killEnemy">killEnemy</a></li><li><a href="global.html#loop">loop</a></li><li><a href="global.html#moveEnemyInFormation">moveEnemyInFormation</a></li><li><a href="global.html#ownedSkins">ownedSkins</a></li><li><a href="global.html#playBackgroundGameMusic">playBackgroundGameMusic</a></li><li><a href="global.html#playIntroMusic">playIntroMusic</a></li><li><a href="global.html#pressedKeys">pressedKeys</a></li><li><a href="global.html#scheduleEnemyAttacks">scheduleEnemyAttacks</a></li><li><a href="global.html#selectAttackingEnemy">selectAttackingEnemy</a></li><li><a href="global.html#spawnEnemyWave">spawnEnemyWave</a></li><li><a href="global.html#stars">stars</a></li><li><a href="global.html#start">start</a></li><li><a href="global.html#startEnemyAttack">startEnemyAttack</a></li><li><a href="global.html#startNextLevel">startNextLevel</a></li><li><a href="global.html#togglePause">togglePause</a></li><li><a href="global.html#update">update</a></li><li><a href="global.html#updateAttackingEnemy">updateAttackingEnemy</a></li><li><a href="global.html#updateBackground">updateBackground</a></li><li><a href="global.html#updateEnemies">updateEnemies</a></li><li><a href="global.html#updateEnemyShots">updateEnemyShots</a></li><li><a href="global.html#updateFunModeButton">updateFunModeButton</a></li><li><a href="global.html#updateInvincibility">updateInvincibility</a></li><li><a href="global.html#updateLevelTransition">updateLevelTransition</a></li><li><a href="global.html#updatePlayer">updatePlayer</a></li><li><a href="global.html#updatePlayerShots">updatePlayerShots</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Sat Dec 06 2025 18:39:50 GMT-0800 (Pacific Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="../scripts/linenumber.js"> </script>
+</body>
+</html>

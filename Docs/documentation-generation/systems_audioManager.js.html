@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: systems/audioManager.js</title>
+
+    <script src="../scripts/prettify/prettify.js"> </script>
+    <script src="../scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="../styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="../styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: systems/audioManager.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>// js/systems/audioManager.js
+// Central audio system – handles SFX, music, fun-mode toggle and volume control.
+
+class AudioManager {
+    constructor() {
+        /** @type {Object&lt;string, HTMLAudioElement>} */
+        this.sounds = {};
+        /** @type {boolean} */
+        this.enabled = true;
+        /** @type {number} Master volume for sound effects (0–1) */
+        this.volume = 0.5;
+        /** @type {number} Volume for background music (0–1) */
+        this.musicVolume = 0.3;
+        /** @type {HTMLAudioElement|null} Currently playing music track */
+        this.currentMusic = null;
+
+        // Load fun-mode preference once at startup
+        const savedFunMode = localStorage.getItem('funMode');
+        /** @type {boolean} */
+        this.funMode = savedFunMode === 'true';
+        console.log(`AudioManager initialized - Fun mode: ${this.funMode}`);
+    }
+
+    /**
+     * Loads an audio file into the manager.
+     *
+     * @param {string} name      Unique identifier for the sound.
+     * @param {string} path      Relative or absolute URL to the audio file.
+     * @param {boolean} [isMusic=false] If true the sound will loop and use musicVolume.
+     */
+    loadSound(name, path, isMusic = false) {
+        try {
+            console.log(`Loading sound: ${name} from ${path}`);
+            const audio = new Audio(path);
+            audio.preload = 'auto';
+            audio.volume = isMusic ? this.musicVolume : this.volume;
+
+            if (isMusic) {
+                audio.loop = true;
+            }
+
+            this.sounds[name] = audio;
+        } catch (error) {
+            console.error(`Failed to load sound: ${name}`, error);
+        }
+    }
+
+    /**
+     * Plays a sound effect (clones the source to allow overlapping playback).
+     *
+     * @param {string} name Identifier of the sound to play.
+     */
+    playSound(name) {
+        if (!this.enabled) {
+            console.log('Audio is disabled');
+            return;
+        }
+
+        if (!this.sounds[name]) {
+            console.warn(`Sound not found: ${name}`);
+            console.log('Available sounds:', Object.keys(this.sounds));
+            return;
+        }
+
+        console.log(`Playing sound: ${name}`);
+
+        try {
+            const sound = this.sounds[name].cloneNode();
+            sound.volume = this.volume;
+            sound.play()
+                .then(() => console.log(`Successfully played: ${name}`))
+                .catch(err => console.warn(`Failed to play: ${name}`, err));
+        } catch (error) {
+            console.error(`Error playing sound: ${name}`, error);
+        }
+    }
+
+    /**
+     * Starts playback of a music track (stops any currently playing music first).
+     *
+     * @param {string} name Identifier of the music track.
+     */
+    playMusic(name) {
+        if (!this.enabled) {
+            console.log('Audio is disabled');
+            return;
+        }
+
+        if (!this.sounds[name]) {
+            console.warn(`Music not found: ${name}`);
+            return;
+        }
+
+        this.stopMusic();
+
+        console.log(`Playing music: ${name}`);
+
+        try {
+            this.currentMusic = this.sounds[name];
+            this.currentMusic.currentTime = 0;
+            this.currentMusic.volume = this.musicVolume;
+            this.currentMusic.play()
+                .then(() => console.log(`Successfully started music: ${name}`))
+                .catch(err => console.warn(`Failed to play music: ${name}`, err));
+        } catch (error) {
+            console.error(`Error playing music: ${name}`, error);
+        }
+    }
+
+    /** Stops the currently playing music (if any). */
+    stopMusic() {
+        if (this.currentMusic) {
+            console.log('Stopping current music');
+            this.currentMusic.pause();
+            this.currentMusic.currentTime = 0;
+            this.currentMusic = null;
+        }
+    }
+
+    /** Plays the appropriate shoot sound – uses "chloe-shoot" when fun mode is active. */
+    playShootSound() {
+        // Re-read fun mode from storage each shot (in case it changed via settings)
+        const currentFunMode = localStorage.getItem('funMode') === 'true';
+        this.funMode = currentFunMode;
+
+        const soundName = this.funMode ? 'chloe-shoot' : 'shoot';
+        console.log(`Playing shoot sound: ${soundName} (fun mode: ${this.funMode})`);
+        this.playSound(soundName);
+    }
+
+    /** Plays the enemy kill sound effect. */
+    playKillEnemySound() {
+        this.playSound('kill-enemy');
+    }
+
+    /** Plays the game-over sound effect and stops any background music. */
+    playGameOverSound() {
+        this.stopMusic();
+        this.playSound('game-over');
+    }
+
+    /** Plays the start-game sound effect and stops any intro music. */
+    playStartGameSound() {
+        this.stopMusic();
+        this.playSound('start-game');
+    }
+
+    /**
+     * Enables or disables fun mode (Chloe shooting sound).
+     *
+     * @param {boolean} enabled
+     */
+    setFunMode(enabled) {
+        this.funMode = enabled;
+        localStorage.setItem('funMode', String(enabled));
+        console.log(`Fun mode ${enabled ? 'ENABLED' : 'DISABLED'}`);
+    }
+
+    /** @returns {boolean} Current fun-mode state (reads from localStorage). */
+    getFunMode() {
+        const saved = localStorage.getItem('funMode') === 'true';
+        this.funMode = saved;
+        return this.funMode;
+    }
+
+    /**
+     * Sets master volume for sound effects.
+     *
+     * @param {number} volume Value between 0 and 1.
+     */
+    setVolume(volume) {
+        this.volume = Math.max(0, Math.min(1, volume));
+        console.log(`Volume set to: ${this.volume}`);
+    }
+
+    /**
+     * Sets volume for background music.
+     *
+     * @param {number} volume Value between 0 and 1.
+     */
+    setMusicVolume(volume) {
+        this.musicVolume = Math.max(0, Math.min(1, volume));
+        if (this.currentMusic) {
+            this.currentMusic.volume = this.musicVolume;
+        }
+        console.log(`Music volume set to: ${this.musicVolume}`);
+    }
+}
+
+/** Singleton instance used throughout the game. */
+export const audioManager = new AudioManager();
+
+/**
+ * Initializes all game audio assets.
+ * Called once at game startup (e.g. from gameLoop.js).
+ */
+export function initAudio() {
+    console.log('Initializing audio...');
+
+    // Sound effects
+    audioManager.loadSound('shoot', 'assets/sounds/reg game sounds/shoot.wav');
+    audioManager.loadSound('chloe-shoot', 'assets/sounds/Chloe-shooting.wav');
+    audioManager.loadSound('kill-enemy', 'assets/sounds/reg game sounds/kill-enemy.wav');
+    audioManager.loadSound('game-over', 'assets/sounds/reg game sounds/game-over.wav');
+    audioManager.loadSound('start-game', 'assets/sounds/reg game sounds/start-game.wav');
+
+    // Background music (looped)
+    audioManager.loadSound('intro', 'assets/sounds/reg game sounds/intro.wav', true);
+
+    console.log(`Audio initialized with fun mode: ${audioManager.getFunMode()}`);
+}
+
+/** Placeholder – not currently used (intro music is handled by persistentAudio.js). */
+export function playBackgroundGameMusic() {
+    audioManager.playMusic('background-game');
+}
+
+/** Legacy helper – kept for compatibility, but intro music is now managed by persistentAudio.js. */
+export function playIntroMusic() {
+    audioManager.playMusic('intro');
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="PersistentAudioManager.html">PersistentAudioManager</a></li></ul><h3>Global</h3><ul><li><a href="global.html#Game">Game</a></li><li><a href="global.html#advanceEnemyAlongPath">advanceEnemyAlongPath</a></li><li><a href="global.html#audioManager">audioManager</a></li><li><a href="global.html#barrierY">barrierY</a></li><li><a href="global.html#boxesOverlap">boxesOverlap</a></li><li><a href="global.html#canvas">canvas</a></li><li><a href="global.html#canvasRef">canvasRef</a></li><li><a href="global.html#checkEnemyShotCollisions">checkEnemyShotCollisions</a></li><li><a href="global.html#checkPlayerEnemyCollision">checkPlayerEnemyCollision</a></li><li><a href="global.html#checkPlayerShotCollisions">checkPlayerShotCollisions</a></li><li><a href="global.html#createEnemy">createEnemy</a></li><li><a href="global.html#createInitialGame">createInitialGame</a></li><li><a href="global.html#createPlayer">createPlayer</a></li><li><a href="global.html#createPlayerShot">createPlayerShot</a></li><li><a href="global.html#ctx">ctx</a></li><li><a href="global.html#ctxRef">ctxRef</a></li><li><a href="global.html#draw">draw</a></li><li><a href="global.html#drawBackground">drawBackground</a></li><li><a href="global.html#drawEnemies">drawEnemies</a></li><li><a href="global.html#drawEnemyShots">drawEnemyShots</a></li><li><a href="global.html#drawPlayer">drawPlayer</a></li><li><a href="global.html#drawPlayerShots">drawPlayerShots</a></li><li><a href="global.html#enemyTypes">enemyTypes</a></li><li><a href="global.html#equipSkin">equipSkin</a></li><li><a href="global.html#fireEnemyShot">fireEnemyShot</a></li><li><a href="global.html#formationConfig">formationConfig</a></li><li><a href="global.html#generateAttackPath">generateAttackPath</a></li><li><a href="global.html#generateEntryPath">generateEntryPath</a></li><li><a href="global.html#getActiveSkin">getActiveSkin</a></li><li><a href="global.html#getEnemyHitbox">getEnemyHitbox</a></li><li><a href="global.html#getEnemyShotHitbox">getEnemyShotHitbox</a></li><li><a href="global.html#getPlayerHitbox">getPlayerHitbox</a></li><li><a href="global.html#getShotHitbox">getShotHitbox</a></li><li><a href="global.html#handleEnemyKilled">handleEnemyKilled</a></li><li><a href="global.html#handleLevelProgression">handleLevelProgression</a></li><li><a href="global.html#handlePlayerHit">handlePlayerHit</a></li><li><a href="global.html#initAudio">initAudio</a></li><li><a href="global.html#initBackground">initBackground</a></li><li><a href="global.html#initEnemyAttack">initEnemyAttack</a></li><li><a href="global.html#initEnemyModule">initEnemyModule</a></li><li><a href="global.html#initInput">initInput</a></li><li><a href="global.html#initPauseMenu">initPauseMenu</a></li><li><a href="global.html#initSharedAudio">initSharedAudio</a></li><li><a href="global.html#initShooting">initShooting</a></li><li><a href="global.html#initialized">initialized</a></li><li><a href="global.html#isGamePaused">isGamePaused</a></li><li><a href="global.html#isKeyPressed">isKeyPressed</a></li><li><a href="global.html#isSkinOwned">isSkinOwned</a></li><li><a href="global.html#killEnemy">killEnemy</a></li><li><a href="global.html#loop">loop</a></li><li><a href="global.html#moveEnemyInFormation">moveEnemyInFormation</a></li><li><a href="global.html#ownedSkins">ownedSkins</a></li><li><a href="global.html#playBackgroundGameMusic">playBackgroundGameMusic</a></li><li><a href="global.html#playIntroMusic">playIntroMusic</a></li><li><a href="global.html#pressedKeys">pressedKeys</a></li><li><a href="global.html#scheduleEnemyAttacks">scheduleEnemyAttacks</a></li><li><a href="global.html#selectAttackingEnemy">selectAttackingEnemy</a></li><li><a href="global.html#spawnEnemyWave">spawnEnemyWave</a></li><li><a href="global.html#stars">stars</a></li><li><a href="global.html#start">start</a></li><li><a href="global.html#startEnemyAttack">startEnemyAttack</a></li><li><a href="global.html#startNextLevel">startNextLevel</a></li><li><a href="global.html#togglePause">togglePause</a></li><li><a href="global.html#update">update</a></li><li><a href="global.html#updateAttackingEnemy">updateAttackingEnemy</a></li><li><a href="global.html#updateBackground">updateBackground</a></li><li><a href="global.html#updateEnemies">updateEnemies</a></li><li><a href="global.html#updateEnemyShots">updateEnemyShots</a></li><li><a href="global.html#updateFunModeButton">updateFunModeButton</a></li><li><a href="global.html#updateInvincibility">updateInvincibility</a></li><li><a href="global.html#updateLevelTransition">updateLevelTransition</a></li><li><a href="global.html#updatePlayer">updatePlayer</a></li><li><a href="global.html#updatePlayerShots">updatePlayerShots</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Sat Dec 06 2025 18:39:50 GMT-0800 (Pacific Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="../scripts/linenumber.js"> </script>
+</body>
+</html>

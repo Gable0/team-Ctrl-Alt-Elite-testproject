@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: core/persistentAudio.js</title>
+
+    <script src="../scripts/prettify/prettify.js"> </script>
+    <script src="../scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="../styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="../styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: core/persistentAudio.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>// js/core/persistentAudio.js
+// Separation of Concerns: Handles persistent background music AND navigation interception
+// Provides a singleton that survives page navigation, keeps intro music playing,
+// and enables SPA-style navigation without full reloads.
+
+/**
+ * Singleton manager that keeps the intro music playing across page navigations
+ * and intercepts internal link clicks to perform client-side routing.
+ */
+class PersistentAudioManager {
+    constructor() {
+        /** @type {HTMLAudioElement|null} */
+        this.audio = null;
+
+        /** @type {boolean} */
+        this.started = false;
+
+        /** @type {boolean} */
+        this.fadingIn = false;
+
+        /** @type {boolean} */
+        this.navigationIntercepted = false;
+
+        /** @type {boolean} */
+        this.manuallyStopped = false;
+    }
+
+    /**
+     * Initializes the persistent audio element and navigation interception.
+     * Safe to call multiple times – everything is idempotent.
+     */
+    init() {
+        // Create audio element if it doesn't exist
+        if (!this.audio) {
+            this.audio = document.createElement('audio');
+            this.audio.id = 'persistent-intro-audio';
+            this.audio.loop = true;
+            this.audio.preload = 'auto';
+
+            const source = document.createElement('source');
+            source.src = 'assets/sounds/reg game sounds/intro.wav';
+            source.type = 'audio/wav';
+
+            this.audio.appendChild(source);
+            document.body.appendChild(this.audio);
+        }
+
+        // Only start audio if not manually stopped
+        if (!this.manuallyStopped) {
+            this.start();
+
+            // Fallback for autoplay restrictions – but only if not manually stopped
+            const interactionEvents = ['click', 'touchstart', 'mouseenter', 'keydown'];
+            interactionEvents.forEach(eventType => {
+                document.addEventListener(eventType, () => {
+                    if (!this.manuallyStopped) {
+                        this.start();
+                    }
+                }, { once: true, passive: true });
+            });
+        }
+
+        // Intercept navigation to prevent page reloads
+        this.interceptNavigation();
+    }
+
+    /**
+     * Starts (or resumes) playback of the persistent intro music.
+     * Handles autoplay policy gracefully.
+     */
+    start() {
+        if (this.started) return;
+
+        this.audio.volume = 0;
+        this.audio.currentTime = 25;
+        this.audio.playbackRate = 0.90;
+
+        this.audio.play()
+            .then(() => {
+                console.log('Persistent audio started');
+                this.started = true;
+                this.fadeIn();
+            })
+            .catch(error => {
+                console.log('Audio autoplay blocked:', error.message);
+            });
+    }
+
+    /**
+     * Performs a smooth fade-in of the background music over approximately 1.5 seconds.
+     */
+    fadeIn() {
+        if (this.fadingIn) return;
+        this.fadingIn = true;
+
+        const fadeInDuration = 1500;
+        const fadeInSteps = 50;
+        const volumeIncrement = 1 / fadeInSteps;
+        const stepDuration = fadeInDuration / fadeInSteps;
+
+        let currentStep = 0;
+        const fadeInInterval = setInterval(() => {
+            currentStep++;
+            this.audio.volume = Math.min(currentStep * volumeIncrement, 1);
+
+            if (currentStep >= fadeInSteps) {
+                clearInterval(fadeInInterval);
+                this.audio.volume = 1;
+                this.fadingIn = false;
+            }
+        }, stepDuration);
+    }
+
+    /**
+     * Stops the music completely and marks it as manually stopped.
+     * Subsequent page loads will respect this choice and not auto-play.
+     */
+    stop() {
+        if (this.audio) {
+            this.audio.pause();
+            this.audio.currentTime = 0;
+            this.audio.volume = 0;
+            this.started = false;
+            this.fadingIn = false;
+            this.manuallyStopped = true; // Mark as manually stopped
+            console.log('Persistent audio stopped and muted');
+        }
+    }
+
+    /**
+     * Intercepts internal navigation (links/buttons that point to .html pages)
+     * and performs client-side page loading to keep the audio element alive.
+     */
+    interceptNavigation() {
+        if (this.navigationIntercepted) return;
+        this.navigationIntercepted = true;
+
+        // Intercept all link clicks
+        document.addEventListener('click', (e) => {
+            const link = e.target.closest('a');
+            if (link &amp;&amp; link.href) {
+                const url = new URL(link.href);
+                if (url.origin === window.location.origin &amp;&amp; url.pathname.endsWith('.html')) {
+                    e.preventDefault();
+                    this.navigateTo(url.pathname);
+                }
+            }
+        }, true);
+
+        // Intercept button clicks that set location.href
+        document.addEventListener('click', (e) => {
+            const button = e.target.closest('button');
+            if (button) {
+                // Check onclick attribute
+                const onclickAttr = button.getAttribute('onclick');
+                if (onclickAttr &amp;&amp; onclickAttr.includes('location.href')) {
+                    const match = onclickAttr.match(/location\.href\s*=\s*['"]([^'"]+)['"]/);
+                    if (match &amp;&amp; match[1].endsWith('.html')) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        button.onclick = null; // Remove original handler
+                        this.navigateTo(match[1]);
+                        return;
+                    }
+                }
+
+                // Check if button has onclick function
+                if (button.onclick) {
+                    const onclickStr = button.onclick.toString();
+                    if (onclickStr.includes('location.href')) {
+                        const match = onclickStr.match(/location\.href\s*=\s*['"]([^'"]+)['"]/);
+                        if (match &amp;&amp; match[1].endsWith('.html')) {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            this.navigateTo(match[1]);
+                            return;
+                        }
+                    }
+                }
+            }
+        }, true);
+
+        // Handle browser back/forward
+        window.addEventListener('popstate', (e) => {
+            this.loadPage(window.location.pathname);
+        });
+
+        // Push initial state
+        if (!window.history.state) {
+            window.history.replaceState({ path: window.location.pathname }, '', window.location.pathname);
+        }
+    }
+
+    /**
+     * Navigates to a new internal page without a full reload.
+     *
+     * @param {string} path - Destination pathname (e.g. "/shop.html")
+     */
+    async navigateTo(path) {
+        window.history.pushState({ path: path }, '', path);
+        await this.loadPage(path);
+    }
+
+    /**
+     * Loads a new page via fetch, replaces body content while preserving the audio element,
+     * and re-executes scripts from the new page.
+     *
+     * @param {string} path - The page to load
+     */
+    async loadPage(path) {
+        try {
+            const response = await fetch(path);
+            const html = await response.text();
+
+            // Parse HTML
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+
+            // Replace body content (keep our audio element)
+            const newBodyContent = doc.body.innerHTML;
+
+            // Save audio element
+            const audioElement = this.audio;
+
+            // Replace body
+            document.body.innerHTML = newBodyContent;
+
+            // Restore audio element
+            document.body.appendChild(audioElement);
+
+            // Update title
+            document.title = doc.title;
+
+            // Execute scripts from new page
+            const scripts = doc.querySelectorAll('script');
+            for (const oldScript of scripts) {
+                const newScript = document.createElement('script');
+
+                if (oldScript.src) {
+                    newScript.src = oldScript.src;
+                } else {
+                    newScript.textContent = oldScript.textContent;
+                }
+
+                if (oldScript.type) {
+                    newScript.type = oldScript.type;
+                }
+
+                document.body.appendChild(newScript);
+
+                // Wait for module scripts to load
+                if (oldScript.type === 'module') {
+                    await new Promise(resolve => {
+                        newScript.onload = resolve;
+                        newScript.onerror = resolve;
+                    });
+                }
+            }
+
+            // Re-intercept navigation on new page
+            this.interceptNavigation();
+
+            console.log('Page loaded:', path);
+        } catch (error) {
+            console.error('Error loading page:', error);
+        }
+    }
+
+    /**
+     * Sets the volume of the persistent background music.
+     *
+     * @param {number} volume - Value between 0 and 1
+     */
+    setVolume(volume) {
+        if (this.audio) {
+            this.audio.volume = Math.max(0, Math.min(1, volume));
+        }
+    }
+}
+
+// Create singleton instance
+export const persistentAudio = new PersistentAudioManager();
+
+// Auto-initialize when the DOM is ready
+if (typeof window !== 'undefined') {
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => persistentAudio.init());
+    } else {
+        persistentAudio.init();
+    }
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="PersistentAudioManager.html">PersistentAudioManager</a></li></ul><h3>Global</h3><ul><li><a href="global.html#Game">Game</a></li><li><a href="global.html#advanceEnemyAlongPath">advanceEnemyAlongPath</a></li><li><a href="global.html#audioManager">audioManager</a></li><li><a href="global.html#barrierY">barrierY</a></li><li><a href="global.html#boxesOverlap">boxesOverlap</a></li><li><a href="global.html#canvas">canvas</a></li><li><a href="global.html#canvasRef">canvasRef</a></li><li><a href="global.html#checkEnemyShotCollisions">checkEnemyShotCollisions</a></li><li><a href="global.html#checkPlayerEnemyCollision">checkPlayerEnemyCollision</a></li><li><a href="global.html#checkPlayerShotCollisions">checkPlayerShotCollisions</a></li><li><a href="global.html#createEnemy">createEnemy</a></li><li><a href="global.html#createInitialGame">createInitialGame</a></li><li><a href="global.html#createPlayer">createPlayer</a></li><li><a href="global.html#createPlayerShot">createPlayerShot</a></li><li><a href="global.html#ctx">ctx</a></li><li><a href="global.html#ctxRef">ctxRef</a></li><li><a href="global.html#draw">draw</a></li><li><a href="global.html#drawBackground">drawBackground</a></li><li><a href="global.html#drawEnemies">drawEnemies</a></li><li><a href="global.html#drawEnemyShots">drawEnemyShots</a></li><li><a href="global.html#drawPlayer">drawPlayer</a></li><li><a href="global.html#drawPlayerShots">drawPlayerShots</a></li><li><a href="global.html#enemyTypes">enemyTypes</a></li><li><a href="global.html#equipSkin">equipSkin</a></li><li><a href="global.html#fireEnemyShot">fireEnemyShot</a></li><li><a href="global.html#formationConfig">formationConfig</a></li><li><a href="global.html#generateAttackPath">generateAttackPath</a></li><li><a href="global.html#generateEntryPath">generateEntryPath</a></li><li><a href="global.html#getActiveSkin">getActiveSkin</a></li><li><a href="global.html#getEnemyHitbox">getEnemyHitbox</a></li><li><a href="global.html#getEnemyShotHitbox">getEnemyShotHitbox</a></li><li><a href="global.html#getPlayerHitbox">getPlayerHitbox</a></li><li><a href="global.html#getShotHitbox">getShotHitbox</a></li><li><a href="global.html#handleEnemyKilled">handleEnemyKilled</a></li><li><a href="global.html#handleLevelProgression">handleLevelProgression</a></li><li><a href="global.html#handlePlayerHit">handlePlayerHit</a></li><li><a href="global.html#initAudio">initAudio</a></li><li><a href="global.html#initBackground">initBackground</a></li><li><a href="global.html#initEnemyAttack">initEnemyAttack</a></li><li><a href="global.html#initEnemyModule">initEnemyModule</a></li><li><a href="global.html#initInput">initInput</a></li><li><a href="global.html#initPauseMenu">initPauseMenu</a></li><li><a href="global.html#initSharedAudio">initSharedAudio</a></li><li><a href="global.html#initShooting">initShooting</a></li><li><a href="global.html#initialized">initialized</a></li><li><a href="global.html#isGamePaused">isGamePaused</a></li><li><a href="global.html#isKeyPressed">isKeyPressed</a></li><li><a href="global.html#isSkinOwned">isSkinOwned</a></li><li><a href="global.html#killEnemy">killEnemy</a></li><li><a href="global.html#loop">loop</a></li><li><a href="global.html#moveEnemyInFormation">moveEnemyInFormation</a></li><li><a href="global.html#ownedSkins">ownedSkins</a></li><li><a href="global.html#playBackgroundGameMusic">playBackgroundGameMusic</a></li><li><a href="global.html#playIntroMusic">playIntroMusic</a></li><li><a href="global.html#pressedKeys">pressedKeys</a></li><li><a href="global.html#scheduleEnemyAttacks">scheduleEnemyAttacks</a></li><li><a href="global.html#selectAttackingEnemy">selectAttackingEnemy</a></li><li><a href="global.html#spawnEnemyWave">spawnEnemyWave</a></li><li><a href="global.html#stars">stars</a></li><li><a href="global.html#start">start</a></li><li><a href="global.html#startEnemyAttack">startEnemyAttack</a></li><li><a href="global.html#startNextLevel">startNextLevel</a></li><li><a href="global.html#togglePause">togglePause</a></li><li><a href="global.html#update">update</a></li><li><a href="global.html#updateAttackingEnemy">updateAttackingEnemy</a></li><li><a href="global.html#updateBackground">updateBackground</a></li><li><a href="global.html#updateEnemies">updateEnemies</a></li><li><a href="global.html#updateEnemyShots">updateEnemyShots</a></li><li><a href="global.html#updateFunModeButton">updateFunModeButton</a></li><li><a href="global.html#updateInvincibility">updateInvincibility</a></li><li><a href="global.html#updateLevelTransition">updateLevelTransition</a></li><li><a href="global.html#updatePlayer">updatePlayer</a></li><li><a href="global.html#updatePlayerShots">updatePlayerShots</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Sat Dec 06 2025 18:39:50 GMT-0800 (Pacific Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="../scripts/linenumber.js"> </script>
+</body>
+</html>
