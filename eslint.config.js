@@ -6,8 +6,8 @@ export default [
       "build/**",
       "coverage/**",
       "playwright-report/**",
-      ".git/**"
-    ]
+      ".git/**",
+    ],
   },
   {
     files: ["**/*.js", "**/*.mjs"],
@@ -34,12 +34,12 @@ export default [
         URL: "readonly",
         location: "readonly",
         // Add any other globals your code uses
-      }
+      },
     },
     rules: {
       // Add any rules you want to enforce
       "no-unused-vars": "warn",
-      "no-undef": "error"
-    }
-  }
+      "no-undef": "error",
+    },
+  },
 ];
