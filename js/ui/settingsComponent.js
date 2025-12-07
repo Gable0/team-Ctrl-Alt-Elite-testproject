@@ -1,6 +1,8 @@
 // js/ui/settingsComponent.js
 // Dynamically injects a settings button + modal into any page that calls injectSettings().
 
+import { applyTranslations } from './translations.js';
+
 export function injectSettings() {
   // Settings button (gear icon)
   const settingsBtn = document.createElement('button');
@@ -21,7 +23,12 @@ export function injectSettings() {
       <input type="range" min="0" max="100" value="50" id="sfx-volume">
 
       <label translate="language">Language</label>
-      <select id="language-select"></select>
+      <select id="language-select">
+        <option value="en">English</option>
+        <option value="es">Español</option>
+        <option value="fr">Français</option>
+        <option value="zh">中文</option>
+      </select>
 
       <div class="fun-mode-container">
         <label class="fun-mode-label" translate="funModeLabel">
@@ -39,6 +46,14 @@ export function injectSettings() {
   // Append to page
   document.body.appendChild(settingsBtn);
   document.body.appendChild(modal);
+
+  applyTranslations(modal);
+
+  modal.querySelector('#language-select').addEventListener('change', (e) => {
+    import('./translations.js').then(({ setLanguage }) => {
+      setLanguage(e.target.value); // <- updates localStorage + triggers event
+    });
+  });
 
   // Dynamically import audioManager only when the modal is created
   import('../systems/audioManager.js').then(module => {
