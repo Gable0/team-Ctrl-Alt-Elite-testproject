@@ -14,11 +14,7 @@ Adopt **Vitest** for:
 
 Playwright remains only for browser-level checks.
 
-## Consequences
-- 100% test coverage of game logic
-- Sub-100ms test runtime
-- Clear separation: Vitest = logic, Playwright = browser
-- Confidence to refactor without breaking behavior
-
+## Notes
+- 66% Test coverage
 Author: Roy Haynes  
 Repository: team-Ctrl-Alt-Elite-testproject

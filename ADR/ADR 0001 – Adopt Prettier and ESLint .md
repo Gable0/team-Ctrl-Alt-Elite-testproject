@@ -12,7 +12,7 @@ Implement:
 - ESLint v9+ with **flat config** (`eslint.config.js`) using ESM imports
 - Integration via `eslint-plugin-prettier` and `eslint-config-prettier`
 
-## Consequences
+## Notes
 - Consistent, professional code style
 - Zero configuration conflicts with ES modules
 - Automatic fixing via `npm run lint:fix` and `npm run format:fix`

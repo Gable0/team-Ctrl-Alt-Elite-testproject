@@ -13,7 +13,7 @@ Use **Playwright** exclusively for **smoke and visual regression testing**:
 - Use `toHaveScreenshot()` for visual regression
 - Run in headless Chromium via GitHub Actions
 
-## Consequences
+## Notes
 - Catches 95% of deployment-breaking bugs
 - Fast, reliable, screenshot-rich failures
 - No flaky input simulation

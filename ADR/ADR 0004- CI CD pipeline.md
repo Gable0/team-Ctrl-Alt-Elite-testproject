@@ -13,7 +13,7 @@ Create a two-stage GitHub Actions workflow:
 
 Both must pass before merge.
 
-## Consequences
+## Notes
 - Zero tolerance for style violations
 - Automatic prevention of broken builds
 - Full HTML report + screenshots on failure
