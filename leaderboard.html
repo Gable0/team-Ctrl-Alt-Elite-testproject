@@ -14,5 +14,10 @@
     <canvas id="game" width="800" height="600"></canvas>
     <button id="back-homepage" onclick="location.href='homepage.html'" translate="backToHome">Back to Home</button>
   </main>
+  <script type="module">
+    import { applyTranslations } from "./js/ui/translations.js";
+    applyTranslations(document);
+    window.addEventListener("languagechange", () => applyTranslations(document));
+  </script>
   </body>
 </html>
