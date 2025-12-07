@@ -1,0 +1,114 @@
+// js/ui/spaRouter.js
+// Single Page Application router to enable seamless navigation without audio interruption
+
+export function initSPARouter() {
+    // Intercept all link clicks
+    document.addEventListener('click', (e) => {
+        const target = e.target.closest('a');
+        
+        // Only intercept internal links (not external or anchors)
+        if (target && target.href && target.origin === window.location.origin) {
+            // Don't intercept links to the game itself (index.html) or difficulty selector
+            if (target.href.includes('index.html') || target.href.includes('difficulty.html')) {
+                return; // Let these navigate normally
+            }
+            
+            e.preventDefault();
+            
+            const url = new URL(target.href);
+            const page = url.pathname.split('/').pop() || 'homepage.html';
+            
+            // Update browser history
+            history.pushState({ page }, '', target.href);
+            
+            // Load the new page content
+            loadPage(page);
+        }
+    });
+    
+    // Handle browser back/forward buttons
+    window.addEventListener('popstate', (e) => {
+        if (e.state && e.state.page) {
+            loadPage(e.state.page);
+        }
+    });
+    
+    // Set initial state
+    const currentPage = window.location.pathname.split('/').pop() || 'homepage.html';
+    history.replaceState({ page: currentPage }, '', window.location.href);
+}
+
+async function loadPage(page) {
+    try {
+        const response = await fetch(page);
+        const html = await response.text();
+        
+        // Parse the HTML
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        
+        // Extract the body content (everything except audio element and scripts)
+        const newBody = doc.body.cloneNode(true);
+        
+        // Remove audio elements from new content (we keep the existing one playing)
+        const audioElements = newBody.querySelectorAll('audio');
+        audioElements.forEach(audio => audio.remove());
+        
+        // Remove script tags (we'll handle them separately)
+        const scripts = newBody.querySelectorAll('script');
+        const scriptContents = Array.from(scripts).map(script => ({
+            content: script.textContent,
+            type: script.type,
+            src: script.src
+        }));
+        scripts.forEach(script => script.remove());
+        
+        // Update the page title
+        document.title = doc.title;
+        
+        // Replace body content (except audio element)
+        const currentAudio = document.getElementById('intro-audio');
+        document.body.innerHTML = newBody.innerHTML;
+        
+        // Re-add the audio element
+        if (currentAudio) {
+            document.body.appendChild(currentAudio);
+        }
+        
+        // Re-inject settings button if needed
+        const settingsBtn = document.querySelector('.settings-btn');
+        const settingsModal = document.querySelector('settings-modal');
+        if (!settingsBtn || !settingsModal) {
+            await import('./settingsComponent.js').then(module => {
+                module.injectSettings();
+            });
+        }
+        
+        // Execute new scripts
+        for (const scriptInfo of scriptContents) {
+            if (scriptInfo.type === 'module') {
+                // For module scripts, we need to re-import
+                const scriptBlob = new Blob([scriptInfo.content], { type: 'application/javascript' });
+                const scriptUrl = URL.createObjectURL(scriptBlob);
+                await import(scriptUrl);
+                URL.revokeObjectURL(scriptUrl);
+            } else if (scriptInfo.src) {
+                // External script
+                const script = document.createElement('script');
+                script.src = scriptInfo.src;
+                script.type = scriptInfo.type || 'text/javascript';
+                document.body.appendChild(script);
+            } else {
+                // Inline script
+                const script = document.createElement('script');
+                script.textContent = scriptInfo.content;
+                document.body.appendChild(script);
+            }
+        }
+        
+    } catch (error) {
+        console.error('Failed to load page:', error);
+        // Fallback to normal navigation
+        window.location.href = page;
+    }
+}

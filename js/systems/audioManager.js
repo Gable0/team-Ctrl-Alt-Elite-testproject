@@ -1,15 +1,11 @@
 // js/systems/audioManager.js
-// possibly do a libray. how to load a sound pack for a video game. make it rigid. use .wave instead
-// all funny sounds will be in a toggle in fun mode
-
-// js/systems/audioManager.js
 
 class AudioManager {
     constructor() {
         this.sounds = {};
         this.enabled = true;
         this.volume = 0.5;
-        this.musicVolume = 0.3; // Lower volume for background music
+        this.musicVolume = 0.3;
         this.currentMusic = null;
         
         // Read fun mode from localStorage on initialization
@@ -103,7 +99,7 @@ class AudioManager {
         console.log(`📦 localStorage value for 'funMode': "${localStorageValue}"`);
         
         const currentFunMode = localStorageValue === 'true';
-        this.funMode = currentFunMode; // Update internal state
+        this.funMode = currentFunMode;
         
         const soundName = this.funMode ? 'chloe-shoot' : 'shoot';
         console.log(`🔫 Playing shoot sound: ${soundName} (fun mode: ${this.funMode})`);
@@ -115,12 +111,12 @@ class AudioManager {
     }
 
     playGameOverSound() {
-        this.stopMusic(); // Stop any background music
+        this.stopMusic();
         this.playSound('game-over');
     }
 
     playStartGameSound() {
-        this.stopMusic(); // Stop intro music
+        this.stopMusic();
         this.playSound('start-game');
     }
 
@@ -162,13 +158,19 @@ export function initAudio() {
     audioManager.loadSound('game-over', 'assets/sounds/reg game sounds/game-over.wav');
     audioManager.loadSound('start-game', 'assets/sounds/reg game sounds/start-game.wav');
     
-    // Load background music (intro) - marked as music for looping
-    audioManager.loadSound('intro', 'assets/sounds/reg game sounds/intro.wav', true);
+    // Load background game music (looping)
+    audioManager.loadSound('background-game', 'assets/sounds/reg game sounds/background-game.wav', true);
     
     console.log(`Audio initialized with fun mode: ${audioManager.getFunMode()}`);
 }
 
-// Function to play intro music on homepage
+// Play background game music
+export function playBackgroundGameMusic() {
+    audioManager.playMusic('background-game');
+}
+
+// Function to play intro music on homepage - NOT USED, handled by persistentAudio.js
 export function playIntroMusic() {
-    audioManager.playMusic('intro');
+    // audioManager.playMusic('intro');
+    console.log('playIntroMusic called but ignored - handled by persistentAudio.js');
 }

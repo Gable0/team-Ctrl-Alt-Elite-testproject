@@ -1,10 +1,15 @@
 import { getActiveSkin } from '../skins/skinsManager.js';
 import { audioManager } from '../systems/audioManager.js';
+import { persistentAudio } from '../core/persistentAudio.js';
 
 export function createInitialGame() {
     const difficulty = localStorage.getItem('gameDifficulty') || 'medium';
     
-    // Play start game sound when game initializes
+    // IMMEDIATELY stop intro music before anything else
+    console.log('🎮 Game starting - stopping intro music');
+    persistentAudio.stop();
+    
+    // Then play start-game sound after a tiny delay
     setTimeout(() => {
         audioManager.playStartGameSound();
     }, 100);
@@ -33,7 +38,8 @@ export function createInitialGame() {
         paused: false,
         activeSkin: getActiveSkin(),
         difficulty: difficulty,
-        tripleShotTimer: 0
+        tripleShotTimer: 0,
+        enemiesFullySetup: false // Track when enemies are ready
     };
 }
 
@@ -84,6 +90,7 @@ export function startNextLevel(game, spawnWaveCallback) {
     game.playerShootingUnlocked = false;
     game.canShoot = false;
     game.globalEnemyShotTimer = game.baseFireRateDelay;
+    game.enemiesFullySetup = false;
 
     setTimeout(() => {
         if (typeof spawnWaveCallback === 'function') {
@@ -114,4 +121,27 @@ export function updateLevelTransition(game, delta) {
     }
 
     return game.showingLevelTransition;
+}
+
+// Check if all enemies are fully set up (in formation)
+export function checkEnemiesFullySetup(game) {
+    if (game.enemiesFullySetup) return; // Already marked as setup
+    
+    if (game.enemies.length === 0) return; // No enemies yet
+    
+    // Check if all enemies are in formation (not waiting or entering)
+    const allInFormation = game.enemies.every(enemy => 
+        enemy.state === 'formation' || enemy.state === 'attacking' || enemy.state === 'dying'
+    );
+    
+    if (allInFormation && !game.enemiesFullySetup) {
+        game.enemiesFullySetup = true;
+        
+        // Start background game music after enemies are set up
+        import('../systems/audioManager.js').then(module => {
+            module.playBackgroundGameMusic();
+        });
+        
+        console.log('✅ All enemies set up, starting background game music');
+    }
 }

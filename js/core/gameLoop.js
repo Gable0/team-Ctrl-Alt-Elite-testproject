@@ -18,7 +18,8 @@ import {
     handlePlayerHit,
     handleLevelProgression,
     updateInvincibility,
-    updateLevelTransition
+    updateLevelTransition,
+    checkEnemiesFullySetup
 } from '../state/gameState.js';
 import { drawHUD, drawLevelTransition } from '../ui/hud.js';
 import { initPauseMenu } from '../ui/pauseMenu.js';
@@ -58,6 +59,9 @@ function update(delta) {
     updatePlayerShots(Game, delta);
     updateEnemyShots(Game, delta);
     updatePowerUps(Game, delta, canvas);
+
+    // Check if all enemies are fully set up (transition from start-game sound to intro music)
+    checkEnemiesFullySetup(Game);
 
     if (Game.playerShootingUnlocked) {
         Game.attackTimer = scheduleEnemyAttacks(Game.enemies, Game.player, delta, Game.attackTimer);
@@ -113,4 +117,3 @@ function start() {
 
 spawnEnemyWave(Game);
 start();
-
