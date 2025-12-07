@@ -1,4 +1,5 @@
 export default [
+  // Ignore folders
   {
     ignores: [
       'node_modules/**',
@@ -9,6 +10,7 @@ export default [
       '.git/**',
     ],
   },
+  // Main JS files
   {
     files: ['**/*.js', '**/*.mjs'],
     languageOptions: {
@@ -34,15 +36,24 @@ export default [
         URL: 'readonly',
         location: 'readonly',
         confirm: 'readonly',
-        // Add any other globals your code uses
+        history: 'readonly',
+        DocumentTouch: 'readonly',
+        NodeList: 'readonly',
+        getComputedStyle: 'readonly',
+        navigator: 'readonly',
+        // Library/module globals
+        define: 'readonly',
+        module: 'readonly',
+        PR: 'readonly',
+        Split: 'readonly',
       },
     },
     rules: {
-      // Add any rules you want to enforce
       'no-unused-vars': 'warn',
       'no-undef': 'error',
     },
   },
+  // Test files
   {
     files: ['**/*.test.js', '**/*.spec.js'],
     languageOptions: {
@@ -68,6 +79,16 @@ export default [
         URL: 'readonly',
         location: 'readonly',
         confirm: 'readonly',
+        history: 'readonly',
+        DocumentTouch: 'readonly',
+        NodeList: 'readonly',
+        getComputedStyle: 'readonly',
+        navigator: 'readonly',
+        // Library/module globals
+        define: 'readonly',
+        module: 'readonly',
+        PR: 'readonly',
+        Split: 'readonly',
         // Vitest/testing globals
         beforeAll: 'readonly',
         beforeEach: 'readonly',
@@ -86,6 +107,7 @@ export default [
       'no-undef': 'error',
     },
   },
+  // Node + config + tests
   {
     files: ['playwright.config.js', 'vitest.config.js', 'tests/**/*.js'],
     languageOptions: {
@@ -98,7 +120,7 @@ export default [
         __dirname: 'readonly',
         __filename: 'readonly',
         global: 'readonly',
-        // Browser globals for tests
+        // Browser globals
         window: 'readonly',
         document: 'readonly',
         localStorage: 'readonly',
@@ -116,6 +138,16 @@ export default [
         URL: 'readonly',
         location: 'readonly',
         confirm: 'readonly',
+        history: 'readonly',
+        DocumentTouch: 'readonly',
+        NodeList: 'readonly',
+        getComputedStyle: 'readonly',
+        navigator: 'readonly',
+        // Library/module globals
+        define: 'readonly',
+        module: 'readonly',
+        PR: 'readonly',
+        Split: 'readonly',
         // Vitest/testing globals
         beforeAll: 'readonly',
         beforeEach: 'readonly',
@@ -134,3 +166,4 @@ export default [
     },
   },
 ];
+
