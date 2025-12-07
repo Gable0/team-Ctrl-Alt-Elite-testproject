@@ -40,6 +40,7 @@ import {
 } from '../state/gameState.js';
 import { drawHUD, drawLevelTransition } from '../ui/hud.js';
 import { initPauseMenu } from '../ui/pauseMenu.js';
+import { injectPauseButton } from '../ui/pauseButton.js';
 import {
   spawnPowerUp,
   updatePowerUps,
@@ -76,6 +77,7 @@ const Game = createInitialGame();
 Game.player = createPlayer(canvas);
 
 initPauseMenu(Game);
+injectPauseButton(Game);
 
 /**
  * Updates all game logic each frame.

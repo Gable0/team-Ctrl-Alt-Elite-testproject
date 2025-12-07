@@ -304,6 +304,56 @@ difficulty-buttons button:hover {
   background: linear-gradient(180deg, #ff3366 0%, #dd0044 100%);
 }
 
+.pause-volume-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin: 2rem 0;
+  padding: 1.5rem;
+  background: rgba(0, 217, 255, 0.05);
+  border: 2px solid rgba(0, 217, 255, 0.2);
+  border-radius: 0.5rem;
+}
+
+.pause-volume-controls label {
+  display: flex;
+  flex-direction: column;
+  font-size: 1.5rem;
+  color: #00d9ff;
+  text-align: left;
+  gap: 0.75rem;
+}
+
+.pause-volume-controls input[type='range'] {
+  width: 100%;
+  height: 0.5rem;
+  background: rgba(0, 217, 255, 0.2);
+  border-radius: 0.25rem;
+  outline: none;
+  cursor: pointer;
+}
+
+.pause-volume-controls input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 1.5rem;
+  height: 1.5rem;
+  background: #00d9ff;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 0 0.5rem #00d9ff;
+}
+
+.pause-volume-controls input[type='range']::-moz-range-thumb {
+  width: 1.5rem;
+  height: 1.5rem;
+  background: #00d9ff;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 0 0.5rem #00d9ff;
+  border: none;
+}
+
 .settings-btn {
   position: fixed;
   top: 1rem;
@@ -319,6 +369,26 @@ difficulty-buttons button:hover {
 
 .settings-btn:hover {
   transform: scale(1.1);
+}
+
+.pause-btn {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  font-size: 3rem;
+  background: none;
+  color: #00d9ff;
+  border: none;
+  cursor: pointer;
+  z-index: 1000;
+  transition: all 0.2s ease;
+  text-shadow: 0 0 1rem #00d9ff;
+}
+
+.pause-btn:hover {
+  transform: scale(1.1);
+  color: #00ff41;
+  text-shadow: 0 0 1.5rem #00ff41;
 }
 
 settings-modal {

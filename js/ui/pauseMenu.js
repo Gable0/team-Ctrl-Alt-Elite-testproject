@@ -21,6 +21,19 @@ export function initPauseMenu(game) {
       <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jersey+10&display=swap"></noscript>
       <div class="pause-menu-content">
         <h2 style="font-family: 'Jersey 10', monospace;">PAUSED</h2>
+
+        <div class="pause-volume-controls">
+          <label style="font-family: 'Jersey 10', monospace;">
+            Audio Volume
+            <input type="range" min="0" max="100" value="50" id="pause-audio-volume">
+          </label>
+
+          <label style="font-family: 'Jersey 10', monospace;">
+            SFX Volume
+            <input type="range" min="0" max="100" value="50" id="pause-sfx-volume">
+          </label>
+        </div>
+
         <button id="resumeButton" class="pause-menu-button" style="font-family: 'Jersey 10', monospace;">Resume</button>
         <button id="restartButton" class="pause-menu-button" style="font-family: 'Jersey 10', monospace;">Restart</button>
         <button id="exitButton" class="pause-menu-button" style="font-family: 'Jersey 10', monospace;">Exit to Menu</button>
