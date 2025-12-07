@@ -287,12 +287,12 @@ difficulty-buttons button:hover {
 }
 
 .pause-menu-button:nth-child(3) {
-  background: linear-gradient(180deg, #ffdd00 0%, #ccaa00 100%);
-  border-color: #ffdd00;
+  background: linear-gradient(180deg, #00ff41 0%, #00cc33 100%);
+  border-color: #00ff41;
 }
 
 .pause-menu-button:nth-child(3):hover {
-  background: linear-gradient(180deg, #ffee44 0%, #ddbb00 100%);
+  background: linear-gradient(180deg, #33ff66 0%, #00dd44 100%);
 }
 
 .pause-menu-button:nth-child(4) {
@@ -383,16 +383,21 @@ settings-modal {
   margin-top: 1rem;
   padding: 0.75rem 1.5rem;
   font-size: 1.5rem;
-  border: none;
-  background: #00d9ff;
+  border: 0.2rem solid #00d9ff;
+  background: linear-gradient(180deg, #00d9ff 0%, #0099cc 100%);
   color: #000;
   cursor: pointer;
   border-radius: 0.25rem;
   transition: all 0.1s;
+  text-transform: uppercase;
+  letter-spacing: 0.15rem;
+  font-family: 'Jersey 10', monospace, sans-serif;
 }
 
 .settings-content .close-settings:hover {
-  background: #00ff41;
+  background: linear-gradient(180deg, #00d9ff 0%, #00ccee 100%);
+  transform: scale(1.05);
+  box-shadow: 0 0 1rem rgba(0, 217, 255, 0.6);
 }
 
 /* Shop Styles - RetroGa (now BIGGER & in rem) */

@@ -80,8 +80,8 @@ body {
   height: 100vh;
   background: linear-gradient(
     180deg,
-    rgba(0, 0, 0, 0.95) 0%,
-    rgba(20, 0, 40, 0.95) 100%
+    rgba(0, 0, 20, 0.98) 0%,
+    rgba(0, 0, 0, 0.98) 100%
   );
   display: none;
   flex-direction: column;
@@ -159,13 +159,11 @@ body {
 #gameOverTitle {
   font-family: 'Jersey 10', sans-serif;
   font-size: 12.5rem; /* 200px */
-  color: #ff0040;
+  color: #ff3333;
   font-weight: normal;
   margin-bottom: 3.75rem; /* 60px */
   text-shadow:
-    0 0 1.25rem #ff0040,
-    0 0 2.5rem #ff0040,
-    0 0 3.75rem #ff0040,
+    0 0 0.5rem rgba(255, 51, 51, 0.6),
     0.25rem 0.25rem 0px rgba(0, 0, 0, 0.8);
   animation:
     pulse 2s ease-in-out infinite,
@@ -181,12 +179,11 @@ body {
 #finalScore {
   font-family: 'Jersey 10', sans-serif;
   font-size: 2.5rem; /* 40px */
-  color: #00ffff;
+  color: #ffffff;
   text-align: center;
   margin-bottom: 3.75rem; /* 60px */
   text-shadow:
-    0 0 0.625rem #00ffff,
-    0 0 1.25rem #00ffff,
+    0 0 0.5rem rgba(255, 255, 255, 0.4),
     0.125rem 0.125rem 0px rgba(0, 0, 0, 0.8);
   line-height: 1.8;
   letter-spacing: 0.25rem; /* 4px */
@@ -201,8 +198,7 @@ body {
   display: block;
   margin-top: 0.625rem; /* 10px */
   text-shadow:
-    0 0 0.9375rem #ffff00,
-    0 0 1.875rem #ffff00,
+    0 0 0.5rem rgba(255, 255, 0, 0.5),
     0.1875rem 0.1875rem 0px rgba(0, 0, 0, 0.8);
   animation: scoreFlash 1.5s ease-in-out infinite;
 }
@@ -212,16 +208,16 @@ body {
   padding: 1.25rem 3.75rem; /* 20px 60px */
   font-size: 2.625rem; /* 42px */
   font-weight: normal;
-  background: linear-gradient(180deg, #00ffff 0%, #00cccc 100%);
+  background: linear-gradient(180deg, #00d9ff 0%, #0099cc 100%);
   color: #000;
-  border: 0.25rem solid #00ffff; /* 4px */
+  border: 0.25rem solid #00d9ff; /* 4px */
   border-radius: 0;
   cursor: pointer;
   text-transform: uppercase;
   letter-spacing: 0.25rem; /* 4px */
   box-shadow:
-    0 0 1.25rem #00ffff,
-    0 0.5rem 0 #008888,
+    0 0 1.25rem #00d9ff,
+    0 0.5rem 0 #006688,
     /* 8px */ 0 0.5rem 1.25rem rgba(0, 0, 0, 0.5);
   transition: all 0.1s;
   position: relative;
@@ -233,19 +229,19 @@ body {
 }
 
 #restartLevelButton:hover {
-  background: linear-gradient(180deg, #00ffff 0%, #00eeee 100%);
+  background: linear-gradient(180deg, #00d9ff 0%, #00ccee 100%);
   box-shadow:
-    0 0 1.875rem #00ffff,
-    0 0.5rem 0 #008888,
-    0 0.5rem 1.875rem rgba(0, 255, 255, 0.5);
+    0 0 1.875rem #00d9ff,
+    0 0.5rem 0 #006688,
+    0 0.5rem 1.875rem rgba(0, 217, 255, 0.5);
   transform: scale(1.05);
 }
 
 #restartLevelButton:active {
   top: 0.25rem; /* 4px */
   box-shadow:
-    0 0 1.25rem #00ffff,
-    0 0.25rem 0 #008888,
+    0 0 1.25rem #00d9ff,
+    0 0.25rem 0 #006688,
     0 0.25rem 0.625rem rgba(0, 0, 0, 0.5);
 }
 
@@ -254,16 +250,16 @@ body {
   padding: 1.25rem 3.75rem; /* 20px 60px */
   font-size: 2.625rem; /* 42px */
   font-weight: normal;
-  background: linear-gradient(180deg, #ffff00 0%, #cccc00 100%);
+  background: linear-gradient(180deg, #00ff41 0%, #00cc33 100%);
   color: #000;
-  border: 0.25rem solid #ffff00; /* 4px */
+  border: 0.25rem solid #00ff41; /* 4px */
   border-radius: 0;
   cursor: pointer;
   text-transform: uppercase;
   letter-spacing: 0.25rem; /* 4px */
   box-shadow:
-    0 0 1.25rem #ffff00,
-    0 0.5rem 0 #888800,
+    0 0 1.25rem #00ff41,
+    0 0.5rem 0 #008822,
     /* 8px */ 0 0.5rem 1.25rem rgba(0, 0, 0, 0.5);
   transition: all 0.1s;
   position: relative;
@@ -275,19 +271,19 @@ body {
 }
 
 #levelsButton:hover {
-  background: linear-gradient(180deg, #ffff44 0%, #eeee00 100%);
+  background: linear-gradient(180deg, #33ff66 0%, #00dd44 100%);
   box-shadow:
-    0 0 1.875rem #ffff00,
-    0 0.5rem 0 #888800,
-    0 0.5rem 1.875rem rgba(255, 255, 0, 0.5);
+    0 0 1.875rem #00ff41,
+    0 0.5rem 0 #008822,
+    0 0.5rem 1.875rem rgba(0, 255, 65, 0.5);
   transform: scale(1.05);
 }
 
 #levelsButton:active {
   top: 0.25rem; /* 4px */
   box-shadow:
-    0 0 1.25rem #ffff00,
-    0 0.25rem 0 #888800,
+    0 0 1.25rem #00ff41,
+    0 0.25rem 0 #008822,
     0 0.25rem 0.625rem rgba(0, 0, 0, 0.5);
 }
 
@@ -388,23 +384,19 @@ body {
   90%,
   100% {
     text-shadow:
-      0 0 1.25rem #ff0040,
-      0 0 2.5rem #ff0040,
-      0 0 3.75rem #ff0040,
+      0 0 0.5rem rgba(255, 51, 51, 0.6),
       0.25rem 0.25rem 0px rgba(0, 0, 0, 0.8);
   }
   92% {
     text-shadow:
-      -0.125rem 0 1.25rem #ff0040,
-      0.125rem 0.125rem 2.5rem #00ffff,
-      0 0 3.75rem #ff0040,
+      -0.125rem 0 0.5rem rgba(255, 51, 51, 0.6),
+      0.125rem 0.125rem 0.3rem rgba(0, 255, 255, 0.4),
       0.25rem 0.25rem 0px rgba(0, 0, 0, 0.8);
   }
   94% {
     text-shadow:
-      0.125rem 0 1.25rem #ff0040,
-      -0.125rem -0.125rem 2.5rem #ffff00,
-      0 0 3.75rem #ff0040,
+      0.125rem 0 0.5rem rgba(255, 51, 51, 0.6),
+      -0.125rem -0.125rem 0.3rem rgba(255, 255, 0, 0.4),
       0.25rem 0.25rem 0px rgba(0, 0, 0, 0.8);
   }
 }
