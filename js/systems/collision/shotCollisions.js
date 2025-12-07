@@ -53,7 +53,8 @@ export function checkEnemyShotCollisions(game, onPlayerHit) {
 
     if (boxesOverlap(shotBox, playerBox)) {
       game.enemyShots.splice(i, 1);
-      if (typeof onPlayerHit === 'function') onPlayerHit();
+      // Pass 'ball' as the hit type since this is a projectile
+      if (typeof onPlayerHit === 'function') onPlayerHit('ball');
       return true;
     }
   }
