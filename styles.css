@@ -16,14 +16,14 @@ canvas {
   border: 1px solid #00d9ff;
 }
 #status {
-    margin-top: 1.5rem;
-    text-align: center;
-    font-family: 'Jersey 10', monospace !important;
-    font-size: 1.8rem;
-    color: #00d9ff;
-    text-shadow: 0 0 1rem #00d9ff;
-    letter-spacing: 0.15rem;
-    line-height: 1.4;
+  margin-top: 1.5rem;
+  text-align: center;
+  font-family: "Jersey 10", monospace !important;
+  font-size: 1.8rem;
+  color: #00d9ff;
+  text-shadow: 0 0 1rem #00d9ff;
+  letter-spacing: 0.15rem;
+  line-height: 1.4;
 }
 
 body {
