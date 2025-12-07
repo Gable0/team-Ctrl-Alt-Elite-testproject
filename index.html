@@ -151,9 +151,11 @@
       });
     </script>
     <script type="module">
-      import { applyTranslations } from "./js/ui/translations.js";
+      import { applyTranslations } from './js/ui/translations.js';
       applyTranslations(document);
-      window.addEventListener("languagechange", () => applyTranslations(document));
+      window.addEventListener('languagechange', () =>
+        applyTranslations(document)
+      );
     </script>
   </body>
 </html>

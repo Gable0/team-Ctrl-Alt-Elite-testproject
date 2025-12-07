@@ -49,7 +49,7 @@ export function injectSettings() {
 
   applyTranslations(modal);
 
-  modal.querySelector('#language-select').addEventListener('change', (e) => {
+  modal.querySelector('#language-select').addEventListener('change', e => {
     import('./translations.js').then(({ setLanguage }) => {
       setLanguage(e.target.value); // <- updates localStorage + triggers event
     });

@@ -145,14 +145,24 @@ export function drawPlayer(ctx, player, invincibilityTimer, game) {
     // Cockpit/nose (front section) - light grey
     ctx.fillStyle = '#aaaaaa';
     ctx.fillRect(-pixelSize * 2, -player.size, pixelSize * 4, pixelSize * 4);
-    ctx.fillRect(-pixelSize, -player.size - pixelSize, pixelSize * 2, pixelSize);
+    ctx.fillRect(
+      -pixelSize,
+      -player.size - pixelSize,
+      pixelSize * 2,
+      pixelSize
+    );
 
     // Left wing - medium grey
     ctx.fillStyle = '#888888';
     ctx.fillRect(-player.size, -pixelSize * 2, pixelSize * 7, pixelSize * 6);
 
     // Right wing - medium grey
-    ctx.fillRect(player.size * 0.3, -pixelSize * 2, pixelSize * 7, pixelSize * 6);
+    ctx.fillRect(
+      player.size * 0.3,
+      -pixelSize * 2,
+      pixelSize * 7,
+      pixelSize * 6
+    );
 
     // Dark hull details (shadows/panels)
     ctx.fillStyle = '#555555';
@@ -170,8 +180,18 @@ export function drawPlayer(ctx, player, invincibilityTimer, game) {
 
     // Engine housings - dark grey
     ctx.fillStyle = '#444444';
-    ctx.fillRect(-pixelSize * 2, player.size * 0.6, pixelSize * 1.5, pixelSize * 3);
-    ctx.fillRect(pixelSize * 0.5, player.size * 0.6, pixelSize * 1.5, pixelSize * 3);
+    ctx.fillRect(
+      -pixelSize * 2,
+      player.size * 0.6,
+      pixelSize * 1.5,
+      pixelSize * 3
+    );
+    ctx.fillRect(
+      pixelSize * 0.5,
+      player.size * 0.6,
+      pixelSize * 1.5,
+      pixelSize * 3
+    );
 
     // Engine cores - bright orange/yellow (active thrust)
     ctx.fillStyle = '#ffaa00';
@@ -181,7 +201,12 @@ export function drawPlayer(ctx, player, invincibilityTimer, game) {
       pixelSize,
       pixelSize * 1.5
     );
-    ctx.fillRect(pixelSize * 0.75, player.size * 0.7, pixelSize, pixelSize * 1.5);
+    ctx.fillRect(
+      pixelSize * 0.75,
+      player.size * 0.7,
+      pixelSize,
+      pixelSize * 1.5
+    );
 
     // Wing tip lights - red
     ctx.fillStyle = '#ff0000';

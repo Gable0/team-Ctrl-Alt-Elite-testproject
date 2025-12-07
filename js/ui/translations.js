@@ -54,7 +54,7 @@ export const languages = {
       audioVolume: 'Audio Volume',
       sfxVolume: 'SFX Volume',
       language: 'Language',
-      funModeLabel: 'Fun Mode (Chloe\'s Shooting Sound) Party',
+      funModeLabel: "Fun Mode (Chloe's Shooting Sound) Party",
       funModeOff: 'Have Some Fun!',
       funModeOn: 'Fun Mode ON!',
       close: 'Close',
@@ -95,7 +95,8 @@ export const languages = {
       finalScore: 'Puntuación Final',
 
       shopHeader: 'Tienda RetroGa',
-      shopSubheader: '¡Desbloquea nuevos diseños para tu nave y la flota enemiga!',
+      shopSubheader:
+        '¡Desbloquea nuevos diseños para tu nave y la flota enemiga!',
       defaultSkin: 'Predeterminado',
       defaultDesc: 'Estilo clásico RetroGa.',
       squarePack: 'Paquete Cuadrado',
@@ -116,7 +117,8 @@ export const languages = {
       sfxVolume: 'Volumen Efectos',
       language: 'Idioma',
       funModeLabel: 'Modo Diversión (Sonido de Disparo de Chloe) Fiesta',
-      funModeOff: '¡A divertirse!', funModeOn: '¡Modo Diversión ON!',
+      funModeOff: '¡A divertirse!',
+      funModeOn: '¡Modo Diversión ON!',
 
       close: 'Cerrar',
       paused: 'PAUSADO',
@@ -144,7 +146,8 @@ export const languages = {
       hard: 'Difficile',
       back: 'Retour',
 
-      moveInstructions: 'Utilisez les flèches ou WASD pour déplacer le vaisseau.',
+      moveInstructions:
+        'Utilisez les flèches ou WASD pour déplacer le vaisseau.',
       fireInstructions: '[Espace] pour tirer.',
 
       score: 'Score',
@@ -154,7 +157,8 @@ export const languages = {
       finalScore: 'Score Final',
 
       shopHeader: 'Boutique RetroGa',
-      shopSubheader: 'Débloquez de nouveaux looks pour votre vaisseau et la flotte ennemie !',
+      shopSubheader:
+        'Débloquez de nouveaux looks pour votre vaisseau et la flotte ennemie !',
       defaultSkin: 'Défaut',
       defaultDesc: 'Style classique RetroGa.',
       squarePack: 'Pack Carré',
@@ -166,7 +170,8 @@ export const languages = {
       noSkins: 'Aucune apparence possédée. Visitez la boutique !',
 
       skinsHeader: 'Bibliothèque d’Apparences RetroGa',
-      skinsSubheader: 'Équipez vos looks préférés pour les vaisseaux et ennemis !',
+      skinsSubheader:
+        'Équipez vos looks préférés pour les vaisseaux et ennemis !',
       backToShop: 'Retour à la Boutique',
       backToHome: 'Retour à l’Accueil',
 
@@ -184,7 +189,6 @@ export const languages = {
       restart: 'Recommencer',
       exitToMenu: 'Menu Principal',
       confirmExit: 'Quitter ? Progression perdue.',
-
     },
   },
 
@@ -253,19 +257,19 @@ export const languages = {
 // 2. Helper functions
 // ------------------------------------------------------------------
 export function getCurrentLanguage() {
-  const saved = localStorage.getItem("gameLanguage");
-  return languages[saved] ? saved : "en";
+  const saved = localStorage.getItem('gameLanguage');
+  return languages[saved] ? saved : 'en';
 }
 
 export function setLanguage(langCode) {
   if (!languages[langCode]) return;
 
-  localStorage.setItem("gameLanguage", langCode);
+  localStorage.setItem('gameLanguage', langCode);
   document.documentElement.lang = langCode;
   document.documentElement.dir = languages[langCode].dir;
 
   // Notify all UI components
-  window.dispatchEvent(new CustomEvent("languagechange"));
+  window.dispatchEvent(new CustomEvent('languagechange'));
 }
 
 // ---------- 3. Translate a single key ----------
@@ -276,11 +280,11 @@ export function translate(key) {
 
 // ---------- 4. Auto-translate all UI elements ----------
 export function applyTranslations(root = document) {
-  root.querySelectorAll("[translate]").forEach((el) => {
-    const key = el.getAttribute("translate");
+  root.querySelectorAll('[translate]').forEach(el => {
+    const key = el.getAttribute('translate');
     el.textContent = translate(key);
   });
 }
 
 // ---------- 5. Translate everything on language change ----------
-window.addEventListener("languagechange", () => applyTranslations());
+window.addEventListener('languagechange', () => applyTranslations());

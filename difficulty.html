@@ -14,13 +14,21 @@
   </head>
   <body>
     <difficulty-buttons>
-      <h1 class="difficulty-header" translate="chooseDifficulty">Choose a Game Mode</h1>
+      <h1 class="difficulty-header" translate="chooseDifficulty">
+        Choose a Game Mode
+      </h1>
 
-      <button id="easy-difficulty"   translate="easy">Easy</button>
+      <button id="easy-difficulty" translate="easy">Easy</button>
       <button id="medium-difficulty" translate="medium">Medium</button>
-      <button id="hard-difficulty"   translate="hard">Hard</button>
+      <button id="hard-difficulty" translate="hard">Hard</button>
 
-      <button id="back-homepage" onclick="location.href='homepage.html'" translate="back">Back</button>
+      <button
+        id="back-homepage"
+        onclick="location.href = 'homepage.html'"
+        translate="back"
+      >
+        Back
+      </button>
     </difficulty-buttons>
     <script type="module">
       import { injectSettings } from './js/ui/settingsComponent.js';
@@ -59,9 +67,11 @@
       );
     </script>
     <script type="module">
-      import { applyTranslations } from "./js/ui/translations.js";
+      import { applyTranslations } from './js/ui/translations.js';
       applyTranslations(document);
-      window.addEventListener("languagechange", () => applyTranslations(document));
+      window.addEventListener('languagechange', () =>
+        applyTranslations(document)
+      );
     </script>
   </body>
 </html>

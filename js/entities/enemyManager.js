@@ -358,8 +358,18 @@ export function drawEnemies(enemies, game) {
 
     // Add engine glow effects (outside the pixel block to keep smooth)
     ctxRef.fillStyle = 'rgba(255, 200, 100, 0.6)';
-    ctxRef.fillRect(-enemy.size * 0.3, enemy.size * 0.5, enemy.size * 0.2, enemy.size * 0.3);
-    ctxRef.fillRect(enemy.size * 0.1, enemy.size * 0.5, enemy.size * 0.2, enemy.size * 0.3);
+    ctxRef.fillRect(
+      -enemy.size * 0.3,
+      enemy.size * 0.5,
+      enemy.size * 0.2,
+      enemy.size * 0.3
+    );
+    ctxRef.fillRect(
+      enemy.size * 0.1,
+      enemy.size * 0.5,
+      enemy.size * 0.2,
+      enemy.size * 0.3
+    );
     ctxRef.restore();
   }
 }

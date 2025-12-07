@@ -13,19 +13,33 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-  <skins-container>
-    <skins-header>
-      <h1 translate="skinsHeader">RetroGa Skins Library</h1>
-      <p translate="skinsSubheader">Equip your favorite looks for ships and enemies!</p>
-    </skins-header>
+    <skins-container>
+      <skins-header>
+        <h1 translate="skinsHeader">RetroGa Skins Library</h1>
+        <p translate="skinsSubheader">
+          Equip your favorite looks for ships and enemies!
+        </p>
+      </skins-header>
 
-    <section class="skins-grid" id="skins-grid">
-      <!-- JS will fill this -->
-    </section>
+      <section class="skins-grid" id="skins-grid">
+        <!-- JS will fill this -->
+      </section>
 
-    <button id="back-shop" onclick="location.href='shop.html'" translate="backToShop">Back to Shop</button>
-    <button id="back-homepage" onclick="location.href='homepage.html'" translate="backToHome">Back to Home</button>
-  </skins-container>
+      <button
+        id="back-shop"
+        onclick="location.href = 'shop.html'"
+        translate="backToShop"
+      >
+        Back to Shop
+      </button>
+      <button
+        id="back-homepage"
+        onclick="location.href = 'homepage.html'"
+        translate="backToHome"
+      >
+        Back to Home
+      </button>
+    </skins-container>
 
     <script type="module">
       import { injectSettings } from './js/ui/settingsComponent.js';
@@ -87,10 +101,12 @@
         }
       });
     </script>
-  <script type="module">
-    import { applyTranslations } from "./js/ui/translations.js";
-    applyTranslations(document);
-    window.addEventListener("languagechange", () => applyTranslations(document));
-  </script>
+    <script type="module">
+      import { applyTranslations } from './js/ui/translations.js';
+      applyTranslations(document);
+      window.addEventListener('languagechange', () =>
+        applyTranslations(document)
+      );
+    </script>
   </body>
 </html>

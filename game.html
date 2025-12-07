@@ -15,7 +15,9 @@
         aria-label="Galaga playfield"
       ></canvas>
       <section id="status">
-        <p translate="moveInstructions">Use Arrow Keys or WASD to move the ship.</p>
+        <p translate="moveInstructions">
+          Use Arrow Keys or WASD to move the ship.
+        </p>
         <p translate="fireInstructions">[Space] to fire.</p>
       </section>
     </main>
@@ -27,9 +29,11 @@
     </script>
     <script type="module" src="js/core/gameLoop.js"></script>
     <script type="module">
-      import { applyTranslations } from "./js/ui/translations.js";
+      import { applyTranslations } from './js/ui/translations.js';
       applyTranslations(document);
-      window.addEventListener("languagechange", () => applyTranslations(document));
+      window.addEventListener('languagechange', () =>
+        applyTranslations(document)
+      );
     </script>
   </body>
 </html>
