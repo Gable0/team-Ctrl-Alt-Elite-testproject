@@ -217,6 +217,14 @@ class AudioManager {
     this.playSound('kill-enemy');
   }
 
+  playBallHitsPlayerSound() {
+    this.playSound('ball-hits-player');
+  }
+
+  playEnemyHitsPlayerSound() {
+    this.playSound('enemy-hits-player');
+  }
+
     playGameOverSound() {
         // This function is no longer used, but keeping it for backwards compatibility
         // The game over sequence is now handled in gameState.js
@@ -268,6 +276,8 @@ export function initAudio() {
     audioManager.loadSound('kill-enemy', 'assets/sounds/reg game sounds/kill-enemy.wav');
     audioManager.loadSound('game-over', 'assets/sounds/reg game sounds/game-over.wav');
     audioManager.loadSound('start-game', 'assets/sounds/reg game sounds/start-game.wav');
+    audioManager.loadSound('ball-hits-player', 'assets/sounds/reg game sounds/ball-hits-player.wav');
+    audioManager.loadSound('enemy-hits-player', 'assets/sounds/reg game sounds/enemy-hits-player.wav');
     
     // Load background music (intro) - marked as music for looping
     audioManager.loadSound('intro', 'assets/sounds/reg game sounds/intro.wav', true);
