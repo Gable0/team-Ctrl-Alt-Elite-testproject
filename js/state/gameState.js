@@ -62,17 +62,18 @@ export function handlePlayerHit(game) {
   if (game.lives <= 0) {
     game.gameOver = true;
 
-    // Stop background music and play game over sound
-    audioManager.stopMusic();
-    audioManager.playGameOverSound();
-
-    // Save score and redirect after a delay to let sound play
+    // Save score immediately
     localStorage.setItem('finalScore', game.score);
     localStorage.setItem('finalLevel', game.level);
+    
+    // Set flag for score screen to play game over sequence
+    localStorage.setItem('playGameOverSound', 'true');
 
+    // Redirect to score screen immediately
+    // The score screen will handle playing game-over-background then game-over sound
     setTimeout(() => {
       window.location.href = 'Demos/Score_UI/index.html';
-    }, 2000); // 2 second delay for game over sound
+    }, 500); // Small delay so player can see they died
   }
 
   return true;
