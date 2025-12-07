@@ -104,9 +104,9 @@ export function drawPlayer(ctx, player, invincibilityTimer, game) {
     }
   }
 
-  ctx.fillStyle = '#00d9ff';
-  ctx.shadowBlur = 20;
-  ctx.shadowColor = '#00d9ff';
+  ctx.fillStyle = '#888888';
+  ctx.shadowBlur = 8;
+  ctx.shadowColor = 'rgba(136, 136, 136, 0.3)';
 
   if (game.activeSkin === 'squarePack') {
     // Square skin
@@ -127,14 +127,74 @@ export function drawPlayer(ctx, player, invincibilityTimer, game) {
     ctx.closePath();
     ctx.fill();
   } else {
-    // Default triangle ship
-    ctx.beginPath();
-    ctx.moveTo(0, -player.size);
-    ctx.lineTo(player.size * 0.7, player.size * 0.8);
-    ctx.lineTo(0, player.size * 0.4);
-    ctx.lineTo(-player.size * 0.7, player.size * 0.8);
-    ctx.closePath();
-    ctx.fill();
+    // Default pixelated grey space battleship
+    const pixelSize = player.size * 0.1; // Each "pixel" is 10% of ship size
+
+    // Disable anti-aliasing for crisp pixel edges
+    ctx.imageSmoothingEnabled = false;
+
+    // Main hull (central body) - medium grey
+    ctx.fillStyle = '#888888';
+    ctx.fillRect(
+      -player.size * 0.3,
+      -player.size * 0.6,
+      player.size * 0.6,
+      player.size * 1.2
+    );
+
+    // Cockpit/nose (front section) - light grey
+    ctx.fillStyle = '#aaaaaa';
+    ctx.fillRect(-pixelSize * 2, -player.size, pixelSize * 4, pixelSize * 4);
+    ctx.fillRect(-pixelSize, -player.size - pixelSize, pixelSize * 2, pixelSize);
+
+    // Left wing - medium grey
+    ctx.fillStyle = '#888888';
+    ctx.fillRect(-player.size, -pixelSize * 2, pixelSize * 7, pixelSize * 6);
+
+    // Right wing - medium grey
+    ctx.fillRect(player.size * 0.3, -pixelSize * 2, pixelSize * 7, pixelSize * 6);
+
+    // Dark hull details (shadows/panels)
+    ctx.fillStyle = '#555555';
+    // Left wing panel
+    ctx.fillRect(-player.size * 0.9, -pixelSize, pixelSize * 3, pixelSize * 2);
+    // Right wing panel
+    ctx.fillRect(player.size * 0.4, -pixelSize, pixelSize * 3, pixelSize * 2);
+    // Center hull panels
+    ctx.fillRect(-pixelSize * 2, -pixelSize * 4, pixelSize * 4, pixelSize * 3);
+    ctx.fillRect(-pixelSize * 2, pixelSize, pixelSize * 4, pixelSize * 3);
+
+    // Bridge window - bright cyan
+    ctx.fillStyle = '#00ffff';
+    ctx.fillRect(-pixelSize, -pixelSize * 7, pixelSize * 2, pixelSize);
+
+    // Engine housings - dark grey
+    ctx.fillStyle = '#444444';
+    ctx.fillRect(-pixelSize * 2, player.size * 0.6, pixelSize * 1.5, pixelSize * 3);
+    ctx.fillRect(pixelSize * 0.5, player.size * 0.6, pixelSize * 1.5, pixelSize * 3);
+
+    // Engine cores - bright orange/yellow (active thrust)
+    ctx.fillStyle = '#ffaa00';
+    ctx.fillRect(
+      -pixelSize * 1.75,
+      player.size * 0.7,
+      pixelSize,
+      pixelSize * 1.5
+    );
+    ctx.fillRect(pixelSize * 0.75, player.size * 0.7, pixelSize, pixelSize * 1.5);
+
+    // Wing tip lights - red
+    ctx.fillStyle = '#ff0000';
+    ctx.fillRect(-player.size * 0.95, -pixelSize * 1.5, pixelSize, pixelSize);
+    ctx.fillRect(player.size * 0.95, -pixelSize * 1.5, pixelSize, pixelSize);
+
+    // Additional hull highlights - light grey accents
+    ctx.fillStyle = '#bbbbbb';
+    ctx.fillRect(-pixelSize * 0.5, -pixelSize * 2, pixelSize, pixelSize);
+    ctx.fillRect(-pixelSize * 0.5, pixelSize * 2, pixelSize, pixelSize);
+
+    // Re-enable smoothing for other elements
+    ctx.imageSmoothingEnabled = true;
   }
 
   ctx.shadowBlur = 0;
