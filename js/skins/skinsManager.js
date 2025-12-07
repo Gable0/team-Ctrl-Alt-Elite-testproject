@@ -7,8 +7,8 @@
  * @type {Object<string, boolean>}
  */
 const ownedSkins = {
-    squarePack: localStorage.getItem('squarePackOwned') === 'true',
-    // Add new: neonPack: localStorage.getItem('neonPackOwned') === 'true',
+  squarePack: localStorage.getItem("squarePackOwned") === "true",
+  // Add new: neonPack: localStorage.getItem('neonPackOwned') === 'true',
 };
 
 /**
@@ -18,7 +18,7 @@ const ownedSkins = {
  *                   Falls back to "default" if nothing is stored.
  */
 export function getActiveSkin() {
-    return localStorage.getItem('activeSkin') || 'default';
+  return localStorage.getItem("activeSkin") || "default";
 }
 
 /**
@@ -28,7 +28,7 @@ export function getActiveSkin() {
  * @returns {boolean} `true` if the skin is owned, otherwise `false`.
  */
 export function isSkinOwned(skinName) {
-    return localStorage.getItem(skinName + 'Owned') === 'true';
+  return localStorage.getItem(skinName + "Owned") === "true";
 }
 
 /**
@@ -38,10 +38,10 @@ export function isSkinOwned(skinName) {
  * @returns {string} The name of the now-active skin.
  */
 export function equipSkin(skinName) {
-    if (skinName === 'default') {
-        localStorage.setItem('activeSkin', 'default');
-    } else if (isSkinOwned(skinName)) {
-        localStorage.setItem('activeSkin', skinName);
-    }
-    return getActiveSkin();
+  if (skinName === "default") {
+    localStorage.setItem("activeSkin", "default");
+  } else if (isSkinOwned(skinName)) {
+    localStorage.setItem("activeSkin", skinName);
+  }
+  return getActiveSkin();
 }

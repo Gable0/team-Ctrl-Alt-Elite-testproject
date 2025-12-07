@@ -18,17 +18,17 @@ let initialized = false;
  * Safe to call multiple times – listeners are only attached on the first call.
  */
 export function initInput() {
-    if (initialized) return;
+  if (initialized) return;
 
-    window.addEventListener('keydown', event => {
-        pressedKeys.add(event.code);
-    });
+  window.addEventListener("keydown", (event) => {
+    pressedKeys.add(event.code);
+  });
 
-    window.addEventListener('keyup', event => {
-        pressedKeys.delete(event.code);
-    });
+  window.addEventListener("keyup", (event) => {
+    pressedKeys.delete(event.code);
+  });
 
-    initialized = true;
+  initialized = true;
 }
 
 /**
@@ -38,5 +38,5 @@ export function initInput() {
  * @returns {boolean} `true` if the key is pressed, `false` otherwise.
  */
 export function isKeyPressed(code) {
-    return pressedKeys.has(code);
+  return pressedKeys.has(code);
 }

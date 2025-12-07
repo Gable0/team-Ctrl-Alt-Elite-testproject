@@ -2,15 +2,15 @@
 // Dynamically injects a settings button + modal into any page that calls injectSettings().
 
 export function injectSettings() {
-    // Settings button (gear icon)
-    const settingsBtn = document.createElement('button');
-    settingsBtn.className = 'settings-btn';
-    settingsBtn.textContent = "⚙️";
+  // Settings button (gear icon)
+  const settingsBtn = document.createElement("button");
+  settingsBtn.className = "settings-btn";
+  settingsBtn.textContent = "⚙️";
 
-    // Modal overlay
-    const modal = document.createElement('settings-modal');
-    modal.className = 'settings-modal hidden';
-    modal.innerHTML = `
+  // Modal overlay
+  const modal = document.createElement("settings-modal");
+  modal.className = "settings-modal hidden";
+  modal.innerHTML = `
     <div class="settings-content">
       <h2 style="font-family: 'Jersey 10', monospace !important;">Settings</h2>
 
@@ -44,32 +44,32 @@ export function injectSettings() {
     </div>
   `;
 
-    // Append to page
-    document.body.appendChild(settingsBtn);
-    document.body.appendChild(modal);
+  // Append to page
+  document.body.appendChild(settingsBtn);
+  document.body.appendChild(modal);
 
-    // Dynamically import audioManager only when the modal is created
-    import('../systems/audioManager.js').then(module => {
-        const { audioManager } = module;
+  // Dynamically import audioManager only when the modal is created
+  import("../systems/audioManager.js").then((module) => {
+    const { audioManager } = module;
 
-        const funModeBtn = document.getElementById('fun-mode-toggle');
+    const funModeBtn = document.getElementById("fun-mode-toggle");
 
-        // Reflect current fun-mode state
-        updateFunModeButton(funModeBtn, audioManager.getFunMode());
+    // Reflect current fun-mode state
+    updateFunModeButton(funModeBtn, audioManager.getFunMode());
 
-        // Toggle fun mode on click
-        funModeBtn.addEventListener('click', () => {
-            const newState = !audioManager.getFunMode();
-            audioManager.setFunMode(newState);
-            updateFunModeButton(funModeBtn, newState);
-        });
+    // Toggle fun mode on click
+    funModeBtn.addEventListener("click", () => {
+      const newState = !audioManager.getFunMode();
+      audioManager.setFunMode(newState);
+      updateFunModeButton(funModeBtn, newState);
     });
+  });
 
-    // Open / close modal
-    settingsBtn.addEventListener('click', () => modal.classList.toggle('hidden'));
-    modal
-        .querySelector('.close-settings')
-        .addEventListener('click', () => modal.classList.add('hidden'));
+  // Open / close modal
+  settingsBtn.addEventListener("click", () => modal.classList.toggle("hidden"));
+  modal
+    .querySelector(".close-settings")
+    .addEventListener("click", () => modal.classList.add("hidden"));
 }
 
 /**
@@ -79,11 +79,11 @@ export function injectSettings() {
  * @param {boolean} isFunMode
  */
 function updateFunModeButton(button, isFunMode) {
-    if (isFunMode) {
-        button.textContent = '🎉 Fun Mode ON!';
-        button.classList.add('active');
-    } else {
-        button.textContent = 'Have Some Fun!';
-        button.classList.remove('active');
-    }
+  if (isFunMode) {
+    button.textContent = "🎉 Fun Mode ON!";
+    button.classList.add("active");
+  } else {
+    button.textContent = "Have Some Fun!";
+    button.classList.remove("active");
+  }
 }

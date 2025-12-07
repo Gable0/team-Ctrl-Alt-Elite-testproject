@@ -1,17 +1,17 @@
 // tests/integration/04-level-progression.test.js
-import { test, assert } from 'vitest';
+import { test, assert } from "vitest";
 import {
   createInitialGame,
   handleLevelProgression,
   updateLevelTransition,
-} from '../../js/state/gameState.js';
+} from "../../js/state/gameState.js";
 import {
   spawnEnemyWave,
   updateEnemies,
   initEnemyModule,
-} from '../../js/entities/enemyManager.js';
+} from "../../js/entities/enemyManager.js";
 
-test('Level 1 → kill all enemies → level becomes 2', () => {
+test("Level 1 → kill all enemies → level becomes 2", () => {
   const game = createInitialGame();
   initEnemyModule({ width: 800, height: 600 }, {});
 
@@ -19,8 +19,8 @@ test('Level 1 → kill all enemies → level becomes 2', () => {
   assert.equal(game.level, 1);
 
   // Kill and remove all enemies
-  game.enemies.forEach(e => {
-    e.state = 'dying';
+  game.enemies.forEach((e) => {
+    e.state = "dying";
     e.dyingTimer = 0;
   });
   updateEnemies(game, 100);

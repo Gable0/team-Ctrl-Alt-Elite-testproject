@@ -1,12 +1,12 @@
-import { test, assert } from 'vitest';
+import { test, assert } from "vitest";
 import {
   getEnemyHitbox,
   getPlayerHitbox,
   getShotHitbox,
   getEnemyShotHitbox,
-} from '../../../js/systems/collision/hitboxes.js';
+} from "../../../js/systems/collision/hitboxes.js";
 
-test('getEnemyHitbox returns wider and taller box centered on enemy', () => {
+test("getEnemyHitbox returns wider and taller box centered on enemy", () => {
   const enemy = { x: 400, y: 200, size: 20 };
   const box = getEnemyHitbox(enemy);
 
@@ -18,7 +18,7 @@ test('getEnemyHitbox returns wider and taller box centered on enemy', () => {
   assert.closeTo(box.height, 26, 0.1);
 });
 
-test('getPlayerHitbox returns tall narrow box centered on player', () => {
+test("getPlayerHitbox returns tall narrow box centered on player", () => {
   const player = { x: 400, y: 500, size: 20 };
   const box = getPlayerHitbox(player);
 
@@ -30,7 +30,7 @@ test('getPlayerHitbox returns tall narrow box centered on player', () => {
   assert.closeTo(box.height, 40, 0.1);
 });
 
-test('getShotHitbox returns vertical rectangle for active player shot', () => {
+test("getShotHitbox returns vertical rectangle for active player shot", () => {
   const shot = { x: 400, y: 300, active: true };
   const box = getShotHitbox(shot);
 
@@ -40,13 +40,13 @@ test('getShotHitbox returns vertical rectangle for active player shot', () => {
   assert.equal(box.y, 300 - 13);
 });
 
-test('getShotHitbox returns null for inactive shot', () => {
+test("getShotHitbox returns null for inactive shot", () => {
   const shot = { x: 400, y: 300, active: false };
   const box = getShotHitbox(shot);
   assert.isNull(box);
 });
 
-test('getEnemyShotHitbox returns perfect circle hitbox centered on shot', () => {
+test("getEnemyShotHitbox returns perfect circle hitbox centered on shot", () => {
   const shot = { x: 400, y: 200, size: 6 };
   const box = getEnemyShotHitbox(shot);
 
@@ -57,7 +57,7 @@ test('getEnemyShotHitbox returns perfect circle hitbox centered on shot', () => 
   assert.equal(box.y, 200 - 6);
 });
 
-test('getEnemyShotHitbox handles null shot', () => {
+test("getEnemyShotHitbox handles null shot", () => {
   const box = getEnemyShotHitbox(null);
   assert.isNull(box);
 });

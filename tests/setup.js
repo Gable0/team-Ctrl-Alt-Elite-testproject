@@ -1,5 +1,5 @@
 // tests/setup.js
-import { beforeEach } from 'vitest';
+import { beforeEach } from "vitest";
 
 // Mock localStorage
 beforeEach(() => {
@@ -19,5 +19,5 @@ beforeEach(() => {
     },
   };
   localStorage.clear();
-  global.canvasRef = document.getElementById('game');
+  global.canvasRef = document.getElementById("game");
 });

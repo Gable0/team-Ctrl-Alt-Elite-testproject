@@ -1,29 +1,29 @@
-import { test, assert } from 'vitest';
+import { test, assert } from "vitest";
 import {
   createPlayerShot,
   updatePlayerShots,
   updateEnemyShots,
   initShooting,
-} from '../../../js/systems/shootingSystem.js';
+} from "../../../js/systems/shootingSystem.js";
 
 beforeAll(() => {
   initShooting({ width: 800, height: 600 });
 });
 
-test('createPlayerShot creates bullet with correct velocity', () => {
+test("createPlayerShot creates bullet with correct velocity", () => {
   const shot = createPlayerShot(400, 500);
   assert.equal(shot.x, 400);
   assert.closeTo(shot.y, 480, 1);
   assert.closeTo(shot.vy, -800, 10);
 });
 
-test('createPlayerShot angled shot works', () => {
+test("createPlayerShot angled shot works", () => {
   const shot = createPlayerShot(400, 500, Math.PI / 6);
   assert.closeTo(shot.vx, 400, 10);
   assert.closeTo(shot.vy, -692.8, 10);
 });
 
-test('triple shot fires 3 bullets', () => {
+test("triple shot fires 3 bullets", () => {
   const game = {
     player: { x: 400, y: 500, size: 20 },
     playerShots: [],
@@ -33,20 +33,20 @@ test('triple shot fires 3 bullets', () => {
 
   if (game.tripleShotTimer > 0) {
     game.playerShots.push(
-      createPlayerShot(game.player.x, game.player.y - game.player.size, -0.2)
+      createPlayerShot(game.player.x, game.player.y - game.player.size, -0.2),
     );
     game.playerShots.push(
-      createPlayerShot(game.player.x, game.player.y - game.player.size, 0)
+      createPlayerShot(game.player.x, game.player.y - game.player.size, 0),
     );
     game.playerShots.push(
-      createPlayerShot(game.player.x, game.player.y - game.player.size, 0.2)
+      createPlayerShot(game.player.x, game.player.y - game.player.size, 0.2),
     );
   }
 
   assert.equal(game.playerShots.length, 3);
 });
 
-test('normal shot fires 1 bullet', () => {
+test("normal shot fires 1 bullet", () => {
   const game = {
     player: { x: 400, y: 500, size: 20 },
     playerShots: [],
@@ -58,14 +58,14 @@ test('normal shot fires 1 bullet', () => {
     // do nothing
   } else {
     game.playerShots.push(
-      createPlayerShot(game.player.x, game.player.y - game.player.size)
+      createPlayerShot(game.player.x, game.player.y - game.player.size),
     );
   }
 
   assert.equal(game.playerShots.length, 1);
 });
 
-test('updateEnemyShots removes shots below screen', () => {
+test("updateEnemyShots removes shots below screen", () => {
   const game = {
     playerShootingUnlocked: true,
     enemies: [], // ← ADD THIS LINE
@@ -80,7 +80,7 @@ test('updateEnemyShots removes shots below screen', () => {
   assert.equal(game.enemyShots.length, 1);
 });
 
-test('player shots deactivate when off top', () => {
+test("player shots deactivate when off top", () => {
   const game = {
     playerShots: [
       {

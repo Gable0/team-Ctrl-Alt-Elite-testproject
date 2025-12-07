@@ -1,12 +1,12 @@
-import { test, assert } from 'vitest';
+import { test, assert } from "vitest";
 import {
   createInitialGame,
   handleEnemyKilled,
   handlePlayerHit,
   updateInvincibility,
-} from '../../../js/state/gameState.js';
+} from "../../../js/state/gameState.js";
 
-test('createInitialGame sets correct default values', () => {
+test("createInitialGame sets correct default values", () => {
   const game = createInitialGame();
 
   assert.equal(game.score, 0);
@@ -16,10 +16,10 @@ test('createInitialGame sets correct default values', () => {
   assert.isFalse(game.gameOver);
   assert.equal(game.invincibilityTimer, 0);
   assert.isFalse(game.paused);
-  assert.equal(game.difficulty, 'medium'); // default from localStorage or fallback
+  assert.equal(game.difficulty, "medium"); // default from localStorage or fallback
 });
 
-test('handleEnemyKilled increases score by 100', () => {
+test("handleEnemyKilled increases score by 100", () => {
   const game = createInitialGame();
   game.score = 500;
 
@@ -28,7 +28,7 @@ test('handleEnemyKilled increases score by 100', () => {
   assert.equal(game.score, 600);
 });
 
-test('handlePlayerHit reduces lives and sets invincibility', () => {
+test("handlePlayerHit reduces lives and sets invincibility", () => {
   const game = createInitialGame();
   game.lives = 3;
   game.invincibilityTimer = 0;
@@ -40,7 +40,7 @@ test('handlePlayerHit reduces lives and sets invincibility', () => {
   assert.closeTo(game.invincibilityTimer, 1.0, 0.01);
 });
 
-test('handlePlayerHit during invincibility does nothing', () => {
+test("handlePlayerHit during invincibility does nothing", () => {
   const game = createInitialGame();
   game.lives = 2;
   game.invincibilityTimer = 0.5;
@@ -51,7 +51,7 @@ test('handlePlayerHit during invincibility does nothing', () => {
   assert.equal(game.lives, 2); // no change
 });
 
-test('handlePlayerHit with 1 life triggers gameOver', () => {
+test("handlePlayerHit with 1 life triggers gameOver", () => {
   const game = createInitialGame();
   game.lives = 1;
   game.invincibilityTimer = 0;
@@ -62,7 +62,7 @@ test('handlePlayerHit with 1 life triggers gameOver', () => {
   assert.equal(game.lives, 0);
 });
 
-test('updateInvincibility decreases timer and stops at 0', () => {
+test("updateInvincibility decreases timer and stops at 0", () => {
   const game = { invincibilityTimer: 1.0 };
 
   updateInvincibility(game, 0.3);
@@ -72,12 +72,12 @@ test('updateInvincibility decreases timer and stops at 0', () => {
   assert.equal(game.invincibilityTimer, 0);
 });
 
-test('game starts with correct difficulty from localStorage', () => {
-  localStorage.setItem('gameDifficulty', 'hard');
+test("game starts with correct difficulty from localStorage", () => {
+  localStorage.setItem("gameDifficulty", "hard");
   const game = createInitialGame();
-  assert.equal(game.difficulty, 'hard');
+  assert.equal(game.difficulty, "hard");
 
-  localStorage.removeItem('gameDifficulty');
+  localStorage.removeItem("gameDifficulty");
   const game2 = createInitialGame();
-  assert.equal(game2.difficulty, 'medium'); // fallback
+  assert.equal(game2.difficulty, "medium"); // fallback
 });

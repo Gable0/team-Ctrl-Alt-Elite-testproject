@@ -24,34 +24,40 @@
       </button>
     </difficulty-buttons>
     <script type="module">
-      import { injectSettings } from './js/ui/settingsComponent.js';
-      import { persistentAudio } from './js/core/persistentAudio.js';
+      import { injectSettings } from "./js/ui/settingsComponent.js";
+      import { persistentAudio } from "./js/core/persistentAudio.js";
       injectSettings();
 
-      document
-        .getElementById('easy-difficulty')
-        .addEventListener('click', () => {
+      document.getElementById("easy-difficulty").addEventListener(
+        "click",
+        () => {
           persistentAudio.stop();
-          sessionStorage.setItem('stopIntroAudio', 'true');
-          localStorage.setItem('gameDifficulty', 'easy');
-          window.location.href = 'game.html';
-        }, true);
-      document
-        .getElementById('medium-difficulty')
-        .addEventListener('click', () => {
+          sessionStorage.setItem("stopIntroAudio", "true");
+          localStorage.setItem("gameDifficulty", "easy");
+          window.location.href = "game.html";
+        },
+        true,
+      );
+      document.getElementById("medium-difficulty").addEventListener(
+        "click",
+        () => {
           persistentAudio.stop();
-          sessionStorage.setItem('stopIntroAudio', 'true');
-          localStorage.setItem('gameDifficulty', 'medium');
-          window.location.href = 'game.html';
-        }, true);
-      document
-        .getElementById('hard-difficulty')
-        .addEventListener('click', () => {
+          sessionStorage.setItem("stopIntroAudio", "true");
+          localStorage.setItem("gameDifficulty", "medium");
+          window.location.href = "game.html";
+        },
+        true,
+      );
+      document.getElementById("hard-difficulty").addEventListener(
+        "click",
+        () => {
           persistentAudio.stop();
-          sessionStorage.setItem('stopIntroAudio', 'true');
-          localStorage.setItem('gameDifficulty', 'hard');
-          window.location.href = 'game.html';
-        }, true);
+          sessionStorage.setItem("stopIntroAudio", "true");
+          localStorage.setItem("gameDifficulty", "hard");
+          window.location.href = "game.html";
+        },
+        true,
+      );
     </script>
   </body>
 </html>

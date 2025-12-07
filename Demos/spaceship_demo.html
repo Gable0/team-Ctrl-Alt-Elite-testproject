@@ -20,8 +20,8 @@
   <body>
     <canvas id="c" width="600" height="400"></canvas>
     <script>
-      const c = document.getElementById('c'),
-        ctx = c.getContext('2d');
+      const c = document.getElementById("c"),
+        ctx = c.getContext("2d");
 
       class S {
         constructor(x, y) {
@@ -55,7 +55,7 @@
           ctx.save();
           ctx.translate(this.x, this.y);
           ctx.rotate(this.a);
-          ctx.fillStyle = '#f00';
+          ctx.fillStyle = "#f00";
           ctx.fillRect(-this.sz, -5, this.sz * 2, 10);
           ctx.restore();
         }
@@ -70,8 +70,8 @@
       const s = new S(c.width / 2, c.height / 2),
         k = {};
 
-      window.addEventListener('keydown', e => (k[e.code] = true));
-      window.addEventListener('keyup', e => (k[e.code] = false));
+      window.addEventListener("keydown", (e) => (k[e.code] = true));
+      window.addEventListener("keyup", (e) => (k[e.code] = false));
 
       const a = () => {
         ctx.clearRect(0, 0, c.width, c.height);
