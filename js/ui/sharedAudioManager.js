@@ -1,57 +1,67 @@
 // js/ui/sharedAudioManager.js
-// Manages persistent background music across page navigations
+// Manages persistent background music across page navigations using the existing #intro-audio element.
+// Persists playback position in localStorage and handles autoplay-policy fallbacks.
 
 let audioInitialized = false;
 let globalAudioElement = null;
 
+/**
+ * Initializes (or re-uses) the shared intro music element and starts playback.
+ * Restores the last saved playback position and fades the music in smoothly.
+ *
+ * @returns {HTMLAudioElement|null} The audio element being used (or null if not found).
+ */
 export function initSharedAudio() {
-    // If already initialized, just return the existing audio element
+    // Return early if music is already playing
     if (audioInitialized && globalAudioElement && !globalAudioElement.paused) {
         return globalAudioElement;
     }
 
     const introAudio = document.getElementById('intro-audio');
-    if (!introAudio) return;
+    if (!introAudio) return null;
 
     globalAudioElement = introAudio;
     let audioStarted = false;
 
+    /**
+     * Starts/resumes playback with a gentle fade-in.
+     * Uses a saved timestamp from localStorage so the track continues where it left off.
+     */
     function startIntroAudio() {
-        if (!audioStarted) {
-            // Get saved time from localStorage, default to 25 seconds
-            const savedTime = parseFloat(localStorage.getItem('introAudioTime')) || 25;
-            
-            introAudio.volume = 0;
-            introAudio.currentTime = savedTime;
-            introAudio.playbackRate = 0.90;
-            
-            introAudio.play().then(() => {
-                audioStarted = true;
-                audioInitialized = true;
-                
-                // Fade in
-                const fadeInDuration = 1500;
-                const fadeInSteps = 50;
-                const volumeIncrement = 1 / fadeInSteps;
-                const stepDuration = fadeInDuration / fadeInSteps;
+        if (audioStarted) return;
 
-                let currentStep = 0;
-                const fadeInInterval = setInterval(() => {
-                    currentStep++;
-                    introAudio.volume = Math.min(currentStep * volumeIncrement, 1);
+        const savedTime = parseFloat(localStorage.getItem('introAudioTime')) || 25;
 
-                    if (currentStep >= fadeInSteps) {
-                        clearInterval(fadeInInterval);
-                        introAudio.volume = 1;
-                    }
-                }, stepDuration);
-            }).catch(error => {
-                console.log('Audio play failed:', error);
-            });
-        }
+        introAudio.volume = 0;
+        introAudio.currentTime = savedTime;
+        introAudio.playbackRate = 0.90;
+
+        introAudio.play().then(() => {
+            audioStarted = true;
+            audioInitialized = true;
+
+            // Fade-in over ~1.5 seconds
+            const fadeInDuration = 1500;
+            const fadeInSteps = 50;
+            const volumeIncrement = 1 / fadeInSteps;
+            const stepDuration = fadeInDuration / fadeInSteps;
+
+            let currentStep = 0;
+            const fadeInInterval = setInterval(() => {
+                currentStep++;
+                introAudio.volume = Math.min(currentStep * volumeIncrement, 1);
+
+                if (currentStep >= fadeInSteps) {
+                    clearInterval(fadeInInterval);
+                    introAudio.volume = 1;
+                }
+            }, stepDuration);
+        }).catch(error => {
+            console.log('Audio play failed (autoplay blocked?):', error);
+        });
     }
 
-    // Save current time periodically (only set up once)
+    // Persist current playback position every 500 ms (only set up once)
     if (!audioInitialized) {
         setInterval(() => {
             if (introAudio && !introAudio.paused) {
@@ -60,13 +70,16 @@ export function initSharedAudio() {
         }, 500);
     }
 
-    // Try to play immediately
+    // Attempt immediate playback
     startIntroAudio();
 
-    // Fallback for autoplay blocking
+    // Fallback: start on first user interaction (covers browsers that block autoplay)
     const interactionEvents = ['click', 'touchstart', 'mouseenter', 'keydown'];
     interactionEvents.forEach(eventType => {
-        document.body.addEventListener(eventType, startIntroAudio, { once: true, passive: true });
+        document.body.addEventListener(eventType, startIntroAudio, {
+            once: true,
+            passive: true,
+        });
     });
 
     return introAudio;

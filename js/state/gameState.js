@@ -1,15 +1,23 @@
+// js/state/gameState.js
+
 import { getActiveSkin } from '../skins/skinsManager.js';
 import { audioManager } from '../systems/audioManager.js';
 import { persistentAudio } from '../core/persistentAudio.js';
 
+/**
+ * Creates and returns a fresh game state object with default values.
+ * This is called once when a new game session starts.
+ *
+ * @returns {Object} The initial game state.
+ */
 export function createInitialGame() {
     const difficulty = localStorage.getItem('gameDifficulty') || 'medium';
-    
-    // Play start game sound when game initializes
+
+    // Play start game sound shortly after initialization
     setTimeout(() => {
         audioManager.playStartGameSound();
     }, 100);
-    
+
     return {
         player: null,
         enemies: [],
@@ -38,43 +46,70 @@ export function createInitialGame() {
     };
 }
 
+/**
+ * Called when an enemy is destroyed. Increases score and plays sound effect.
+ *
+ * @param {Object} game - Global game state.
+ * @param {Object} enemy - The enemy that was killed (unused here but kept for consistency).
+ * @param {number} [points=100] - Points awarded for killing the enemy.
+ */
 export function handleEnemyKilled(game, enemy, points = 100) {
-  game.score += points;
+    game.score += points;
 
-  // Play kill enemy sound
-  audioManager.playKillEnemySound();
+    // Play kill enemy sound
+    audioManager.playKillEnemySound();
 }
 
+/**
+ * Handles the player taking damage. Reduces lives and triggers invincibility.
+ * Ends the game if lives reach zero.
+ *
+ * @param {Object} game - Global game state.
+ * @returns {boolean} `true` if the player actually took damage, `false` if invincible.
+ */
 export function handlePlayerHit(game) {
-  if (game.invincibilityTimer > 0) return false;
+    if (game.invincibilityTimer > 0) return false;
 
-  game.lives--;
-  game.invincibilityTimer = 1.0;
+    game.lives--;
+    game.invincibilityTimer = 1.0;
 
-  if (game.lives <= 0) {
-    game.gameOver = true;
+    if (game.lives <= 0) {
+        game.gameOver = true;
 
-    // Play game over sound
-    audioManager.playGameOverSound();
+        // Play game over sound
+        audioManager.playGameOverSound();
 
-    // Save score and redirect after a delay to let sound play
-    localStorage.setItem('finalScore', game.score);
-    localStorage.setItem('finalLevel', game.level);
+        // Persist final score/level for the results screen
+        localStorage.setItem('finalScore', game.score);
+        localStorage.setItem('finalLevel', game.level);
 
-    setTimeout(() => {
-      window.location.href = 'Demos/Score_UI/index.html';
-    }, 2000); // 2 second delay for game over sound
-  }
+        // Redirect to score screen after a short delay (lets sound finish)
+        setTimeout(() => {
+            window.location.href = 'Demos/Score_UI/index.html';
+        }, 2000);
+    }
 
-  return true;
+    return true;
 }
 
+/**
+ * Decrements the player's invincibility timer each frame.
+ *
+ * @param {Object} game - Global game state.
+ * @param {number} delta - Time elapsed since last frame (seconds).
+ */
 export function updateInvincibility(game, delta) {
-  if (game.invincibilityTimer > 0) {
-    game.invincibilityTimer = Math.max(0, game.invincibilityTimer - delta);
-  }
+    if (game.invincibilityTimer > 0) {
+        game.invincibilityTimer = Math.max(0, game.invincibilityTimer - delta);
+    }
 }
 
+/**
+ * Begins the transition to the next level.
+ *
+ * @param {Object} game - Global game state.
+ * @param {Function} spawnWaveCallback - Function to spawn the next enemy wave.
+ */
 export function startNextLevel(game, spawnWaveCallback) {
     game.level++;
     game.showingLevelTransition = true;
@@ -86,33 +121,47 @@ export function startNextLevel(game, spawnWaveCallback) {
     game.canShoot = false;
     game.globalEnemyShotTimer = game.baseFireRateDelay;
 
-  setTimeout(() => {
-    if (typeof spawnWaveCallback === 'function') {
-      spawnWaveCallback(game);
-    }
-  }, 2000);
+    setTimeout(() => {
+        if (typeof spawnWaveCallback === 'function') {
+            spawnWaveCallback(game);
+        }
+    }, 2000);
 }
 
+/**
+ * Checks for level completion and manages the delay before starting the next level.
+ *
+ * @param {Object} game - Global game state.
+ * @param {number} delta - Time elapsed since last frame (seconds).
+ * @param {Function} spawnWaveCallback - Function to spawn the next enemy wave.
+ */
 export function handleLevelProgression(game, delta, spawnWaveCallback) {
-  if (game.enemies.length === 0 && !game.showingLevelTransition) {
-    if (game.pendingWaveTimer > 0) {
-      game.pendingWaveTimer -= delta;
-      if (game.pendingWaveTimer <= 0) {
-        startNextLevel(game, spawnWaveCallback);
-      }
-    } else {
-      game.pendingWaveTimer = 1.5;
+    if (game.enemies.length === 0 && !game.showingLevelTransition) {
+        if (game.pendingWaveTimer > 0) {
+            game.pendingWaveTimer -= delta;
+            if (game.pendingWaveTimer <= 0) {
+                startNextLevel(game, spawnWaveCallback);
+            }
+        } else {
+            game.pendingWaveTimer = 1.5;
+        }
     }
-  }
 }
 
+/**
+ * Updates the level transition timer and clears the transition flag when finished.
+ *
+ * @param {Object} game - Global game state.
+ * @param {number} delta - Time elapsed since last frame (seconds).
+ * @returns {boolean} `true` while the level transition screen is active.
+ */
 export function updateLevelTransition(game, delta) {
-  if (!game.showingLevelTransition) return false;
+    if (!game.showingLevelTransition) return false;
 
-  game.levelTransitionTimer -= delta;
-  if (game.levelTransitionTimer <= 0) {
-    game.showingLevelTransition = false;
-  }
+    game.levelTransitionTimer -= delta;
+    if (game.levelTransitionTimer <= 0) {
+        game.showingLevelTransition = false;
+    }
 
-  return game.showingLevelTransition;
+    return game.showingLevelTransition;
 }
