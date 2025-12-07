@@ -4,14 +4,8 @@
 import { audioManager } from './audioManager.js';
 
 export function spawnPowerUp(game, enemy) {
-  // Base drop chance varies by difficulty
-  let dropChance = 0.1; // 10% on medium
-
-  if (game.difficulty === 'easy') {
-    dropChance = 0.25; // 25% on easy
-  } else if (game.difficulty === 'hard') {
-    dropChance = 0.05; // 5% on hard
-  }
+  // 10% drop chance across all difficulties
+  let dropChance = 0.1;
 
   if (Math.random() < dropChance) {
     game.powerUps.push({
@@ -39,8 +33,8 @@ export function updatePowerUps(game, delta, canvas) {
     const distance = Math.hypot(dx, dy);
 
     if (distance < game.player.size + powerUp.size) {
-      // Grant triple-shot for 30 seconds
-      game.tripleShotTimer = 30;
+      // Grant triple-shot for 10 seconds
+      game.tripleShotTimer = 10;
 
       // Play power-up collection sound
       audioManager.playPowerUpSound();

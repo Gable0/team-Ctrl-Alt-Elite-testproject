@@ -1,10 +1,10 @@
 import { test, assert } from 'vitest';
 import { spawnPowerUp, updatePowerUps } from '../../../js/systems/powerUps.js';
 
-test('spawnPowerUp uses difficulty-based drop chance', () => {
+test('spawnPowerUp uses 10% drop chance for all difficulties', () => {
   const enemy = { x: 400, y: 100 };
 
-  // EASY: 25%
+  // EASY: 10%
   const gameEasy = { powerUps: [], difficulty: 'easy' };
   let dropsEasy = 0;
   for (let i = 0; i < 1000; i++) {
@@ -13,8 +13,8 @@ test('spawnPowerUp uses difficulty-based drop chance', () => {
     if (gameEasy.powerUps.length > 0) dropsEasy++;
   }
   const rateEasy = dropsEasy / 1000;
-  assert.isAtLeast(rateEasy, 0.2);
-  assert.isAtMost(rateEasy, 0.3);
+  assert.isAtLeast(rateEasy, 0.06);
+  assert.isAtMost(rateEasy, 0.14);
 
   // MEDIUM: 10%
   const gameMedium = { powerUps: [], difficulty: 'medium' };
@@ -28,7 +28,7 @@ test('spawnPowerUp uses difficulty-based drop chance', () => {
   assert.isAtLeast(rateMedium, 0.06);
   assert.isAtMost(rateMedium, 0.14);
 
-  // HARD: 5%
+  // HARD: 10%
   const gameHard = { powerUps: [], difficulty: 'hard' };
   let dropsHard = 0;
   for (let i = 0; i < 1000; i++) {
@@ -37,8 +37,8 @@ test('spawnPowerUp uses difficulty-based drop chance', () => {
     if (gameHard.powerUps.length > 0) dropsHard++;
   }
   const rateHard = dropsHard / 1000;
-  assert.isAtLeast(rateHard, 0.02);
-  assert.isAtMost(rateHard, 0.08);
+  assert.isAtLeast(rateHard, 0.06);
+  assert.isAtMost(rateHard, 0.14);
 });
 
 test('spawnPowerUp adds power-up at enemy position (force drop)', () => {
@@ -81,7 +81,7 @@ test('player collects one power-up when touching it (single)', () => {
   updatePowerUps(game, 0.1, { height: 600 });
 
   assert.equal(game.powerUps.length, 0);
-  assert.closeTo(game.tripleShotTimer, 30, 0.2); // allow small floating-point error
+  assert.closeTo(game.tripleShotTimer, 10, 0.2); // allow small floating-point error
 });
 
 test('player collects only the power-up they touch when multiple exist', () => {
@@ -96,7 +96,7 @@ test('player collects only the power-up they touch when multiple exist', () => {
 
   updatePowerUps(game, 0.1, { height: 600 });
 
-  assert.closeTo(game.tripleShotTimer, 30, 0.2); // allow small floating-point error
+  assert.closeTo(game.tripleShotTimer, 10, 0.2); // allow small floating-point error
   assert.equal(game.powerUps.length, 1);
   assert.equal(game.powerUps[0].id, 'far'); // only the far one remains
 });
