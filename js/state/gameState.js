@@ -2,6 +2,7 @@
 
 import { getActiveSkin } from '../skins/skinsManager.js';
 import { audioManager } from '../systems/audioManager.js';
+import { addScore } from '../ui/leaderboard.js';
 import { persistentAudio } from '../core/persistentAudio.js';
 
 /**
@@ -48,6 +49,7 @@ export function createInitialGame() {
     activeSkin: getActiveSkin(),
     difficulty: difficulty,
     tripleShotTimer: 0,
+    coinCount: Number(localStorage.getItem('coinCount') || 0)
   };
 }
 
@@ -85,6 +87,49 @@ export function handlePlayerHit(game, hitType = 'laser') {
   } else {
     audioManager.playLaserHitsPlayerSound();
   }
+    if (game.lives <= 0) {
+        game.gameOver = true;
+
+        // Play game over sound
+        audioManager.playGameOverSound();
+
+        // Prompt the player immediately to enter a name and save the run
+        try {
+          const promptText = `You scored ${game.score}! Enter your name to save on the ${game.difficulty} leaderboard (max 10 chars):`;
+          let playerName = null;
+          try {
+            playerName = prompt(promptText, 'Player');
+          } catch (e) {
+            // prompt may be blocked in some environments
+            playerName = null;
+          }
+
+          const name = (playerName === null) ? 'Player' : (playerName || 'Player').toString().trim().substring(0, 10) || 'Player';
+
+          // Save finalScore and finalLevel for external displays
+          localStorage.setItem('finalScore', String(game.score));
+          localStorage.setItem('finalLevel', String(game.level));
+
+          // Try to add the score directly to leaderboards (this will persist top-5)
+          try {
+            addScore(game.difficulty || 'medium', { name, score: game.score });
+          } catch (e) {
+            // If the leaderboard helper isn't available for some reason, fall back to storing recentScore
+            try {
+              localStorage.setItem('recentScore', JSON.stringify({ score: game.score, difficulty: game.difficulty }));
+            } catch (e2) {
+              // ignore
+            }
+          }
+        } catch (e) {
+          // ignore any storage/prompt errors
+        }
+
+        // Redirect to the leaderboard page after a short delay to allow the game over sound to play
+        setTimeout(() => {
+          window.location.href = 'leaderboard.html';
+        }, 2000);
+    }
 
   if (game.lives <= 0) {
     game.gameOver = true;

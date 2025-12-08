@@ -4,18 +4,23 @@
 import { audioManager } from './audioManager.js';
 
 export function spawnPowerUp(game, enemy) {
-  // 10% drop chance across all difficulties
-  let dropChance = 0.1;
-
-  if (Math.random() < dropChance) {
-    game.powerUps.push({
-      x: enemy.x,
-      y: enemy.y,
-      size: 12,
-      speed: 80,
-      active: true,
-    });
-  }
+    // 25% chance to drop a power-up
+    let dropChance = 0.08; // default (medium)
+    
+    if (game.difficulty === 'easy') {
+        dropChance = 0.15; // 15% chance on easy
+    } else if (game.difficulty === 'hard') {
+        dropChance = 0.01; // 1% chance on hard
+    }
+    if (Math.random() < dropChance) {
+        game.powerUps.push({
+            x: enemy.x,
+            y: enemy.y,
+            size: 12,
+            speed: 80,
+            active: true
+        });
+    }
 }
 
 export function updatePowerUps(game, delta, canvas) {

@@ -8,24 +8,55 @@
   </head>
   <body>
     <main>
-      <section id="status">
-        <h1 translate="leaderboard">Leaderboard</h1>
-      </section>
-      <canvas id="game" width="800" height="600"></canvas>
-      <button
-        id="back-homepage"
-        onclick="location.href = 'homepage.html'"
-        translate="backToHome"
-      >
-        Back to Home
-      </button>
+        <section id="status">
+            <h1>Leaderboard</h1>
+        </section>
+
+        <section class="leaderboard-container">
+            <div class="board" data-difficulty="easy">
+                <h2>Easy</h2>
+                <ol class="scores" id="scores-easy"></ol>
+            </div>
+
+            <div class="board" data-difficulty="medium">
+                <h2>Medium</h2>
+                <ol class="scores" id="scores-medium"></ol>
+            </div>
+
+            <div class="board" data-difficulty="hard">
+                <h2>Hard</h2>
+                <ol class="scores" id="scores-hard"></ol>
+            </div>
+        </section>
+
+        <div style="text-align:center;margin-top:1.5rem;">
+            <button id="back-homepage" onclick="location.href='homepage.html'">Back to Home</button>
+        </div>
     </main>
+
     <script type="module">
-      import { applyTranslations } from './js/ui/translations.js';
-      applyTranslations(document);
-      window.addEventListener('languagechange', () =>
-        applyTranslations(document)
-      );
+        import { renderAllBoards, addScore } from './js/ui/leaderboard.js';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderAllBoards();
+
+            // If the game set a recentScore (before redirect), offer to save it
+            try {
+                const recentRaw = localStorage.getItem('recentScore');
+                if (recentRaw) {
+                    const recent = JSON.parse(recentRaw);
+                    const name = prompt('You scored ' + recent.score + '! Enter your name to save on leaderboard (max 10 chars):', 'Player');
+                    if (name !== null) {
+                        const trimmed = (name || 'Player').toString().trim().substring(0, 10) || 'Player';
+                        addScore(recent.difficulty || 'medium', { name: trimmed, score: Number(recent.score) || 0 });
+                        // re-render
+                        renderAllBoards();
+                    }
+                    localStorage.removeItem('recentScore');
+                }
+            } catch (e) {
+                console.error('Error processing recentScore', e);
+            }
+        });
     </script>
-  </body>
-</html>
+</body>

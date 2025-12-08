@@ -625,7 +625,6 @@ skins-header p {
   }
 }
 
-/* Coin Icon - untouched */
 .coin-icon {
   position: relative;
   width: 3rem;
@@ -692,6 +691,7 @@ skins-header p {
 }
 
 @keyframes coinSpin {
+<<<<<<< HEAD
   0% {
     transform: rotateY(0deg);
   }
@@ -699,3 +699,78 @@ skins-header p {
     transform: rotateY(360deg);
   }
 }
+=======
+    0% {
+        transform: rotateY(0deg);
+    }
+    100% {
+        transform: rotateY(360deg);
+    }
+}
+
+/* Shop coin display (used in shop.html) */
+shop-coins {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem; /* ~10px */
+    margin-top: 1.125rem; /* ~18px */
+}
+
+.shop-coin-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(180deg, #ffd54f, #bf8f00);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+}
+
+.shop-coin-symbol {
+    font-weight: 700;
+    color: #6b3d00;
+}
+
+#coin-count {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: #ffdd57;
+}
+
+/* Leaderboard styles */
+.leaderboard-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    max-width: 80rem;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.board {
+    background: rgba(0,8,20,0.7);
+    border: 0.125rem solid #00d9ff;
+    border-radius: 0.5rem;
+    padding: 1rem;
+}
+
+.board h2 {
+    font-family: 'Press Start 2P', cursive;
+    color: #ffdd00;
+    font-size: 1rem;
+    margin: 0 0 0.5rem 0;
+}
+
+.scores { list-style: none; padding: 0; margin: 0; }
+.score-row { display:flex; align-items:center; gap:0.75rem; padding:0.5rem 0; border-bottom: 1px solid rgba(255,255,255,0.02); }
+.score-row .rank { width:2rem; color:#ffdd57; font-weight:700; }
+.score-row .name { flex:1; color:#fff; }
+.score-row .score { width:5.5rem; text-align:right; color:#00ff41; font-weight:700; }
+.score-row .date { margin-left:0.75rem; color:#888; font-size:0.75rem; }
+.score-row .empty { color: #666; }
+
+@media (max-width: 900px) {
+    .leaderboard-container { grid-template-columns: 1fr; }
+}
+>>>>>>> jkelley-branch
