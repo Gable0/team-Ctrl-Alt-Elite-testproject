@@ -45,6 +45,12 @@ import { spawnCoin, updateCoins, drawCoins } from '../systems/coins.js';
 import { initBackground, updateBackground, drawBackground } from './background.js';
 import { initAudio } from '../systems/audioManager.js';
 import { persistentAudio } from './persistentAudio.js';
+import { loadEnemySkinImage } from '../skins/skinAssets.js';
+
+// ... inside your async game init / start function
+// Preload all custom enemy skins
+await loadEnemySkinImage('prof', 'assets/images/prof.jpg');     // Prof skin
+// await loadEnemySkinImage('futureSkin', 'assets/images/future.jpg'); // add more later
  
 //Stop intro audio when  game starts
 persistentAudio.stop(); 
