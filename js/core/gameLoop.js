@@ -52,9 +52,9 @@ import {
 } from './background.js';
 import { initAudio } from '../systems/audioManager.js';
 import { persistentAudio } from './persistentAudio.js';
-
-//Stop intro audio when game starts
-persistentAudio.stop();
+ 
+//Stop intro audio when  game starts
+persistentAudio.stop(); 
 /** @type {HTMLCanvasElement} */
 const canvas = document.getElementById('game');
 
