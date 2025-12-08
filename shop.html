@@ -23,17 +23,19 @@
 
       <section class="skins-grid" id="skins-grid"></section>
 
-    <shop-coins class="shop-coins" aria-live="polite">
+      <shop-coins class="shop-coins" aria-live="polite">
         <div class="shop-coin-icon">
-            <span class="shop-coin-symbol">¢</span>
+          <span class="shop-coin-symbol">¢</span>
         </div>
         <div>
-            <div id="coin-count">0</div>
+          <div id="coin-count">0</div>
         </div>
-    </shop-coins>
+      </shop-coins>
 
-    <button id="back-homepage" onclick="location.href='homepage.html'">Back to Home</button>
-</shop-container>
+      <button id="back-homepage" onclick="location.href = 'homepage.html'">
+        Back to Home
+      </button>
+    </shop-container>
 
     <script type="module">
       import {
@@ -108,25 +110,25 @@
         }
       });
 
-const ownedSkins = {
-    squarePack: localStorage.getItem('squarePackOwned') === 'true',
-    starPack: localStorage.getItem('starPackOwned') === 'true'
-    // Add new: neonPack: localStorage.getItem('neonPackOwned') === 'true',
-};
+      const ownedSkins = {
+        squarePack: localStorage.getItem('squarePackOwned') === 'true',
+        starPack: localStorage.getItem('starPackOwned') === 'true',
+        // Add new: neonPack: localStorage.getItem('neonPackOwned') === 'true',
+      };
 
-// Coins display: read from localStorage and show in the shop header
-function updateCoinDisplay() {
-    const el = document.getElementById('coin-count');
-    if (!el) return;
-    const coins = Number(localStorage.getItem('coinCount') || 0);
-    el.textContent = String(coins);
-}
+      // Coins display: read from localStorage and show in the shop header
+      function updateCoinDisplay() {
+        const el = document.getElementById('coin-count');
+        if (!el) return;
+        const coins = Number(localStorage.getItem('coinCount') || 0);
+        el.textContent = String(coins);
+      }
 
-window.addEventListener('storage', (ev) => {
-    if (ev.key === 'coinCount') updateCoinDisplay();
-});
+      window.addEventListener('storage', ev => {
+        if (ev.key === 'coinCount') updateCoinDisplay();
+      });
 
-document.addEventListener('DOMContentLoaded', updateCoinDisplay);
-</script>
-</body>
+      document.addEventListener('DOMContentLoaded', updateCoinDisplay);
+    </script>
+  </body>
 </html>

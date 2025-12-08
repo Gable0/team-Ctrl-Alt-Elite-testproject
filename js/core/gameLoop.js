@@ -40,14 +40,22 @@ import {
 } from '../state/gameState.js';
 import { drawHUD, drawLevelTransition } from '../ui/hud.js';
 import { initPauseMenu } from '../ui/pauseMenu.js';
-import { spawnPowerUp, updatePowerUps, drawPowerUps } from '../systems/powerUps.js';
+import {
+  spawnPowerUp,
+  updatePowerUps,
+  drawPowerUps,
+} from '../systems/powerUps.js';
 import { spawnCoin, updateCoins, drawCoins } from '../systems/coins.js';
-import { initBackground, updateBackground, drawBackground } from './background.js';
+import {
+  initBackground,
+  updateBackground,
+  drawBackground,
+} from './background.js';
 import { initAudio } from '../systems/audioManager.js';
 import { persistentAudio } from './persistentAudio.js';
- 
+
 //Stop intro audio when  game starts
-persistentAudio.stop(); 
+persistentAudio.stop();
 /** @type {HTMLCanvasElement} */
 const canvas = document.getElementById('game');
 
@@ -96,7 +104,6 @@ function update(delta) {
   updatePowerUps(Game, delta, canvas);
   updateCoins(Game, delta, canvas);
 
-
   // Enemy dive attacks only start after the player can shoot
   if (Game.playerShootingUnlocked) {
     Game.attackTimer = scheduleEnemyAttacks(
@@ -115,12 +122,12 @@ function update(delta) {
   }
 
   // Player bullet → enemy collision
-  checkPlayerShotCollisions(Game, (enemy) => {
+  checkPlayerShotCollisions(Game, enemy => {
     handleEnemyKilled(Game, enemy);
     spawnPowerUp(Game, enemy);
     spawnCoin(Game, enemy);
   });
-    
+
   // Player can only be hit when not invincible
   if (Game.invincibilityTimer <= 0) {
     // Check enemy laser hits (pass hit type to handlePlayerHit)
@@ -140,17 +147,17 @@ function update(delta) {
 function draw() {
   drawBackground(ctx, canvas);
 
-    if (Game.showingLevelTransition) {
-        drawPlayer(ctx, Game.player, Game.invincibilityTimer, Game);
-        drawLevelTransition(ctx, canvas, Game);
-    } else {
-        drawEnemies(Game.enemies, Game);
-        drawEnemyShots(ctx, Game.enemyShots);
-        drawPlayerShots(ctx, Game.playerShots);
-        drawPowerUps(ctx, Game.powerUps);
-        drawCoins(ctx, Game.coins);
-        drawPlayer(ctx, Game.player, Game.invincibilityTimer, Game);
-    }
+  if (Game.showingLevelTransition) {
+    drawPlayer(ctx, Game.player, Game.invincibilityTimer, Game);
+    drawLevelTransition(ctx, canvas, Game);
+  } else {
+    drawEnemies(Game.enemies, Game);
+    drawEnemyShots(ctx, Game.enemyShots);
+    drawPlayerShots(ctx, Game.playerShots);
+    drawPowerUps(ctx, Game.powerUps);
+    drawCoins(ctx, Game.coins);
+    drawPlayer(ctx, Game.player, Game.invincibilityTimer, Game);
+  }
 
   drawHUD(ctx, canvas, Game);
 }

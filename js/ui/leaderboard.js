@@ -2,7 +2,7 @@
 const DIFFICULTY_KEYS = {
   easy: 'leaderboard_easy',
   medium: 'leaderboard_medium',
-  hard: 'leaderboard_hard'
+  hard: 'leaderboard_hard',
 };
 
 function safeParse(raw) {
@@ -37,7 +37,8 @@ export function saveLeaderboard(difficulty, entries) {
 export function addScore(difficulty, entry) {
   if (!DIFFICULTY_KEYS[difficulty]) difficulty = 'medium';
   const score = Number(entry.score) || 0;
-  const name = (entry.name || 'Player').toString().trim().substring(0, 10) || 'Player';
+  const name =
+    (entry.name || 'Player').toString().trim().substring(0, 10) || 'Player';
   const date = entry.date || Date.now();
 
   const entries = loadLeaderboard(difficulty);
@@ -76,7 +77,13 @@ export function addScore(difficulty, entry) {
 }
 
 function escapeHtml(s) {
-  return (s || '').replace(/[&<>"']/g, (m) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;"}[m]));
+  return (s || '').replace(
+    /[&<>"']/g,
+    m =>
+      ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[
+        m
+      ]
+  );
 }
 
 export function renderBoard(difficulty) {
@@ -92,14 +99,14 @@ export function renderBoard(difficulty) {
     if (e) {
       const d = new Date(e.date);
       li.innerHTML = `
-        <span class="rank">${i+1}.</span>
+        <span class="rank">${i + 1}.</span>
         <span class="name">${escapeHtml(e.name)}</span>
         <span class="score">${Number(e.score)}</span>
         <span class="date">${d.toLocaleDateString()}</span>
       `;
     } else {
       li.innerHTML = `
-        <span class="rank">${i+1}.</span>
+        <span class="rank">${i + 1}.</span>
         <span class="empty">—</span>
       `;
     }
@@ -108,15 +115,21 @@ export function renderBoard(difficulty) {
 }
 
 export function renderAllBoards() {
-  ['easy','medium','hard'].forEach(renderBoard);
+  ['easy', 'medium', 'hard'].forEach(renderBoard);
 }
 
 // expose a small API to window for integration from game code
 if (typeof window !== 'undefined') {
   window.leaderboard = window.leaderboard || {};
   window.leaderboard.addScore = (d, e) => addScore(d, e);
-  window.leaderboard.load = (d) => loadLeaderboard(d);
+  window.leaderboard.load = d => loadLeaderboard(d);
   window.leaderboard.renderAll = () => renderAllBoards();
 }
 
-export default { loadLeaderboard, saveLeaderboard, addScore, renderBoard, renderAllBoards };
+export default {
+  loadLeaderboard,
+  saveLeaderboard,
+  addScore,
+  renderBoard,
+  renderAllBoards,
+};
