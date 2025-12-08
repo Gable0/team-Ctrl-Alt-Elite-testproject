@@ -1,121 +1,104 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>RetroGa Skins Library</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Doto:wght@100..900&family=Nabla&family=Press+Start+2P&family=Tourney:ital,wght@0,100..900;1,100..900&family=Jersey+10&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="styles.css" />
-  </head>
-  <body>
-    <skins-container>
-      <skins-header>
-        <h1 translate="skinsHeader">RetroGa Skins Library</h1>
-        <p translate="skinsSubheader">
-          Equip your favorite looks for ships and enemies!
-        </p>
-      </skins-header>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RetroGa Skins Library</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Doto:wght@100..900&family=Nabla&family=Press+Start+2P&family=Tourney:ital,wght@0,100..900;1,100..900&family=Jersey+10&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<skins-container>
+  <skins-header>
+    <h1 translate="skinsHeader">RetroGa Skins Library</h1>
+    <p translate="skinsSubheader">
+      Equip your favorite looks for ships and enemies!
+    </p>
+  </skins-header>
 
-      <section class="skins-grid" id="skins-grid">
-        <!-- JS will fill this -->
-      </section>
+  <section class="skins-grid" id="skins-grid">
+    <!-- JS will fill this -->
+  </section>
 
-      <button
-        id="back-shop"
-        translate="backToShop"
-      >
-        Back to Shop
-      </button>
-      <button
-        id="back-homepage"
-        translate="backToHome"
-      >
-        Back to Home
-      </button>
-    </skins-container>
+  <button id="back-shop" translate="backToShop">Back to Shop</button>
+  <button id="back-homepage" translate="backToHome">Back to Home</button>
+</skins-container>
 
-    <script type="module">
-      import { injectSettings } from './js/ui/settingsComponent.js';
-      injectSettings();
+<script type="module">
+  import { injectSettings } from './js/ui/settingsComponent.js';
+  injectSettings();
 
-      // FIXED: Use query params to navigate through index.html SPA
-      document.getElementById('back-shop').addEventListener('click', () => {
-        // Navigate to shop through index.html routing
-        window.location.href = 'index.html?page=shop';
+  document.getElementById('back-shop').addEventListener('click', () => {
+    window.location.href = 'index.html?page=shop';
+  });
+
+  document.getElementById('back-homepage').addEventListener('click', () => {
+    window.location.href = 'index.html';
+  });
+</script>
+
+<script type="module">
+  import {
+    getActiveSkin,
+    isSkinOwned,
+    equipSkin,
+  } from './js/skins/skinsManager.js';
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const grid = document.getElementById('skins-grid');
+    const activeSkin = getActiveSkin();
+
+    // Helper to add a skin card
+    function addSkin(skinId, name, desc) {
+      // Use raw localStorage check for 'prof' since it's not in skinsManager yet
+      const owned = skinId === 'prof'
+        ? localStorage.getItem('profOwned') === 'true'
+        : isSkinOwned(skinId);
+
+      if (!owned) return;
+
+      const card = document.createElement('article');
+      card.className = 'skin-card';
+      card.innerHTML = `
+            <h3>${name}</h3>
+            <p>${desc}</p>
+            <button class="equip-btn">
+              ${activeSkin === skinId ? 'Equipped' : 'Equip'}
+            </button>
+          `;
+      grid.appendChild(card);
+
+      card.querySelector('button').addEventListener('click', () => {
+        equipSkin(activeSkin === skinId ? 'default' : skinId);
+        location.reload();
       });
+    }
 
-      document.getElementById('back-homepage').addEventListener('click', () => {
-        // Navigate back to index.html (which loads homepage)
-        window.location.href = 'index.html';
-      });
-    </script>
-    <script type="module">
-      import {
-        getActiveSkin,
-        isSkinOwned,
-        equipSkin,
-      } from './js/skins/skinsManager.js';
+    // Add all owned skins
+    addSkin('squarePack', 'Square Pack', 'Blocky vibes for ships and foes.');
+    addSkin('starPack', 'Star Pack', 'Stellar shapes for ships and foes.');
+    addSkin('prof', 'Prof Pack', 'The Professor invades your fleet!');
 
-      document.addEventListener('DOMContentLoaded', () => {
-        const grid = document.getElementById('skins-grid');
-        const activeSkin = getActiveSkin();
+    // Empty message
+    if (grid.children.length === 0) {
+      const emptyMsg = document.createElement('p');
+      emptyMsg.textContent = 'No skins owned yet. Visit the shop!';
+      emptyMsg.style.textAlign = 'center';
+      emptyMsg.style.gridColumn = '1 / -1';
+      grid.appendChild(emptyMsg);
+    }
+  });
+</script>
 
-        // Sample owned skins (extend ownedSkins in manager for more)
-        if (isSkinOwned('squarePack')) {
-          const card = document.createElement('article');
-          card.className = 'skin-card';
-          card.innerHTML = `
-                <h3>Square Pack</h3>
-                <p>Blocky vibes for ships and foes.</p>
-                <button class="equip-btn" id="square-pack-equip">${activeSkin === 'squarePack' ? 'Equipped' : 'Equip'}</button>
-            `;
-          grid.appendChild(card);
-
-          const btn = document.getElementById('square-pack-equip');
-          btn.addEventListener('click', () => {
-            equipSkin(activeSkin === 'squarePack' ? 'default' : 'squarePack');
-            location.reload(); // Refresh UI
-          });
-        }
-
-        if (isSkinOwned('starPack')) {
-          const card = document.createElement('article');
-          card.className = 'skin-card';
-          card.innerHTML = `
-                <h3>Star Pack</h3>
-                <p>Stellar shapes for ships and foes.</p>
-                <button class="equip-btn" id="star-pack-equip">${activeSkin === 'starPack' ? 'Equipped' : 'Equip'}</button>
-            `;
-          grid.appendChild(card);
-
-          const btn = document.getElementById('star-pack-equip');
-          btn.addEventListener('click', () => {
-            equipSkin(activeSkin === 'starPack' ? 'default' : 'starPack');
-            location.reload(); // Refresh UI
-          });
-        }
-
-        // Show empty message only if no skins were added
-        if (grid.children.length === 0) {
-          const emptyMsg = document.createElement('p');
-          emptyMsg.textContent = 'No skins owned yet. Visit the shop!';
-          emptyMsg.style.textAlign = 'center';
-          emptyMsg.style.gridColumn = '1 / -1';
-          grid.appendChild(emptyMsg);
-        }
-      });
-    </script>
-    <script type="module">
-      import { applyTranslations } from './js/ui/translations.js';
-      applyTranslations(document);
-      window.addEventListener('languagechange', () =>
-        applyTranslations(document)
-      );
-    </script>
-  </body>
+<script type="module">
+  import { applyTranslations } from './js/ui/translations.js';
+  applyTranslations(document);
+  window.addEventListener('languagechange', () => applyTranslations(document));
+</script>
+</body>
 </html>
