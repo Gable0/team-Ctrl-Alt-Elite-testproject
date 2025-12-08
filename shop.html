@@ -32,25 +32,31 @@
         </div>
       </shop-coins>
 
-      <button id="back-homepage" onclick="location.href = 'homepage.html'">
+      <button id="back-homepage">
         Back to Home
       </button>
     </shop-container>
 
     <script type="module">
       import { injectSettings } from './js/ui/settingsComponent.js';
+      import { persistentAudio } from './js/core/persistentAudio.js';
+      
       injectSettings();
 
-      // Initialize shop immediately (not waiting for DOMContentLoaded)
+      // FIXED: Use persistentAudio navigation
+      document.getElementById('back-homepage').addEventListener('click', (e) => {
+        e.preventDefault();
+        persistentAudio.navigateTo('homepage.html');
+      });
+
+      // Initialize shop immediately
       function initShop() {
         const grid = document.getElementById('skins-grid');
         if (!grid) {
-          // Grid not ready yet, try again in a moment
           setTimeout(initShop, 50);
           return;
         }
 
-        // Clear existing content to prevent duplicates
         grid.innerHTML = '';
 
         function addSkin(skinId, name, desc) {
@@ -78,27 +84,20 @@
           }
         }
 
-        // All skins — completely free
-        addSkin(
-          'squarePack',
-          'Square Pack',
-          'Blocky vibes for ships and foes.'
-        );
+        addSkin('squarePack', 'Square Pack', 'Blocky vibes for ships and foes.');
         addSkin('starPack', 'Star Pack', 'Stellar shapes for ships and foes.');
         addSkin('prof', 'Prof Pack', 'The Professor invades your fleet!');
       }
-      // Initialize immediately
+      
       initShop();
+
       // Coin counter
       function updateCoinDisplay() {
         const el = document.getElementById('coin-count');
         if (el) el.textContent = Number(localStorage.getItem('coinCount') || 0);
       }
 
-      window.addEventListener(
-        'storage',
-        e => e.key === 'coinCount' && updateCoinDisplay()
-      );
+      window.addEventListener('storage', e => e.key === 'coinCount' && updateCoinDisplay());
       updateCoinDisplay();
     </script>
   </body>

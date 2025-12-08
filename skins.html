@@ -31,14 +31,19 @@
 
     <script type="module">
       import { injectSettings } from './js/ui/settingsComponent.js';
+      import { persistentAudio } from './js/core/persistentAudio.js';
+      
       injectSettings();
 
-      document.getElementById('back-shop').addEventListener('click', () => {
-        window.location.href = 'index.html?page=shop';
+      // FIXED: Use persistentAudio navigation
+      document.getElementById('back-shop').addEventListener('click', (e) => {
+        e.preventDefault();
+        persistentAudio.navigateTo('shop.html');
       });
 
-      document.getElementById('back-homepage').addEventListener('click', () => {
-        window.location.href = 'index.html';
+      document.getElementById('back-homepage').addEventListener('click', (e) => {
+        e.preventDefault();
+        persistentAudio.navigateTo('homepage.html');
       });
     </script>
 
@@ -53,9 +58,7 @@
         const grid = document.getElementById('skins-grid');
         const activeSkin = getActiveSkin();
 
-        // Helper to add a skin card
         function addSkin(skinId, name, desc) {
-          // Use raw localStorage check for 'prof' since it's not in skinsManager yet
           const owned =
             skinId === 'prof'
               ? localStorage.getItem('profOwned') === 'true'
@@ -80,16 +83,10 @@
           });
         }
 
-        // Add all owned skins
-        addSkin(
-          'squarePack',
-          'Square Pack',
-          'Blocky vibes for ships and foes.'
-        );
+        addSkin('squarePack', 'Square Pack', 'Blocky vibes for ships and foes.');
         addSkin('starPack', 'Star Pack', 'Stellar shapes for ships and foes.');
         addSkin('prof', 'Prof Pack', 'The Professor invades your fleet!');
 
-        // Empty message
         if (grid.children.length === 0) {
           const emptyMsg = document.createElement('p');
           emptyMsg.textContent = 'No skins owned yet. Visit the shop!';
@@ -109,3 +106,4 @@
     </script>
   </body>
 </html>
+

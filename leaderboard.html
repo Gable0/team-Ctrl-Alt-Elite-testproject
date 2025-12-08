@@ -30,7 +30,7 @@
       </section>
 
       <div style="text-align: center; margin-top: 1.5rem">
-        <button id="back-homepage" onclick="location.href = 'homepage.html'">
+        <button id="back-homepage">
           Back to Home
         </button>
       </div>
@@ -38,9 +38,16 @@
 
     <script type="module">
       import { renderAllBoards, addScore } from './js/ui/leaderboard.js';
+      import { persistentAudio } from './js/core/persistentAudio.js';
 
       document.addEventListener('DOMContentLoaded', () => {
         renderAllBoards();
+
+        // FIXED: Use persistentAudio navigation for back button
+        document.getElementById('back-homepage').addEventListener('click', (e) => {
+          e.preventDefault();
+          persistentAudio.navigateTo('homepage.html');
+        });
 
         // If the game set a recentScore (before redirect), offer to save it
         try {
@@ -61,7 +68,6 @@
                 name: trimmed,
                 score: Number(recent.score) || 0,
               });
-              // re-render
               renderAllBoards();
             }
             localStorage.removeItem('recentScore');
