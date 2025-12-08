@@ -39,8 +39,17 @@
   import { injectSettings } from './js/ui/settingsComponent.js';
   injectSettings();
 
-  document.addEventListener('DOMContentLoaded', () => {
+  // Initialize shop immediately (not waiting for DOMContentLoaded)
+  function initShop() {
     const grid = document.getElementById('skins-grid');
+    if (!grid) {
+      // Grid not ready yet, try again in a moment
+      setTimeout(initShop, 50);
+      return;
+    }
+
+    // Clear existing content to prevent duplicates
+    grid.innerHTML = '';
 
     function addSkin(skinId, name, desc) {
       const card = document.createElement('article');
@@ -71,15 +80,15 @@
     addSkin('squarePack', 'Square Pack', 'Blocky vibes for ships and foes.');
     addSkin('starPack', 'Star Pack', 'Stellar shapes for ships and foes.');
     addSkin('prof', 'Prof Pack', 'The Professor invades your fleet!');
-  });
-
-  // Coin counter — unchanged, just displays your current coins
+  }
+  // Initialize immediately
+  initShop();
+  // Coin counter
   function updateCoinDisplay() {
     const el = document.getElementById('coin-count');
     if (el) el.textContent = Number(localStorage.getItem('coinCount') || 0);
   }
+  
   window.addEventListener('storage', e => e.key === 'coinCount' && updateCoinDisplay());
-  document.addEventListener('DOMContentLoaded', updateCoinDisplay);
+  updateCoinDisplay();
 </script>
-</body>
-</html>
