@@ -3,73 +3,152 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>RetroGa</title>
+    <title>RetroGa - Leaderboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Jersey+10&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="styles.css" />
+    <style>
+      /* Additional inline styles to ensure consistency */
+      body {
+        font-family: 'Jersey 10', monospace !important;
+      }
+      
+      main {
+        width: 100%;
+        max-width: 100%;
+        padding: 2rem 1rem;
+      }
+      
+      #status {
+        margin-bottom: 2rem;
+      }
+      
+      .leaderboard-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+      }
+    </style>
   </head>
   <body>
     <main>
-        <section id="status">
-            <h1>Leaderboard</h1>
-        </section>
+      <section id="status">
+        <h1>Leaderboard</h1>
+      </section>
 
+      <div class="leaderboard-wrapper">
         <section class="leaderboard-container">
-            <div class="board" data-difficulty="easy">
-                <h2>Easy</h2>
-                <ol class="scores" id="scores-easy"></ol>
-            </div>
+          <div class="board" data-difficulty="easy">
+            <h2>Easy</h2>
+            <ol class="scores" id="scores-easy"></ol>
+          </div>
 
-            <div class="board" data-difficulty="medium">
-                <h2>Medium</h2>
-                <ol class="scores" id="scores-medium"></ol>
-            </div>
+          <div class="board" data-difficulty="medium">
+            <h2>Medium</h2>
+            <ol class="scores" id="scores-medium"></ol>
+          </div>
 
-            <div class="board" data-difficulty="hard">
-                <h2>Hard</h2>
-                <ol class="scores" id="scores-hard"></ol>
-            </div>
+          <div class="board" data-difficulty="hard">
+            <h2>Hard</h2>
+            <ol class="scores" id="scores-hard"></ol>
+          </div>
         </section>
 
         <div style="text-align:center;margin-top:1.5rem;">
-            <button id="back-homepage" onclick="location.href='homepage.html'">Back to Home</button>
+          <button id="back-homepage" onclick="location.href='homepage.html'">
+            Back to Home
+          </button>
         </div>
+      </div>
     </main>
 
     <script type="module">
-        import { renderAllBoards, addScore } from './js/ui/leaderboard.js';
+      import { renderAllBoards, addScore } from './js/ui/leaderboard.js';
 
-        function initLeaderboard() {
-            // Check if the leaderboard containers exist yet
-            const easyBoard = document.getElementById('scores-easy');
-            if (!easyBoard) {
-                // Not ready yet, retry
-                setTimeout(initLeaderboard, 50);
-                return;
-            }
-
-            // Render all boards
-            renderAllBoards();
-
-            // If the game set a recentScore (before redirect), offer to save it
-            try {
-                const recentRaw = localStorage.getItem('recentScore');
-                if (recentRaw) {
-                    const recent = JSON.parse(recentRaw);
-                    const name = prompt('You scored ' + recent.score + '! Enter your name to save on leaderboard (max 10 chars):', 'Player');
-                    if (name !== null) {
-                        const trimmed = (name || 'Player').toString().trim().substring(0, 10) || 'Player';
-                        addScore(recent.difficulty || 'medium', { name: trimmed, score: Number(recent.score) || 0 });
-                        // re-render
-                        renderAllBoards();
-                    }
-                    localStorage.removeItem('recentScore');
-                }
-            } catch (e) {
-                console.error('Error processing recentScore', e);
-            }
+      function initLeaderboard() {
+        // Force font application
+        document.body.style.fontFamily = "'Jersey 10', monospace";
+        
+        // Check if the leaderboard containers exist yet
+        const easyBoard = document.getElementById('scores-easy');
+        if (!easyBoard) {
+          // Not ready yet, retry
+          setTimeout(initLeaderboard, 50);
+          return;
         }
 
-        // Initialize immediately (not waiting for DOMContentLoaded)
+        // Clear any existing content
+        document.querySelectorAll('.scores').forEach(list => {
+          list.innerHTML = '';
+        });
+
+        // Render all boards
+        renderAllBoards();
+
+        // If the game set a recentScore (before redirect), offer to save it
+        try {
+          const recentRaw = localStorage.getItem('recentScore');
+          if (recentRaw) {
+            const recent = JSON.parse(recentRaw);
+            const name = prompt(
+              'You scored ' + recent.score + 
+              '! Enter your name to save on the ' + 
+              (recent.difficulty || 'medium') + 
+              ' leaderboard (max 10 chars):',
+              'Player'
+            );
+            if (name !== null) {
+              const trimmed = (name || 'Player')
+                .toString()
+                .trim()
+                .substring(0, 10) || 'Player';
+              addScore(
+                recent.difficulty || 'medium',
+                { name: trimmed, score: Number(recent.score) || 0 }
+              );
+              // Re-render after adding score
+              renderAllBoards();
+            }
+            localStorage.removeItem('recentScore');
+          }
+        } catch (e) {
+          console.error('Error processing recentScore', e);
+        }
+      }
+
+      // Initialize on page load
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initLeaderboard);
+      } else {
         initLeaderboard();
+      }
+
+      // Re-initialize when visibility changes (fixes the reload issue)
+      document.addEventListener('visibilitychange', function() {
+        if (!document.hidden) {
+          setTimeout(() => {
+            renderAllBoards();
+          }, 100);
+        }
+      });
     </script>
-</body>
+
+    <script type="module">
+      import { injectSettings } from './js/ui/settingsComponent.js';
+      injectSettings();
+    </script>
+
+    <script type="module">
+      import { applyTranslations } from './js/ui/translations.js';
+      applyTranslations(document);
+      window.addEventListener('languagechange', () =>
+        applyTranslations(document)
+      );
+    </script>
+  </body>
 </html>
