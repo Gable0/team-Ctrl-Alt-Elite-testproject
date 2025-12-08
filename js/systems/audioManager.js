@@ -314,24 +314,41 @@ class AudioManager {
   /**
    * Sets master volume for sound effects.
    *
-   * @param {number} volume Value between 0 and 1.
+   * @param {number} newVolume Value between 0 and 1.
    */
-  setVolume(volume) {
-    this.volume = Math.max(0, Math.min(1, volume));
-    console.log(`Volume set to: ${this.volume}`);
+  setVolume(newVolume) {
+    this.volume = Math.max(0, Math.min(1, newVolume));
+    // Apply to all existing SFX sounds
+    Object.values(this.sounds).forEach(sound => {
+      if (!sound.loop) {  // SFX, not music
+        sound.volume = this.volume;
+      }
+    });
+    localStorage.setItem('sfxVolume', this.volume);
   }
 
   /**
    * Sets volume for background music.
    *
-   * @param {number} volume Value between 0 and 1.
+   * @param {number} newVolume Value between 0 and 1.
    */
-  setMusicVolume(volume) {
-    this.musicVolume = Math.max(0, Math.min(1, volume));
+  setMusicVolume(newVolume) {
+    this.musicVolume = Math.max(0, Math.min(1, newVolume));
+    // Apply to current music if playing
     if (this.currentMusic) {
       this.currentMusic.volume = this.musicVolume;
     }
-    console.log(`Music volume set to: ${this.musicVolume}`);
+    localStorage.setItem('musicVolume', this.musicVolume);
+  }
+
+  /** Returns current music volume (0–1) */
+  getMusicVolume() {
+    return this.musicVolume;
+  }
+
+  /** Returns current sound-effects volume (0–1) */
+  getSFXVolume() {
+    return this.volume;
   }
 }
 
