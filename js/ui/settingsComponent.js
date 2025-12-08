@@ -59,16 +59,26 @@ export function injectSettings() {
   import('../systems/audioManager.js').then(module => {
     const { audioManager } = module;
 
-    const funModeBtn = document.getElementById('fun-mode-toggle');
+    const musicSlider = modal.querySelector('#audio-volume'); // Music volume (Background music)
+    const sfxSlider = modal.querySelector('#sfx-volume'); // Sound effects
 
-    // Reflect current fun-mode state
-    updateFunModeButton(funModeBtn, audioManager.getFunMode());
+    // Load saved values
+    musicSlider.value = audioManager.getMusicVolume() * 100;
+    sfxSlider.value = audioManager.getSFXVolume() * 100;
 
-    // Toggle fun mode on click
-    funModeBtn.addEventListener('click', () => {
-      const newState = !audioManager.getFunMode();
-      audioManager.setFunMode(newState);
-      updateFunModeButton(funModeBtn, newState);
+    // Music volume change
+    musicSlider.addEventListener('input', () => {
+      const newVol = Number(musicSlider.value) / 100;
+      audioManager.setMusicVolume(newVol);
+    });
+
+    // SFX volume change
+    sfxSlider.addEventListener('input', () => {
+      const newVol = Number(sfxSlider.value) / 100;
+      audioManager.setVolume(newVol);
+
+      // optional preview click sound:
+      // audioManager.playSound('shoot');
     });
   });
 

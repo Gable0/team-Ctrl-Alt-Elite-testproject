@@ -4,7 +4,7 @@
 import { audioManager } from './audioManager.js';
 
 export function spawnPowerUp(game, enemy) {
-  // 25% chance to drop a power-up
+  // 10% chance to drop a power-up
   let dropChance = 0.1; // default (medium)
 
   /*if (game.difficulty === 'easy') {

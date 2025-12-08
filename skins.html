@@ -31,19 +31,22 @@
 
     <script type="module">
       import { injectSettings } from './js/ui/settingsComponent.js';
+      import { persistentAudio } from './js/core/persistentAudio.js';
+      
       injectSettings();
 
-      // FIXED: Use query params to navigate through index.html SPA
-      document.getElementById('back-shop').addEventListener('click', () => {
-        // Navigate to shop through index.html routing
-        window.location.href = 'index.html?page=shop';
+      // FIXED: Use persistentAudio navigation
+      document.getElementById('back-shop').addEventListener('click', (e) => {
+        e.preventDefault();
+        persistentAudio.navigateTo('shop.html');
       });
 
-      document.getElementById('back-homepage').addEventListener('click', () => {
-        // Navigate back to index.html (which loads homepage)
-        window.location.href = 'index.html';
+      document.getElementById('back-homepage').addEventListener('click', (e) => {
+        e.preventDefault();
+        persistentAudio.navigateTo('homepage.html');
       });
     </script>
+
     <script type="module">
       import {
         getActiveSkin,
@@ -55,42 +58,35 @@
         const grid = document.getElementById('skins-grid');
         const activeSkin = getActiveSkin();
 
-        // Sample owned skins (extend ownedSkins in manager for more)
-        if (isSkinOwned('squarePack')) {
+        function addSkin(skinId, name, desc) {
+          const owned =
+            skinId === 'prof'
+              ? localStorage.getItem('profOwned') === 'true'
+              : isSkinOwned(skinId);
+
+          if (!owned) return;
+
           const card = document.createElement('article');
           card.className = 'skin-card';
           card.innerHTML = `
-                <h3>Square Pack</h3>
-                <p>Blocky vibes for ships and foes.</p>
-                <button class="equip-btn" id="square-pack-equip">${activeSkin === 'squarePack' ? 'Equipped' : 'Equip'}</button>
-            `;
+            <h3>${name}</h3>
+            <p>${desc}</p>
+            <button class="equip-btn">
+              ${activeSkin === skinId ? 'Equipped' : 'Equip'}
+            </button>
+          `;
           grid.appendChild(card);
 
-          const btn = document.getElementById('square-pack-equip');
-          btn.addEventListener('click', () => {
-            equipSkin(activeSkin === 'squarePack' ? 'default' : 'squarePack');
-            location.reload(); // Refresh UI
+          card.querySelector('button').addEventListener('click', () => {
+            equipSkin(activeSkin === skinId ? 'default' : skinId);
+            location.reload();
           });
         }
 
-        if (isSkinOwned('starPack')) {
-          const card = document.createElement('article');
-          card.className = 'skin-card';
-          card.innerHTML = `
-                <h3>Star Pack</h3>
-                <p>Stellar shapes for ships and foes.</p>
-                <button class="equip-btn" id="star-pack-equip">${activeSkin === 'starPack' ? 'Equipped' : 'Equip'}</button>
-            `;
-          grid.appendChild(card);
+        addSkin('squarePack', 'Square Pack', 'Blocky vibes for ships and foes.');
+        addSkin('starPack', 'Star Pack', 'Stellar shapes for ships and foes.');
+        addSkin('prof', 'Prof Pack', 'The Professor invades your fleet!');
 
-          const btn = document.getElementById('star-pack-equip');
-          btn.addEventListener('click', () => {
-            equipSkin(activeSkin === 'starPack' ? 'default' : 'starPack');
-            location.reload(); // Refresh UI
-          });
-        }
-
-        // Show empty message only if no skins were added
         if (grid.children.length === 0) {
           const emptyMsg = document.createElement('p');
           emptyMsg.textContent = 'No skins owned yet. Visit the shop!';
@@ -100,6 +96,7 @@
         }
       });
     </script>
+
     <script type="module">
       import { applyTranslations } from './js/ui/translations.js';
       applyTranslations(document);
@@ -109,3 +106,4 @@
     </script>
   </body>
 </html>
+

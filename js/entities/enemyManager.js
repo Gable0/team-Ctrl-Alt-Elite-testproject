@@ -1,5 +1,6 @@
 // js/entities/enemyManager.js
-
+import { getActiveSkin } from '../skins/skinsManager.js';
+import { getEnemySkinImage } from '../skins/skinAssets.js';
 /**
  * Configuration for the enemy formation layout.
  */
@@ -262,10 +263,18 @@ export function updateEnemies(game, delta) {
 export function drawEnemies(enemies, game) {
   if (!ctxRef) return;
 
+  // Static imports — put these at the top of the file!
+  // import { getActiveSkin } from '../skins/skinsManager.js';
+  // import { getEnemySkinImage } from '../skins/skinAssets.js';
+
+  const activeSkin = getActiveSkin();
+  const skinImg = getEnemySkinImage(activeSkin);
+
   for (const enemy of enemies) {
     ctxRef.save();
     ctxRef.translate(enemy.x, enemy.y);
 
+    // Dying explosion
     if (enemy.state === 'dying') {
       const progress = Math.max(enemy.dyingTimer / 0.3, 0);
       ctxRef.globalAlpha = progress;
@@ -277,7 +286,7 @@ export function drawEnemies(enemies, game) {
       continue;
     }
 
-    // Visual indicator for attacking enemies
+    // Attacking glow
     if (enemy.state === 'attacking') {
       ctxRef.fillStyle = '#ff0000';
       ctxRef.globalAlpha = 0.3;
@@ -287,67 +296,50 @@ export function drawEnemies(enemies, game) {
       ctxRef.globalAlpha = 1.0;
     }
 
-    ctxRef.fillStyle = enemy.color;
-    if (game.activeSkin === 'squarePack') {
-      // Square skin
-      ctxRef.fillRect(-enemy.size / 2, -enemy.size / 2, enemy.size, enemy.size);
-    } else if (game.activeSkin === 'starPack') {
-      // Star skin (simple 5-point star)
-      const r1 = enemy.size * 0.8;
-      const r2 = enemy.size * 0.32;
-      ctxRef.beginPath();
-      for (let i = 0; i < 5; i++) {
-        const angle = (Math.PI / 2.5) * i * 2;
-        ctxRef.lineTo(Math.cos(angle) * r1, Math.sin(angle) * r1);
-        ctxRef.lineTo(
-          Math.cos(angle + Math.PI / 5) * r2,
-          Math.sin(angle + Math.PI / 5) * r2
-        );
-      }
-      ctxRef.closePath();
-      ctxRef.fill();
-    } else {
-      // Pixelated alien ships - different designs based on color
-      const px = enemy.size * 0.15; // Pixel size
+    // CUSTOM IMAGE SKIN (Prof.jpg, etc.)
+    if (skinImg) {
+      const drawSize = enemy.size * 2.4;
+      ctxRef.drawImage(
+        skinImg,
+        -drawSize / 2,
+        -drawSize / 2,
+        drawSize,
+        drawSize
+      );
+    }
+    // ORIGINAL PIXEL-ART ALIENS (your beautiful code)
+    else {
+      ctxRef.fillStyle = enemy.color;
+      const px = enemy.size * 0.15;
       ctxRef.imageSmoothingEnabled = false;
 
-      // Determine ship type by color (different rows have different designs)
       if (enemy.color === '#ff0844') {
-        // Type 1: Scout - small inverted U-shape
-        ctxRef.fillRect(-px * 3, -px * 2, px * 6, px); // top bar
-        ctxRef.fillRect(-px * 3, -px * 2, px, px * 4); // left side
-        ctxRef.fillRect(px * 2, -px * 2, px, px * 4); // right side
-        ctxRef.fillRect(-px * 2, px * 2, px * 4, px); // bottom bar
-        // Cockpit
+        ctxRef.fillRect(-px * 3, -px * 2, px * 6, px);
+        ctxRef.fillRect(-px * 3, -px * 2, px, px * 4);
+        ctxRef.fillRect(px * 2, -px * 2, px, px * 4);
+        ctxRef.fillRect(-px * 2, px * 2, px * 4, px);
         ctxRef.fillStyle = '#ffff00';
         ctxRef.fillRect(-px, -px, px * 2, px * 2);
       } else if (enemy.color === '#ff3366') {
-        // Type 2: Fighter - classic space invader style
-        ctxRef.fillRect(-px * 2.5, -px * 2, px * 5, px); // top
-        ctxRef.fillRect(-px * 3.5, -px, px * 7, px * 2); // middle
-        ctxRef.fillRect(-px * 2.5, px, px, px * 2); // left leg
-        ctxRef.fillRect(px * 1.5, px, px, px * 2); // right leg
-        // Eyes
+        ctxRef.fillRect(-px * 2.5, -px * 2, px * 5, px);
+        ctxRef.fillRect(-px * 3.5, -px, px * 7, px * 2);
+        ctxRef.fillRect(-px * 2.5, px, px, px * 2);
+        ctxRef.fillRect(px * 1.5, px, px, px * 2);
         ctxRef.fillStyle = '#00ff00';
         ctxRef.fillRect(-px * 1.5, -px * 0.5, px, px);
         ctxRef.fillRect(px * 0.5, -px * 0.5, px, px);
       } else if (enemy.color === '#ff5588') {
-        // Type 3: Cruiser - wider H-shape
-        ctxRef.fillRect(-px * 4, -px * 2, px * 1.5, px * 4); // left wing
-        ctxRef.fillRect(px * 2.5, -px * 2, px * 1.5, px * 4); // right wing
-        ctxRef.fillRect(-px * 2, -px, px * 4, px * 2); // center body
-        // Windows
+        ctxRef.fillRect(-px * 4, -px * 2, px * 1.5, px * 4);
+        ctxRef.fillRect(px * 2.5, -px * 2, px * 1.5, px * 4);
+        ctxRef.fillRect(-px * 2, -px, px * 4, px * 2);
         ctxRef.fillStyle = '#00ffff';
         ctxRef.fillRect(-px, -px * 0.5, px * 0.7, px);
         ctxRef.fillRect(px * 0.3, -px * 0.5, px * 0.7, px);
       } else {
-        // Type 4: Battlecruiser - large cross shape
-        ctxRef.fillRect(-px * 1.5, -px * 3, px * 3, px * 6); // vertical bar
-        ctxRef.fillRect(-px * 4, -px * 1.5, px * 8, px * 3); // horizontal bar
-        // Core
+        ctxRef.fillRect(-px * 1.5, -px * 3, px * 3, px * 6);
+        ctxRef.fillRect(-px * 4, -px * 1.5, px * 8, px * 3);
         ctxRef.fillStyle = '#ff00ff';
         ctxRef.fillRect(-px, -px, px * 2, px * 2);
-        // Corner details
         ctxRef.fillStyle = enemy.color;
         ctxRef.fillRect(-px * 3.5, -px * 1, px, px * 2);
         ctxRef.fillRect(px * 2.5, -px * 1, px, px * 2);
@@ -356,7 +348,7 @@ export function drawEnemies(enemies, game) {
       ctxRef.imageSmoothingEnabled = true;
     }
 
-    // Add engine glow effects (outside the pixel block to keep smooth)
+    // Engine glow (on top of both skins)
     ctxRef.fillStyle = 'rgba(255, 200, 100, 0.6)';
     ctxRef.fillRect(
       -enemy.size * 0.3,
@@ -370,6 +362,7 @@ export function drawEnemies(enemies, game) {
       enemy.size * 0.2,
       enemy.size * 0.3
     );
+
     ctxRef.restore();
   }
 }

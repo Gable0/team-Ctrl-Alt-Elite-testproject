@@ -300,11 +300,6 @@ class PersistentAudioManager {
    *
    * @param {number} volume - Value between 0 and 1
    */
-  setVolume(volume) {
-    if (this.audio) {
-      this.audio.volume = Math.max(0, Math.min(1, volume));
-    }
-  }
 }
 
 // Create singleton instance
