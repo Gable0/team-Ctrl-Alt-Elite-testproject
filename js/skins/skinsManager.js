@@ -10,7 +10,7 @@
 const ownedSkins = {
   squarePack: localStorage.getItem('squarePackOwned') === 'true',
   starPack: localStorage.getItem('starPackOwned') === 'true',
-  prof: localStorage.getItem('profOwned') === 'true'  // ← FIXED: Add Prof here
+  prof: localStorage.getItem('profOwned') === 'true', // ← FIXED: Add Prof here
   // Add new: neonPack: localStorage.getItem('neonPackOwned') === 'true',
 };
 

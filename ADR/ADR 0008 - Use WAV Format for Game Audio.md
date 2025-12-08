@@ -15,6 +15,7 @@ The game requires background music and sound effects for player actions, enemy a
 - **Development workflow**: Easy to edit and preview
 
 Common options considered:
+
 - **MP3**: Compressed, smaller file size, but has decoding latency
 - **OGG Vorbis**: Good compression, but inconsistent browser support
 - **WAV**: Uncompressed, larger files, but zero latency
@@ -49,7 +50,6 @@ Use **uncompressed WAV files** for all game audio.
 - **Larger file sizes**: WAV files are 5-10x larger than MP3
   - Mitigated by: Short sound clips (< 5 seconds each)
   - Total audio footprint: ~2-3 MB (acceptable for a game)
-  
 - **No streaming**: Entire file must load before playback
   - Mitigated by: `preload="auto"` on critical sounds
   - Short clips load in < 100ms on typical connections
@@ -70,6 +70,7 @@ Use **uncompressed WAV files** for all game audio.
 ## Future Considerations
 
 If bandwidth becomes a concern (mobile users), we could:
+
 - Add MP3 as fallback for non-critical sounds
 - Implement lazy loading for music tracks
 - Use Web Audio API's `AudioContext` for advanced mixing
@@ -78,5 +79,5 @@ For now, WAV provides the best player experience with minimal complexity.
 
 ---
 
-Author: Chloe Ogamba 
+Author: Chloe Ogamba
 Repository: team-Ctrl-Alt-Elite-testproject

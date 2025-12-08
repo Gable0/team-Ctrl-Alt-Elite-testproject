@@ -23,7 +23,7 @@ export function initPauseMenu(game) {
     document.body.appendChild(pauseIconElement);
 
     // Click handler for pause icon
-    pauseIconElement.addEventListener('click', (e) => {
+    pauseIconElement.addEventListener('click', e => {
       e.stopPropagation();
       if (!game.gameOver) {
         togglePause(game);
@@ -74,7 +74,7 @@ export function initPauseMenu(game) {
         // FIXED: Navigate back to index.html (which has the persistent audio)
         // The intro audio in index.html will continue playing
         sessionStorage.removeItem('stopIntroAudio');
-        
+
         // Navigate to the main index which will load homepage
         window.location.href = 'index.html';
       }
@@ -86,7 +86,7 @@ export function initPauseMenu(game) {
   }
 
   // Global ESC key listener (only works when the game isn't over)
-  window.addEventListener('keydown', (e) => {
+  window.addEventListener('keydown', e => {
     if (e.code === 'Escape' && !game.gameOver) {
       e.preventDefault();
       togglePause(game);

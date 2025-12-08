@@ -106,18 +106,18 @@
       function getPageFromURL() {
         const hash = window.location.hash.slice(1); // Remove #
         const path = window.location.pathname;
-        
+
         // Check hash first (e.g., index.html#shop)
         if (hash) {
           return hash + '.html';
         }
-        
+
         // Check if we're on index.html with a query param (e.g., index.html?page=shop)
         const params = new URLSearchParams(window.location.search);
         if (params.has('page')) {
           return params.get('page') + '.html';
         }
-        
+
         // Default to homepage
         return 'homepage.html';
       }
@@ -140,13 +140,17 @@
               !url.pathname.includes('game.html') // Don't intercept game.html
             ) {
               e.preventDefault();
-              
+
               // Extract page name
               const pageName = url.pathname.split('/').pop();
-              
+
               // Update URL without reload
-              window.history.pushState({}, '', `?page=${pageName.replace('.html', '')}`);
-              
+              window.history.pushState(
+                {},
+                '',
+                `?page=${pageName.replace('.html', '')}`
+              );
+
               // Load the page
               loadPage(pageName);
             }

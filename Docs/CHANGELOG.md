@@ -5,6 +5,7 @@
 This is the **first public pre-release** of RetroGa — a fully functional, polished Galaga-inspired arcade shooter built entirely with vanilla JavaScript, HTML5 Canvas, and CSS.
 
 ### Game Systems & Core Loop
+
 - Complete game loop with delta-time handling and `requestAnimationFrame`
 - Modular entity system (player, enemies, shots, power-ups)
 - Player movement (Arrow Keys + WASD) with screen boundary clamping
@@ -18,6 +19,7 @@ This is the **first public pre-release** of RetroGa — a fully functional, poli
 - Level progression with “LEVEL X / GET READY!” transition overlay
 
 ### Visual & Audio Polish
+
 - Neon glow effects on player, enemies, shots, and power-ups
 - Background starfield with parallax scrolling
 - Retro arcade color palette and particle-style explosions
@@ -25,31 +27,25 @@ This is the **first public pre-release** of RetroGa — a fully functional, poli
 - “Fun Mode” toggle with legendary shooting sound
 
 ### UI & Menus
+
 - Stylized homepage with animated title and neon buttons
 - Difficulty selection screen (Easy / Medium / Hard)
 - In-game HUD showing Score, Level, Lives (color-coded by difficulty)
 - Pause menu (ESC key) with Resume / Restart / Exit to Menu
 - Settings modal (gear icon) with:
-    - Audio & SFX volume sliders
-    - Language selector
-    - Fun Mode toggle
+  - Audio & SFX volume sliders
+  - Language selector
+  - Fun Mode toggle
 - Basic Shop and Skins library pages (layout only)
 
 ### Technical Foundation
+
 - Mobile-responsive canvas
 - Cross-browser tested (Chrome, Firefox, Safari, Edge)
 - GitHub Actions CI pipeline
 - Architecture Decision Records (ADR) process established
 
 This release marks the point where RetroGa became a **functional, playable arcade experience** — everything needed for endless retro fun is now in place.
-
-
-
-
-
-
-
-
 
 ## [0.6.0-pre] - 2025-12-06
 
