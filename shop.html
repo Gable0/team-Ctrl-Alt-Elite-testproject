@@ -1,94 +1,105 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>RetroGa Shop</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Doto:wght@100..900&family=Nabla&family=Press+Start+2P&family=Tourney:ital,wght@0,100..900;1,100..900&family=Jersey+10&display=swap"
-    rel="stylesheet"
-  />
-  <link rel="stylesheet" href="styles.css" />
-</head>
-<body>
-<shop-container>
-  <shop-header>
-    <h1 translate="shopHeader">RetroGa Shop</h1>
-    <p translate="shopSubheader">
-      Unlock new looks for your ship and the enemy fleet!
-    </p>
-  </shop-header>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RetroGa Shop</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Doto:wght@100..900&family=Nabla&family=Press+Start+2P&family=Tourney:ital,wght@0,100..900;1,100..900&family=Jersey+10&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <shop-container>
+      <shop-header>
+        <h1 translate="shopHeader">RetroGa Shop</h1>
+        <p translate="shopSubheader">
+          Unlock new looks for your ship and the enemy fleet!
+        </p>
+      </shop-header>
 
-  <section class="skins-grid" id="skins-grid"></section>
+      <section class="skins-grid" id="skins-grid"></section>
 
-  <shop-coins class="shop-coins" aria-live="polite">
-    <div class="shop-coin-icon">
-      <span class="shop-coin-symbol">¢</span>
-    </div>
-    <div>
-      <div id="coin-count">0</div>
-    </div>
-  </shop-coins>
+      <shop-coins class="shop-coins" aria-live="polite">
+        <div class="shop-coin-icon">
+          <span class="shop-coin-symbol">¢</span>
+        </div>
+        <div>
+          <div id="coin-count">0</div>
+        </div>
+      </shop-coins>
 
-  <button id="back-homepage" onclick="location.href='homepage.html'">Back to Home</button>
-</shop-container>
+      <button id="back-homepage" onclick="location.href = 'homepage.html'">
+        Back to Home
+      </button>
+    </shop-container>
 
-<script type="module">
-  import { injectSettings } from './js/ui/settingsComponent.js';
-  injectSettings();
+    <script type="module">
+      import { injectSettings } from './js/ui/settingsComponent.js';
+      injectSettings();
 
-  // Initialize shop immediately (not waiting for DOMContentLoaded)
-  function initShop() {
-    const grid = document.getElementById('skins-grid');
-    if (!grid) {
-      // Grid not ready yet, try again in a moment
-      setTimeout(initShop, 50);
-      return;
-    }
+      // Initialize shop immediately (not waiting for DOMContentLoaded)
+      function initShop() {
+        const grid = document.getElementById('skins-grid');
+        if (!grid) {
+          // Grid not ready yet, try again in a moment
+          setTimeout(initShop, 50);
+          return;
+        }
 
-    // Clear existing content to prevent duplicates
-    grid.innerHTML = '';
+        // Clear existing content to prevent duplicates
+        grid.innerHTML = '';
 
-    function addSkin(skinId, name, desc) {
-      const card = document.createElement('article');
-      card.className = 'skin-card';
-      card.innerHTML = `
+        function addSkin(skinId, name, desc) {
+          const card = document.createElement('article');
+          card.className = 'skin-card';
+          card.innerHTML = `
         <h3>${name}</h3>
         <p>${desc}</p>
         <button class="purchase-btn" data-skin="${skinId}">Buy (Free)</button>
       `;
-      grid.appendChild(card);
+          grid.appendChild(card);
 
-      const btn = card.querySelector('button');
-      const ownedKey = `${skinId}Owned`;
+          const btn = card.querySelector('button');
+          const ownedKey = `${skinId}Owned`;
 
-      if (localStorage.getItem(ownedKey) === 'true') {
-        btn.textContent = 'Owned';
-        btn.disabled = true;
-      } else {
-        btn.addEventListener('click', () => {
-          localStorage.setItem(ownedKey, 'true');
-          btn.textContent = 'Owned';
-          btn.disabled = true;
-        });
+          if (localStorage.getItem(ownedKey) === 'true') {
+            btn.textContent = 'Owned';
+            btn.disabled = true;
+          } else {
+            btn.addEventListener('click', () => {
+              localStorage.setItem(ownedKey, 'true');
+              btn.textContent = 'Owned';
+              btn.disabled = true;
+            });
+          }
+        }
+
+        // All skins — completely free
+        addSkin(
+          'squarePack',
+          'Square Pack',
+          'Blocky vibes for ships and foes.'
+        );
+        addSkin('starPack', 'Star Pack', 'Stellar shapes for ships and foes.');
+        addSkin('prof', 'Prof Pack', 'The Professor invades your fleet!');
       }
-    }
+      // Initialize immediately
+      initShop();
+      // Coin counter
+      function updateCoinDisplay() {
+        const el = document.getElementById('coin-count');
+        if (el) el.textContent = Number(localStorage.getItem('coinCount') || 0);
+      }
 
-    // All skins — completely free
-    addSkin('squarePack', 'Square Pack', 'Blocky vibes for ships and foes.');
-    addSkin('starPack', 'Star Pack', 'Stellar shapes for ships and foes.');
-    addSkin('prof', 'Prof Pack', 'The Professor invades your fleet!');
-  }
-  // Initialize immediately
-  initShop();
-  // Coin counter
-  function updateCoinDisplay() {
-    const el = document.getElementById('coin-count');
-    if (el) el.textContent = Number(localStorage.getItem('coinCount') || 0);
-  }
-  
-  window.addEventListener('storage', e => e.key === 'coinCount' && updateCoinDisplay());
-  updateCoinDisplay();
-</script>
+      window.addEventListener(
+        'storage',
+        e => e.key === 'coinCount' && updateCoinDisplay()
+      );
+      updateCoinDisplay();
+    </script>
+  </body>
+</html>

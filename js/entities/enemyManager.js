@@ -299,7 +299,13 @@ export function drawEnemies(enemies, game) {
     // CUSTOM IMAGE SKIN (Prof.jpg, etc.)
     if (skinImg) {
       const drawSize = enemy.size * 2.4;
-      ctxRef.drawImage(skinImg, -drawSize/2, -drawSize/2, drawSize, drawSize);
+      ctxRef.drawImage(
+        skinImg,
+        -drawSize / 2,
+        -drawSize / 2,
+        drawSize,
+        drawSize
+      );
     }
     // ORIGINAL PIXEL-ART ALIENS (your beautiful code)
     else {
@@ -344,8 +350,18 @@ export function drawEnemies(enemies, game) {
 
     // Engine glow (on top of both skins)
     ctxRef.fillStyle = 'rgba(255, 200, 100, 0.6)';
-    ctxRef.fillRect(-enemy.size * 0.3, enemy.size * 0.5, enemy.size * 0.2, enemy.size * 0.3);
-    ctxRef.fillRect(enemy.size * 0.1, enemy.size * 0.5, enemy.size * 0.2, enemy.size * 0.3);
+    ctxRef.fillRect(
+      -enemy.size * 0.3,
+      enemy.size * 0.5,
+      enemy.size * 0.2,
+      enemy.size * 0.3
+    );
+    ctxRef.fillRect(
+      enemy.size * 0.1,
+      enemy.size * 0.5,
+      enemy.size * 0.2,
+      enemy.size * 0.3
+    );
 
     ctxRef.restore();
   }
