@@ -286,21 +286,30 @@ difficulty-buttons button:hover {
     0 0.15rem 0 #006688;
 }
 
-.pause-menu-button:nth-child(3) {
+.pause-menu-settings {
+  background: linear-gradient(180deg, #ff9526 0%, #cc7720 100%) !important;
+  border-color: #ff9526 !important;
+}
+
+.pause-menu-settings:hover {
+  background: linear-gradient(180deg, #ffaa44 0%, #dd8833 100%) !important;
+}
+
+.pause-menu-button:nth-child(4) {
   background: linear-gradient(180deg, #ffdd00 0%, #ccaa00 100%);
   border-color: #ffdd00;
 }
 
-.pause-menu-button:nth-child(3):hover {
+.pause-menu-button:nth-child(4):hover {
   background: linear-gradient(180deg, #ffee44 0%, #ddbb00 100%);
 }
 
-.pause-menu-button:nth-child(4) {
+.pause-menu-button:nth-child(5) {
   background: linear-gradient(180deg, #ff0844 0%, #cc0033 100%);
   border-color: #ff0844;
 }
 
-.pause-menu-button:nth-child(4):hover {
+.pause-menu-button:nth-child(5):hover {
   background: linear-gradient(180deg, #ff3366 0%, #dd0044 100%);
 }
 
@@ -317,8 +326,39 @@ difficulty-buttons button:hover {
   transition: transform 0.2s ease;
 }
 
+/* Hide settings button on game.html */
+body:has(#game) .settings-btn {
+  display: none;
+}
+
 .settings-btn:hover {
   transform: scale(1.1);
+}
+
+.pause-icon {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  font-size: 3rem;
+  background: rgba(0, 217, 255, 0.2);
+  color: #00d9ff;
+  border: 2px solid #00d9ff;
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+  z-index: 1000;
+  transition: all 0.2s ease;
+  box-shadow: 0 0 1rem rgba(0, 217, 255, 0.4);
+}
+
+.pause-icon:hover {
+  transform: scale(1.1);
+  background: rgba(0, 217, 255, 0.3);
+  box-shadow: 0 0 1.5rem rgba(0, 217, 255, 0.6);
+}
+
+.pause-icon:active {
+  transform: scale(0.95);
 }
 
 settings-modal {
