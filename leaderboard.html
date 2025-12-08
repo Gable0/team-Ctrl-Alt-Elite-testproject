@@ -14,12 +14,17 @@
       <canvas id="game" width="800" height="600"></canvas>
       <button
         id="back-homepage"
-        onclick="location.href = 'homepage.html'"
         translate="backToHome"
       >
         Back to Home
       </button>
     </main>
+    <script type="module">
+      // FIXED: Navigate to index.html to preserve audio
+      document.getElementById('back-homepage').addEventListener('click', () => {
+        window.location.href = 'index.html';
+      });
+    </script>
     <script type="module">
       import { applyTranslations } from './js/ui/translations.js';
       applyTranslations(document);

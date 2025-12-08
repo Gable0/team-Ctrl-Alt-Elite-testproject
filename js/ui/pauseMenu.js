@@ -69,8 +69,15 @@ export function initPauseMenu(game) {
     });
 
     document.getElementById('exitButton').addEventListener('click', () => {
-      window.alert(translate('confirmExit'));
-      window.location.href = 'homepage.html';
+      const confirmed = window.confirm(translate('confirmExit'));
+      if (confirmed) {
+        // FIXED: Navigate back to index.html (which has the persistent audio)
+        // The intro audio in index.html will continue playing
+        sessionStorage.removeItem('stopIntroAudio');
+        
+        // Navigate to the main index which will load homepage
+        window.location.href = 'index.html';
+      }
     });
 
     window.addEventListener('languagechange', () => {

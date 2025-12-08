@@ -25,7 +25,6 @@
 
       <button
         id="back-homepage"
-        onclick="location.href = 'homepage.html'"
         translate="backToHome"
       >
         Back to Home
@@ -40,6 +39,11 @@
       } from './js/skins/skinsManager.js';
       import { injectSettings } from './js/ui/settingsComponent.js';
       injectSettings();
+
+      // FIXED: Back to home button navigates to index.html to preserve audio
+      document.getElementById('back-homepage').addEventListener('click', () => {
+        window.location.href = 'index.html';
+      });
 
       document.addEventListener('DOMContentLoaded', () => {
         const grid = document.getElementById('skins-grid');

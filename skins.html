@@ -27,14 +27,12 @@
 
       <button
         id="back-shop"
-        onclick="location.href = 'shop.html'"
         translate="backToShop"
       >
         Back to Shop
       </button>
       <button
         id="back-homepage"
-        onclick="location.href = 'homepage.html'"
         translate="backToHome"
       >
         Back to Home
@@ -44,6 +42,17 @@
     <script type="module">
       import { injectSettings } from './js/ui/settingsComponent.js';
       injectSettings();
+
+      // FIXED: Use query params to navigate through index.html SPA
+      document.getElementById('back-shop').addEventListener('click', () => {
+        // Navigate to shop through index.html routing
+        window.location.href = 'index.html?page=shop';
+      });
+
+      document.getElementById('back-homepage').addEventListener('click', () => {
+        // Navigate back to index.html (which loads homepage)
+        window.location.href = 'index.html';
+      });
     </script>
     <script type="module">
       import {
