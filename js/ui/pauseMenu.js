@@ -4,6 +4,7 @@
 import { translate, applyTranslations } from './translations.js';
 let isPaused = false;
 let pauseMenuElement = null;
+let pauseIconElement = null;
 
 /**
  * Initializes the pause menu UI and sets up global ESC-key handling.
@@ -12,6 +13,24 @@ let pauseMenuElement = null;
  * @param {Object} game - The main game state object (must have `gameOver` and `paused` properties).
  */
 export function initPauseMenu(game) {
+  // Create the pause icon button
+  if (!pauseIconElement) {
+    pauseIconElement = document.createElement('button');
+    pauseIconElement.id = 'pauseIcon';
+    pauseIconElement.className = 'pause-icon';
+    pauseIconElement.innerHTML = '⏸️'; // Pause emoji
+    pauseIconElement.setAttribute('aria-label', 'Pause Game');
+    document.body.appendChild(pauseIconElement);
+
+    // Click handler for pause icon
+    pauseIconElement.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (!game.gameOver) {
+        togglePause(game);
+      }
+    });
+  }
+
   // Create the pause menu only once
   if (!pauseMenuElement) {
     pauseMenuElement = document.createElement('div');
@@ -23,6 +42,7 @@ export function initPauseMenu(game) {
       <div class="pause-menu-content">
         <h2 translate="paused">PAUSED</h2>
         <button id="resumeButton"   class="pause-menu-button" translate="resume">Resume</button>
+        <button id="settingsButton" class="pause-menu-button pause-menu-settings" translate="settings">Settings</button>
         <button id="restartButton"  class="pause-menu-button" translate="restart">Restart</button>
         <button id="exitButton"     class="pause-menu-button" translate="exitToMenu">Exit to Menu</button>
       </div>
@@ -36,13 +56,28 @@ export function initPauseMenu(game) {
       togglePause(game);
     });
 
+    document.getElementById('settingsButton').addEventListener('click', () => {
+      // Open settings - trigger settings button click
+      const settingsBtn = document.querySelector('.settings-btn');
+      if (settingsBtn) {
+        settingsBtn.click();
+      }
+    });
+
     document.getElementById('restartButton').addEventListener('click', () => {
       window.location.href = 'game.html';
     });
 
     document.getElementById('exitButton').addEventListener('click', () => {
-      window.alert(translate('confirmExit'));
-      window.location.href = 'homepage.html';
+      const confirmed = window.confirm(translate('confirmExit'));
+      if (confirmed) {
+        // FIXED: Navigate back to index.html (which has the persistent audio)
+        // The intro audio in index.html will continue playing
+        sessionStorage.removeItem('stopIntroAudio');
+        
+        // Navigate to the main index which will load homepage
+        window.location.href = 'index.html';
+      }
     });
 
     window.addEventListener('languagechange', () => {
@@ -51,7 +86,7 @@ export function initPauseMenu(game) {
   }
 
   // Global ESC key listener (only works when the game isn't over)
-  window.addEventListener('keydown', e => {
+  window.addEventListener('keydown', (e) => {
     if (e.code === 'Escape' && !game.gameOver) {
       e.preventDefault();
       togglePause(game);
@@ -71,9 +106,15 @@ export function togglePause(game) {
   if (isPaused) {
     pauseMenuElement.classList.remove('hidden');
     pauseMenuElement.classList.add('active');
+    if (pauseIconElement) {
+      pauseIconElement.style.display = 'none'; // Hide icon when paused
+    }
   } else {
     pauseMenuElement.classList.remove('active');
     pauseMenuElement.classList.add('hidden');
+    if (pauseIconElement) {
+      pauseIconElement.style.display = 'block'; // Show icon when resumed
+    }
   }
 }
 

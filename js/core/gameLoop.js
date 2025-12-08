@@ -44,7 +44,10 @@ import { spawnPowerUp, updatePowerUps, drawPowerUps } from '../systems/powerUps.
 import { spawnCoin, updateCoins, drawCoins } from '../systems/coins.js';
 import { initBackground, updateBackground, drawBackground } from './background.js';
 import { initAudio } from '../systems/audioManager.js';
-
+import { persistentAudio } from './persistentAudio.js';
+ 
+//Stop intro audio when  game starts
+persistentAudio.stop(); 
 /** @type {HTMLCanvasElement} */
 const canvas = document.getElementById('game');
 

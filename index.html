@@ -68,7 +68,7 @@
       });
 
       // =====================
-      // SIMPLE PAGE LOADER
+      // ENHANCED PAGE LOADER WITH ROUTING
       // =====================
       async function loadPage(url) {
         try {
@@ -101,6 +101,28 @@
       }
 
       // =====================
+      // ROUTING - Determine which page to load
+      // =====================
+      function getPageFromURL() {
+        const hash = window.location.hash.slice(1); // Remove #
+        const path = window.location.pathname;
+        
+        // Check hash first (e.g., index.html#shop)
+        if (hash) {
+          return hash + '.html';
+        }
+        
+        // Check if we're on index.html with a query param (e.g., index.html?page=shop)
+        const params = new URLSearchParams(window.location.search);
+        if (params.has('page')) {
+          return params.get('page') + '.html';
+        }
+        
+        // Default to homepage
+        return 'homepage.html';
+      }
+
+      // =====================
       // INTERCEPT NAVIGATION
       // =====================
       function interceptClicks() {
@@ -111,42 +133,34 @@
             const url = new URL(link.href);
             const currentOrigin = window.location.origin;
 
-            // Only intercept internal links to .html files
+            // Only intercept internal links to .html files (except game.html)
             if (
               url.origin === currentOrigin &&
-              url.pathname.endsWith('.html')
+              url.pathname.endsWith('.html') &&
+              !url.pathname.includes('game.html') // Don't intercept game.html
             ) {
               e.preventDefault();
-              loadPage(url.pathname);
-              window.history.pushState({}, '', url.pathname);
+              
+              // Extract page name
+              const pageName = url.pathname.split('/').pop();
+              
+              // Update URL without reload
+              window.history.pushState({}, '', `?page=${pageName.replace('.html', '')}`);
+              
+              // Load the page
+              loadPage(pageName);
             }
           }
-        });
-
-        // Also intercept location.href changes
-        const originalLocationSetter = Object.getOwnPropertyDescriptor(
-          window,
-          'location'
-        ).set;
-        Object.defineProperty(window, 'location', {
-          set(value) {
-            if (typeof value === 'string' && value.endsWith('.html')) {
-              loadPage(value);
-              window.history.pushState({}, '', value);
-            } else {
-              originalLocationSetter.call(window, value);
-            }
-          },
         });
       }
 
       // Handle browser back/forward
       window.addEventListener('popstate', () => {
-        loadPage(window.location.pathname);
+        loadPage(getPageFromURL());
       });
 
-      // Start by loading the homepage
-      loadPage('homepage.html').then(() => {
+      // Start by loading the appropriate page
+      loadPage(getPageFromURL()).then(() => {
         interceptClicks();
       });
     </script>
