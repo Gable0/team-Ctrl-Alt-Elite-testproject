@@ -15,6 +15,8 @@
 body {
   margin: 0;
   min-height: 100vh;
+  min-height: 600px;
+  min-width: 800px;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   background: #000814;
   color: #00d9ff;
@@ -22,6 +24,8 @@ body {
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
+  overflow-x: auto;
+  overflow-y: auto;
 }
 
 main {
@@ -59,7 +63,8 @@ homepage-galaga {
   align-items: center;
   justify-content: flex-start;
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;
+  min-height: 800px;
   overflow: hidden;
   position: relative;
   font-family: 'Jersey 10', sans-serif;
@@ -142,7 +147,7 @@ homepage-galaga::after {
 }
 
 homepage-galaga h1 {
-  font-size: clamp(3rem, 12vw, 12rem);
+  font-size: 12rem;
   color: #00d9ff;
   font-weight: normal;
   text-shadow:
@@ -151,7 +156,7 @@ homepage-galaga h1 {
   animation:
     pulse 2s ease-in-out infinite,
     glitch 3s infinite;
-  letter-spacing: clamp(0.2rem, 1vw, 0.6rem);
+  letter-spacing: 0.6rem;
   text-align: center;
   width: 100%;
   margin-bottom: 5rem;
@@ -239,6 +244,13 @@ homepage-galaga p {
   overflow: hidden;
   border: 3px solid rgba(0, 255, 65, 0.3);
   animation: readyPulse 2s ease-in-out infinite;
+  display: inline-block;
+  text-align: center;
+  box-sizing: border-box;
+  line-height: 1.2;
+  min-height: 80px;
+  height: 80px;
+  flex-shrink: 0;
 }
 
 .start-btn::before {
@@ -286,6 +298,13 @@ homepage-galaga p {
   transition: all 0.2s;
   margin-bottom: 3rem;
   border: 2px solid rgba(0, 217, 255, 0.3);
+  display: inline-block;
+  text-align: center;
+  box-sizing: border-box;
+  line-height: 1.2;
+  min-height: 60px;
+  height: 60px;
+  flex-shrink: 0;
 }
 
 .go-to-leaderboard:hover {
@@ -319,9 +338,9 @@ homepage-galaga p {
     rgba(0, 217, 255, 0.15) 0%,
     rgba(0, 217, 255, 0.05) 100%
   );
-  border: 3px solid #00d9ff;
-  border-radius: 1rem;
-  padding: 2rem 3rem;
+  border: 2px solid #00d9ff;
+  border-radius: 0.75rem;
+  padding: 1.2rem 1.5rem;
   text-decoration: none;
   color: #00d9ff;
   transition: all 0.3s ease;
@@ -329,10 +348,11 @@ homepage-galaga p {
     0 0 1rem rgba(0, 217, 255, 0.3),
     0 0 2rem rgba(0, 217, 255, 0.2),
     inset 0 0 20px rgba(0, 217, 255, 0.1);
-  width: 200px;
-  min-height: 180px;
+  width: 140px;
+  min-height: 140px;
   position: relative;
   overflow: hidden;
+  box-sizing: border-box;
 }
 
 .option-btn::before {
@@ -369,13 +389,15 @@ homepage-galaga p {
 }
 
 .option-icon {
-  font-size: 3rem;
+  font-size: 2.5rem;
+  line-height: 1;
 }
 
 .option-text {
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   text-transform: uppercase;
-  letter-spacing: 0.1rem;
+  letter-spacing: 0.08rem;
+  line-height: 1.2;
 }
 
 .shop-btn,
@@ -1314,64 +1336,7 @@ section h1 {
   }
 }
 
-/* Responsive styles for homepage buttons on smaller screens */
-@media (max-width: 1440px) {
-  .start-btn {
-    font-size: 2.5rem;
-    padding: 0.9rem 2.5rem;
-    letter-spacing: 0.15rem;
-  }
-
-  .go-to-leaderboard {
-    font-size: 1.75rem;
-    padding: 0.7rem 1.75rem;
-    letter-spacing: 0.15rem;
-  }
-
-  .option-btn {
-    padding: 1.5rem 2.5rem;
-  }
-
-  .option-icon {
-    font-size: 2.5rem;
-  }
-
-  .option-text {
-    font-size: 1.3rem;
-    letter-spacing: 0.08rem;
-  }
-}
-
-@media (max-width: 1024px) {
-  .start-btn {
-    font-size: 2rem;
-    padding: 0.8rem 2rem;
-    letter-spacing: 0.1rem;
-  }
-
-  .go-to-leaderboard {
-    font-size: 1.5rem;
-    padding: 0.6rem 1.5rem;
-    letter-spacing: 0.1rem;
-  }
-
-  .options-container {
-    gap: 1.5rem;
-  }
-
-  .option-btn {
-    padding: 1.2rem 2rem;
-  }
-
-  .option-icon {
-    font-size: 2rem;
-  }
-
-  .option-text {
-    font-size: 1.1rem;
-    letter-spacing: 0.05rem;
-  }
-}
+/* All buttons now use fixed sizes - no responsive media queries needed */
 
 /* ==========================================
    FLYING SHIPS ANIMATION - HOMEPAGE
