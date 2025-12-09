@@ -24,3 +24,8 @@ document.getElementById('levelsButton')?.addEventListener('click', () => {
   // Navigate to levels page if you have one
   window.location.href = '../../difficulty.html';
 });
+
+// Handle back to home button
+document.getElementById('gameOverBackHome')?.addEventListener('click', () => {
+  window.location.href = '../../homepage.html';
+});

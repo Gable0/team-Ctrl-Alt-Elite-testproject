@@ -163,13 +163,9 @@ body {
   font-weight: normal;
   margin-bottom: 3.75rem; /* 60px */
   text-shadow:
-    0 0 1.25rem #ff0844,
-    0 0 2.5rem #ff0844,
-    0 0 3.75rem #ff0844,
+    0 0 0.5rem #ff0844,
     0.25rem 0.25rem 0px rgba(0, 0, 0, 0.8);
-  animation:
-    pulse 2s ease-in-out infinite,
-    glitch 3s infinite;
+  animation: glitch 2s infinite;
   letter-spacing: 0.5rem; /* 8px */
   text-align: center;
   width: 100%;
@@ -212,8 +208,8 @@ body {
   padding: 1.25rem 3.75rem; /* 20px 60px */
   font-size: 2.625rem; /* 42px */
   font-weight: normal;
-  background: #00ff41;
-  color: #000;
+  background: #001a33;
+  color: #00ff41;
   border: 0.25rem solid #00ff41; /* 4px */
   border-radius: 0.5rem;
   cursor: pointer;
@@ -227,10 +223,12 @@ body {
   display: block;
   margin-left: auto;
   margin-right: auto;
+  min-width: 28rem;
 }
 
 #restartLevelButton:hover {
-  background: #33ff66;
+  background: #002244;
+  color: #00ff41;
   box-shadow: 0 0 2rem #00ff41;
   transform: scale(1.05);
 }
@@ -246,14 +244,14 @@ body {
   padding: 1.25rem 3.75rem; /* 20px 60px */
   font-size: 2.625rem; /* 42px */
   font-weight: normal;
-  background: #00d9ff;
-  color: #000;
-  border: 0.25rem solid #00d9ff; /* 4px */
+  background: #001a33;
+  color: #ffdd00;
+  border: 0.25rem solid #ffdd00; /* 4px */
   border-radius: 0.5rem;
   cursor: pointer;
   text-transform: uppercase;
   letter-spacing: 0.25rem; /* 4px */
-  box-shadow: 0 0 1.5rem #00d9ff;
+  box-shadow: 0 0 1.5rem #ffdd00;
   transition: all 0.2s;
   position: relative;
   top: 0;
@@ -261,17 +259,19 @@ body {
   display: block;
   margin-left: auto;
   margin-right: auto;
+  min-width: 28rem;
 }
 
 #levelsButton:hover {
-  background: #33e6ff;
-  box-shadow: 0 0 2rem #00d9ff;
+  background: #002244;
+  color: #ffdd00;
+  box-shadow: 0 0 2rem #ffdd00;
   transform: scale(1.05);
 }
 
 #levelsButton:active {
   top: 0.25rem; /* 4px */
-  box-shadow: 0 0 1rem #00d9ff;
+  box-shadow: 0 0 1rem #ffdd00;
   transform: scale(0.98);
 }
 
@@ -297,8 +297,8 @@ body {
   font-size: 0.875rem; /* 14px */
 }
 
-/* Home Button - Below Restart Button */
-#homeButton {
+/* Back to Home Button - Matches game over button style */
+#gameOverBackHome {
   font-family: 'Jersey 10', sans-serif;
   padding: 1.25rem 3.75rem; /* 20px 60px */
   font-size: 2.625rem; /* 42px */
@@ -310,7 +310,7 @@ body {
   cursor: pointer;
   text-transform: uppercase;
   letter-spacing: 0.25rem;
-  box-shadow: 0 0 1rem #00d9ff;
+  box-shadow: 0 0 1.5rem #00d9ff;
   transition: all 0.2s;
   position: relative;
   top: 0;
@@ -318,16 +318,17 @@ body {
   display: block;
   margin-left: auto;
   margin-right: auto;
+  min-width: 28rem;
 }
 
-#homeButton:hover {
+#gameOverBackHome:hover {
   background: #002244;
-  color: #00ff41;
-  box-shadow: 0 0 1.5rem #00ff41;
+  color: #00d9ff;
+  box-shadow: 0 0 2rem #00d9ff;
   transform: scale(1.05);
 }
 
-#homeButton:active {
+#gameOverBackHome:active {
   top: 0.25rem;
   box-shadow: 0 0 1rem #00d9ff;
   transform: scale(0.98);
@@ -391,30 +392,109 @@ body {
   }
 }
 
-/* Glitch effect for Game Over title */
+/* Glitch effect for Game Over title - Crashed spaceship tech */
 @keyframes glitch {
-  0%,
-  90%,
-  100% {
+  0% {
     text-shadow:
-      0 0 1.25rem #ff0844,
-      0 0 2.5rem #ff0844,
-      0 0 3.75rem #ff0844,
+      0 0 0.5rem #ff0844,
       0.25rem 0.25rem 0px rgba(0, 0, 0, 0.8);
+    transform: translate(0, 0) skew(0deg);
+    opacity: 1;
   }
+
+  5% {
+    text-shadow:
+      -0.3rem 0 0.5rem #ff0844,
+      0.3rem 0 0.5rem #00d9ff,
+      0 0 1rem #ffdd00;
+    transform: translate(-5px, 2px) skew(-2deg);
+  }
+
+  10% {
+    text-shadow:
+      0.3rem 0 0.5rem #ff0844,
+      -0.3rem 0 0.5rem #00ff41,
+      0 0 1rem #ff0844;
+    transform: translate(3px, -1px) skew(1deg);
+  }
+
+  15% {
+    text-shadow:
+      0 0 0.5rem #ff0844,
+      0.25rem 0.25rem 0px rgba(0, 0, 0, 0.8);
+    transform: translate(0, 0) skew(0deg);
+  }
+
+  50% {
+    text-shadow:
+      0 0 0.5rem #ff0844,
+      0.25rem 0.25rem 0px rgba(0, 0, 0, 0.8);
+    transform: translate(0, 0) skew(0deg);
+    opacity: 1;
+  }
+
+  55% {
+    text-shadow:
+      0.4rem 0 0.8rem #00d9ff,
+      -0.4rem 0 0.8rem #ff0844,
+      0 0.3rem 1rem #ffdd00;
+    transform: translate(4px, 0) skew(3deg);
+    opacity: 0.8;
+  }
+
+  60% {
+    text-shadow:
+      -0.2rem 0.2rem 0.5rem #ff0844,
+      0.2rem -0.2rem 0.5rem #00ff41;
+    transform: translate(-3px, 1px) skew(-1deg);
+    opacity: 1;
+  }
+
+  62% {
+    text-shadow:
+      0 0 0.5rem #ff0844,
+      0.25rem 0.25rem 0px rgba(0, 0, 0, 0.8);
+    transform: translate(0, 0) skew(0deg);
+  }
+
+  85% {
+    text-shadow:
+      0 0 0.5rem #ff0844,
+      0.25rem 0.25rem 0px rgba(0, 0, 0, 0.8);
+    transform: translate(0, 0) skew(0deg);
+    opacity: 1;
+  }
+
+  87% {
+    text-shadow:
+      -0.5rem 0 1rem #00d9ff,
+      0.5rem 0 1rem #ff0844,
+      0 0 0.5rem #ffdd00;
+    transform: translate(-6px, -2px) skew(-3deg);
+    opacity: 0.7;
+  }
+
+  90% {
+    text-shadow:
+      0.3rem -0.3rem 0.8rem #ff0844,
+      -0.3rem 0.3rem 0.8rem #00ff41;
+    transform: translate(5px, 3px) skew(2deg);
+  }
+
   92% {
     text-shadow:
-      -0.125rem 0 1.25rem #ff0844,
-      0.125rem 0.125rem 2.5rem #00d9ff,
-      0 0 3.75rem #ff0844,
+      0 0 0.5rem #ff0844,
       0.25rem 0.25rem 0px rgba(0, 0, 0, 0.8);
+    transform: translate(0, 0) skew(0deg);
+    opacity: 1;
   }
-  94% {
+
+  100% {
     text-shadow:
-      0.125rem 0 1.25rem #ff0844,
-      -0.125rem -0.125rem 2.5rem #ffdd00,
-      0 0 3.75rem #ff0844,
+      0 0 0.5rem #ff0844,
       0.25rem 0.25rem 0px rgba(0, 0, 0, 0.8);
+    transform: translate(0, 0) skew(0deg);
+    opacity: 1;
   }
 }
 
