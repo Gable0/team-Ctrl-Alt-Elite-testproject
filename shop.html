@@ -32,19 +32,17 @@
         </div>
       </shop-coins>
 
-      <button id="back-homepage">
-        Back to Home
-      </button>
+      <button id="back-homepage">Back to Home</button>
     </shop-container>
 
     <script type="module">
       import { injectSettings } from './js/ui/settingsComponent.js';
       import { persistentAudio } from './js/core/persistentAudio.js';
-      
+
       injectSettings();
 
       // FIXED: Use persistentAudio navigation
-      document.getElementById('back-homepage').addEventListener('click', (e) => {
+      document.getElementById('back-homepage').addEventListener('click', e => {
         e.preventDefault();
         persistentAudio.navigateTo('homepage.html');
       });
@@ -84,11 +82,15 @@
           }
         }
 
-        addSkin('squarePack', 'Square Pack', 'Blocky vibes for ships and foes.');
+        addSkin(
+          'squarePack',
+          'Square Pack',
+          'Blocky vibes for ships and foes.'
+        );
         addSkin('starPack', 'Star Pack', 'Stellar shapes for ships and foes.');
         addSkin('prof', 'Prof Pack', 'The Professor invades your fleet!');
       }
-      
+
       initShop();
 
       // Coin counter
@@ -97,7 +99,10 @@
         if (el) el.textContent = Number(localStorage.getItem('coinCount') || 0);
       }
 
-      window.addEventListener('storage', e => e.key === 'coinCount' && updateCoinDisplay());
+      window.addEventListener(
+        'storage',
+        e => e.key === 'coinCount' && updateCoinDisplay()
+      );
       updateCoinDisplay();
     </script>
   </body>

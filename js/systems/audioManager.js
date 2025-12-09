@@ -250,9 +250,39 @@ class AudioManager {
     this.playSound(soundName);
   }
 
-  /** Plays the enemy kill sound effect. */
+  /** Plays the enemy kill sound effect - quick Galaga-style. */
   playKillEnemySound() {
-    this.playSound('kill-enemy');
+    if (!this.enabled) {
+      console.log('Audio is disabled');
+      return;
+    }
+
+    if (!this.sounds['kill-enemy']) {
+      console.warn('Sound not found: kill-enemy');
+      return;
+    }
+
+    console.log('Playing sound: kill-enemy');
+
+    try {
+      const sound = this.sounds['kill-enemy'].cloneNode();
+      sound.volume = this.volume;
+      sound.playbackRate = 1.3; // Speed up for snappier sound
+
+      sound
+        .play()
+        .then(() => {
+          console.log('Successfully played: kill-enemy');
+          // Cut off the sound after 150ms for a quick, Galaga-style effect
+          setTimeout(() => {
+            sound.pause();
+            sound.currentTime = 0;
+          }, 150);
+        })
+        .catch(err => console.warn('Failed to play: kill-enemy', err));
+    } catch (error) {
+      console.error('Error playing sound: kill-enemy', error);
+    }
   }
 
   /** Plays the laser hits player sound effect. */
@@ -320,7 +350,8 @@ class AudioManager {
     this.volume = Math.max(0, Math.min(1, newVolume));
     // Apply to all existing SFX sounds
     Object.values(this.sounds).forEach(sound => {
-      if (!sound.loop) {  // SFX, not music
+      if (!sound.loop) {
+        // SFX, not music
         sound.volume = this.volume;
       }
     });

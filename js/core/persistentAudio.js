@@ -74,7 +74,9 @@ class PersistentAudioManager {
       playPromise
         .then(() => {
           this.started = true;
-          console.log('✅ Audio playing (muted) - waiting for user interaction to unmute');
+          console.log(
+            '✅ Audio playing (muted) - waiting for user interaction to unmute'
+          );
         })
         .catch(error => {
           console.warn('⚠️ Even muted playback failed:', error);
@@ -88,17 +90,12 @@ class PersistentAudioManager {
    * FIREFOX FIX: Unmutes audio on first user interaction
    */
   setupUnmuteListener() {
-    const interactionEvents = [
-      'click',
-      'touchstart',
-      'keydown',
-      'mousedown',
-    ];
+    const interactionEvents = ['click', 'touchstart', 'keydown', 'mousedown'];
 
     const unmuteOnce = () => {
       if (!this.unmuted && this.audio) {
         console.log('👆 User interaction detected - unmuting audio');
-        
+
         // If audio hasn't started yet, start it now
         if (!this.started) {
           this.startMuted();

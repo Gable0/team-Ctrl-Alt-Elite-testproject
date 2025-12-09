@@ -32,16 +32,16 @@
     <script type="module">
       import { injectSettings } from './js/ui/settingsComponent.js';
       import { persistentAudio } from './js/core/persistentAudio.js';
-      
+
       injectSettings();
 
       // FIXED: Use persistentAudio navigation
-      document.getElementById('back-shop').addEventListener('click', (e) => {
+      document.getElementById('back-shop').addEventListener('click', e => {
         e.preventDefault();
         persistentAudio.navigateTo('shop.html');
       });
 
-      document.getElementById('back-homepage').addEventListener('click', (e) => {
+      document.getElementById('back-homepage').addEventListener('click', e => {
         e.preventDefault();
         persistentAudio.navigateTo('homepage.html');
       });
@@ -83,7 +83,11 @@
           });
         }
 
-        addSkin('squarePack', 'Square Pack', 'Blocky vibes for ships and foes.');
+        addSkin(
+          'squarePack',
+          'Square Pack',
+          'Blocky vibes for ships and foes.'
+        );
         addSkin('starPack', 'Star Pack', 'Stellar shapes for ships and foes.');
         addSkin('prof', 'Prof Pack', 'The Professor invades your fleet!');
 
@@ -106,4 +110,3 @@
     </script>
   </body>
 </html>
-

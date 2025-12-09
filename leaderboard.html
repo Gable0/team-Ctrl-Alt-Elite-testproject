@@ -16,17 +16,17 @@
       body {
         font-family: 'Jersey 10', monospace !important;
       }
-      
+
       main {
         width: 100%;
         max-width: 100%;
         padding: 2rem 1rem;
       }
-      
+
       #status {
         margin-bottom: 2rem;
       }
-      
+
       .leaderboard-wrapper {
         display: flex;
         flex-direction: column;
@@ -59,8 +59,8 @@
           </div>
         </section>
 
-        <div style="text-align:center;margin-top:1.5rem;">
-          <button id="back-homepage" onclick="location.href='homepage.html'">
+        <div style="text-align: center; margin-top: 1.5rem">
+          <button id="back-homepage" onclick="location.href = 'homepage.html'">
             Back to Home
           </button>
         </div>
@@ -73,7 +73,7 @@
       function initLeaderboard() {
         // Force font application
         document.body.style.fontFamily = "'Jersey 10', monospace";
-        
+
         // Check if the leaderboard containers exist yet
         const easyBoard = document.getElementById('scores-easy');
         if (!easyBoard) {
@@ -96,21 +96,21 @@
           if (recentRaw) {
             const recent = JSON.parse(recentRaw);
             const name = prompt(
-              'You scored ' + recent.score + 
-              '! Enter your name to save on the ' + 
-              (recent.difficulty || 'medium') + 
-              ' leaderboard (max 10 chars):',
+              'You scored ' +
+                recent.score +
+                '! Enter your name to save on the ' +
+                (recent.difficulty || 'medium') +
+                ' leaderboard (max 10 chars):',
               'Player'
             );
             if (name !== null) {
-              const trimmed = (name || 'Player')
-                .toString()
-                .trim()
-                .substring(0, 10) || 'Player';
-              addScore(
-                recent.difficulty || 'medium',
-                { name: trimmed, score: Number(recent.score) || 0 }
-              );
+              const trimmed =
+                (name || 'Player').toString().trim().substring(0, 10) ||
+                'Player';
+              addScore(recent.difficulty || 'medium', {
+                name: trimmed,
+                score: Number(recent.score) || 0,
+              });
               // Re-render after adding score
               renderAllBoards();
             }
@@ -129,7 +129,7 @@
       }
 
       // Re-initialize when visibility changes (fixes the reload issue)
-      document.addEventListener('visibilitychange', function() {
+      document.addEventListener('visibilitychange', function () {
         if (!document.hidden) {
           setTimeout(() => {
             renderAllBoards();
