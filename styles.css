@@ -65,6 +65,51 @@ homepage-galaga {
   font-family: 'Jersey 10', sans-serif;
 }
 
+/* Animated starfield background */
+homepage-galaga::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image:
+    radial-gradient(2px 2px at 20% 30%, white, transparent),
+    radial-gradient(2px 2px at 60% 70%, white, transparent),
+    radial-gradient(1px 1px at 50% 50%, white, transparent),
+    radial-gradient(1px 1px at 80% 10%, white, transparent),
+    radial-gradient(2px 2px at 90% 60%, white, transparent),
+    radial-gradient(1px 1px at 33% 80%, white, transparent),
+    radial-gradient(1px 1px at 15% 90%, white, transparent);
+  background-size: 200% 200%;
+  background-position: 0% 0%;
+  animation: starMove 40s linear infinite;
+  opacity: 0.4;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Scanline effect for retro feel */
+homepage-galaga::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.15) 0px,
+    rgba(0, 0, 0, 0.15) 2px,
+    transparent 2px,
+    transparent 4px
+  );
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.3;
+  animation: scanline 8s linear infinite;
+}
+
 homepage-galaga h1 {
   font-size: clamp(3rem, 12vw, 12rem);
   color: #00d9ff;
@@ -80,17 +125,63 @@ homepage-galaga h1 {
   width: 100%;
   margin-bottom: 5rem;
   margin-top: 5rem;
+  position: relative;
+  z-index: 2;
 }
 
 homepage-galaga a {
   font-size: 2rem;
   text-decoration: none;
+  position: relative;
+  z-index: 2;
 }
 
 homepage-galaga p {
   font-size: 3rem;
   text-decoration: none;
   padding: 0;
+  position: relative;
+  z-index: 2;
+}
+
+/* Systems status indicator */
+.systems-status {
+  position: fixed;
+  top: 2rem;
+  left: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: rgba(0, 217, 255, 0.1);
+  border: 2px solid #00ff41;
+  border-radius: 0.5rem;
+  padding: 0.8rem 1.5rem;
+  box-shadow:
+    0 0 1.5rem rgba(0, 255, 65, 0.4),
+    inset 0 0 20px rgba(0, 255, 65, 0.1);
+  z-index: 10;
+  animation: statusBlink 3s ease-in-out infinite;
+}
+
+.status-indicator {
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  background: #00ff41;
+  box-shadow:
+    0 0 10px #00ff41,
+    0 0 20px #00ff41,
+    0 0 30px #00ff41;
+  animation: indicatorPulse 1.5s ease-in-out infinite;
+}
+
+.status-text {
+  font-family: 'Jersey 10', sans-serif;
+  font-size: 1.2rem;
+  color: #00ff41;
+  text-shadow: 0 0 10px #00ff41;
+  letter-spacing: 0.15rem;
+  font-weight: bold;
 }
 
 /* ==========================================
@@ -98,7 +189,7 @@ homepage-galaga p {
    ========================================== */
 .start-btn {
   font-size: 3rem;
-  background: #00ff41;
+  background: linear-gradient(135deg, #00ff41 0%, #00dd33 100%);
   color: #000;
   padding: 1rem 3rem;
   border-radius: 0.5rem;
@@ -106,24 +197,73 @@ homepage-galaga p {
   text-transform: uppercase;
   letter-spacing: 0.2rem;
   text-shadow: none;
-  box-shadow: 0 0 1.5rem #00ff41;
-  transition: 0.2s;
+  box-shadow:
+    0 0 1.5rem #00ff41,
+    0 0 3rem rgba(0, 255, 65, 0.5),
+    inset 0 -4px 0 rgba(0, 0, 0, 0.2),
+    inset 0 4px 0 rgba(255, 255, 255, 0.2);
+  transition: all 0.2s;
   margin-bottom: 3rem;
+  position: relative;
+  overflow: hidden;
+  border: 3px solid rgba(0, 255, 65, 0.3);
+  animation: readyPulse 2s ease-in-out infinite;
+}
+
+.start-btn::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.3) 50%,
+    transparent 70%
+  );
+  transform: rotate(45deg);
+  animation: energySweep 3s linear infinite;
+}
+
+.start-btn:hover {
+  transform: scale(1.08);
+  box-shadow:
+    0 0 2.5rem #00ff41,
+    0 0 5rem rgba(0, 255, 65, 0.7),
+    inset 0 -4px 0 rgba(0, 0, 0, 0.2),
+    inset 0 4px 0 rgba(255, 255, 255, 0.3);
+  animation: readyPulse 1s ease-in-out infinite;
 }
 
 .go-to-leaderboard {
   font-size: 2rem;
-  background: #00d9ff;
+  background: linear-gradient(135deg, #00d9ff 0%, #0099cc 100%);
   color: #000;
-  padding: 0.5rem;
+  padding: 0.8rem 2rem;
   border-radius: 0.5rem;
   font-weight: bold;
   text-transform: uppercase;
   letter-spacing: 0.2rem;
   text-shadow: none;
-  box-shadow: 0 0 1.5rem #00d9ff;
-  transition: 0.2s;
+  box-shadow:
+    0 0 1.5rem #00d9ff,
+    0 0 3rem rgba(0, 217, 255, 0.4),
+    inset 0 -3px 0 rgba(0, 0, 0, 0.2),
+    inset 0 3px 0 rgba(255, 255, 255, 0.2);
+  transition: all 0.2s;
   margin-bottom: 3rem;
+  border: 2px solid rgba(0, 217, 255, 0.3);
+}
+
+.go-to-leaderboard:hover {
+  transform: scale(1.05) translateY(-3px);
+  box-shadow:
+    0 0 2rem #00d9ff,
+    0 0 4rem rgba(0, 217, 255, 0.6),
+    inset 0 -3px 0 rgba(0, 0, 0, 0.2),
+    inset 0 3px 0 rgba(255, 255, 255, 0.3);
 }
 
 /* ==========================================
@@ -143,22 +283,58 @@ homepage-galaga p {
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  background: rgba(0, 217, 255, 0.1);
-  border: 2px solid #00d9ff;
+  background: linear-gradient(
+    135deg,
+    rgba(0, 217, 255, 0.15) 0%,
+    rgba(0, 217, 255, 0.05) 100%
+  );
+  border: 3px solid #00d9ff;
   border-radius: 1rem;
   padding: 2rem 3rem;
   text-decoration: none;
   color: #00d9ff;
   transition: all 0.3s ease;
-  box-shadow: 0 0 1rem rgba(0, 217, 255, 0.3);
+  box-shadow:
+    0 0 1rem rgba(0, 217, 255, 0.3),
+    0 0 2rem rgba(0, 217, 255, 0.2),
+    inset 0 0 20px rgba(0, 217, 255, 0.1);
   width: 200px;
   min-height: 180px;
+  position: relative;
+  overflow: hidden;
+}
+
+.option-btn::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, #00d9ff, #00ff41, #00d9ff);
+  border-radius: 1rem;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: -1;
+  animation: borderRotate 3s linear infinite;
+}
+
+.option-btn:hover::before {
+  opacity: 0.3;
 }
 
 .option-btn:hover {
-  background: rgba(0, 217, 255, 0.2);
-  box-shadow: 0 0 2rem rgba(0, 217, 255, 0.6);
-  transform: translateY(-5px);
+  background: linear-gradient(
+    135deg,
+    rgba(0, 217, 255, 0.25) 0%,
+    rgba(0, 217, 255, 0.15) 100%
+  );
+  box-shadow:
+    0 0 2rem rgba(0, 217, 255, 0.6),
+    0 0 4rem rgba(0, 217, 255, 0.4),
+    inset 0 0 30px rgba(0, 217, 255, 0.2);
+  transform: translateY(-8px) scale(1.05);
+  border-color: #00ff41;
 }
 
 .option-icon {
@@ -959,10 +1135,144 @@ section h1 {
 }
 
 /* ==========================================
+   ANIMATION KEYFRAMES
+   ========================================== */
+
+/* Starfield moving animation */
+@keyframes starMove {
+  0% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: 100% 100%;
+  }
+}
+
+/* Scanline moving effect */
+@keyframes scanline {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(10px);
+  }
+}
+
+/* Energy sweep for start button */
+@keyframes energySweep {
+  0% {
+    transform: translateX(-100%) translateY(-100%) rotate(45deg);
+  }
+  100% {
+    transform: translateX(100%) translateY(100%) rotate(45deg);
+  }
+}
+
+/* Ready pulse for start button */
+@keyframes readyPulse {
+  0%, 100% {
+    box-shadow:
+      0 0 1.5rem #00ff41,
+      0 0 3rem rgba(0, 255, 65, 0.5),
+      inset 0 -4px 0 rgba(0, 0, 0, 0.2),
+      inset 0 4px 0 rgba(255, 255, 255, 0.2);
+  }
+  50% {
+    box-shadow:
+      0 0 2rem #00ff41,
+      0 0 4rem rgba(0, 255, 65, 0.7),
+      inset 0 -4px 0 rgba(0, 0, 0, 0.2),
+      inset 0 4px 0 rgba(255, 255, 255, 0.2);
+  }
+}
+
+/* Border rotate for option buttons */
+@keyframes borderRotate {
+  0% {
+    filter: hue-rotate(0deg);
+  }
+  100% {
+    filter: hue-rotate(360deg);
+  }
+}
+
+/* Glitch effect (existing, keeping for compatibility) */
+@keyframes glitch {
+  0%, 90%, 100% {
+    transform: translate(0);
+  }
+  92% {
+    transform: translate(-2px, 2px);
+  }
+  94% {
+    transform: translate(2px, -2px);
+  }
+  96% {
+    transform: translate(-2px, -2px);
+  }
+  98% {
+    transform: translate(2px, 2px);
+  }
+}
+
+/* Pulse effect (existing, keeping for compatibility) */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.85;
+  }
+}
+
+/* Status blink animation */
+@keyframes statusBlink {
+  0%, 100% {
+    box-shadow:
+      0 0 1.5rem rgba(0, 255, 65, 0.4),
+      inset 0 0 20px rgba(0, 255, 65, 0.1);
+  }
+  50% {
+    box-shadow:
+      0 0 2.5rem rgba(0, 255, 65, 0.6),
+      inset 0 0 30px rgba(0, 255, 65, 0.2);
+  }
+}
+
+/* Indicator pulse animation */
+@keyframes indicatorPulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow:
+      0 0 10px #00ff41,
+      0 0 20px #00ff41,
+      0 0 30px #00ff41;
+  }
+  50% {
+    transform: scale(1.2);
+    box-shadow:
+      0 0 15px #00ff41,
+      0 0 30px #00ff41,
+      0 0 45px #00ff41;
+  }
+}
+
+/* ==========================================
    RESPONSIVE MEDIA QUERIES
    ========================================== */
 @media (max-width: 900px) {
   .leaderboard-container {
     grid-template-columns: 1fr;
+  }
+
+  .systems-status {
+    top: 1rem;
+    left: 1rem;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .status-text {
+    font-size: 1rem;
   }
 }
