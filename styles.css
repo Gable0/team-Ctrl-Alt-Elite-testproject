@@ -65,7 +65,7 @@ homepage-galaga {
   font-family: 'Jersey 10', sans-serif;
 }
 
-/* Animated starfield background */
+/* Enhanced space background with nebula effect */
 homepage-galaga::before {
   content: '';
   position: absolute;
@@ -73,18 +73,49 @@ homepage-galaga::before {
   left: 0;
   width: 100%;
   height: 100%;
-  background-image:
+  background:
+    radial-gradient(
+      ellipse at 20% 40%,
+      rgba(138, 43, 226, 0.15) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      ellipse at 80% 60%,
+      rgba(75, 0, 130, 0.1) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      ellipse at 50% 80%,
+      rgba(0, 100, 255, 0.08) 0%,
+      transparent 50%
+    ),
     radial-gradient(2px 2px at 20% 30%, white, transparent),
     radial-gradient(2px 2px at 60% 70%, white, transparent),
     radial-gradient(1px 1px at 50% 50%, white, transparent),
     radial-gradient(1px 1px at 80% 10%, white, transparent),
     radial-gradient(2px 2px at 90% 60%, white, transparent),
     radial-gradient(1px 1px at 33% 80%, white, transparent),
-    radial-gradient(1px 1px at 15% 90%, white, transparent);
-  background-size: 200% 200%;
+    radial-gradient(1px 1px at 15% 90%, white, transparent),
+    radial-gradient(3px 3px at 45% 15%, rgba(255, 255, 255, 0.8), transparent),
+    radial-gradient(2px 2px at 75% 85%, rgba(255, 255, 255, 0.6), transparent),
+    radial-gradient(1px 1px at 10% 60%, white, transparent);
+  background-size:
+    200% 200%,
+    200% 200%,
+    200% 200%,
+    200% 200%,
+    200% 200%,
+    200% 200%,
+    200% 200%,
+    200% 200%,
+    200% 200%,
+    200% 200%,
+    200% 200%,
+    200% 200%,
+    200% 200%;
   background-position: 0% 0%;
   animation: starMove 40s linear infinite;
-  opacity: 0.4;
+  opacity: 0.6;
   pointer-events: none;
   z-index: 0;
 }
@@ -1170,7 +1201,8 @@ section h1 {
 
 /* Ready pulse for start button */
 @keyframes readyPulse {
-  0%, 100% {
+  0%,
+  100% {
     box-shadow:
       0 0 1.5rem #00ff41,
       0 0 3rem rgba(0, 255, 65, 0.5),
@@ -1198,7 +1230,9 @@ section h1 {
 
 /* Glitch effect (existing, keeping for compatibility) */
 @keyframes glitch {
-  0%, 90%, 100% {
+  0%,
+  90%,
+  100% {
     transform: translate(0);
   }
   92% {
@@ -1217,7 +1251,8 @@ section h1 {
 
 /* Pulse effect (existing, keeping for compatibility) */
 @keyframes pulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
   }
   50% {
@@ -1227,7 +1262,8 @@ section h1 {
 
 /* Status blink animation */
 @keyframes statusBlink {
-  0%, 100% {
+  0%,
+  100% {
     box-shadow:
       0 0 1.5rem rgba(0, 255, 65, 0.4),
       inset 0 0 20px rgba(0, 255, 65, 0.1);
@@ -1241,7 +1277,8 @@ section h1 {
 
 /* Indicator pulse animation */
 @keyframes indicatorPulse {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1);
     box-shadow:
       0 0 10px #00ff41,
@@ -1274,5 +1311,562 @@ section h1 {
 
   .status-text {
     font-size: 1rem;
+  }
+}
+
+/* ==========================================
+   FLYING SHIPS ANIMATION - HOMEPAGE
+   ========================================== */
+
+/* Enemy ship styles - exact copies from canvas code */
+.enemy-ship {
+  position: absolute;
+  width: 32px;
+  height: 28px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Type 1 enemy - #ff0844 (darkest pink/red) */
+.enemy-ship::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 2px;
+  height: 2px;
+  background: #ff0844;
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+  box-shadow:
+    /* Top bar - 3 pixels wide, 1 pixel tall */
+    -3px -2px 0 0 #ff0844,
+    -1px -2px 0 0 #ff0844,
+    1px -2px 0 0 #ff0844,
+    3px -2px 0 0 #ff0844,
+    5px -2px 0 0 #ff0844,
+    7px -2px 0 0 #ff0844,
+    /* Left side bar - 1 pixel wide, 4 pixels tall */ -3px -2px 0 0 #ff0844,
+    -3px 0px 0 0 #ff0844,
+    -3px 2px 0 0 #ff0844,
+    -3px 4px 0 0 #ff0844,
+    /* Right side bar */ 7px -2px 0 0 #ff0844,
+    7px 0px 0 0 #ff0844,
+    7px 2px 0 0 #ff0844,
+    7px 4px 0 0 #ff0844,
+    /* Bottom bar - 4 pixels wide, 1 pixel tall */ -1px 6px 0 0 #ff0844,
+    1px 6px 0 0 #ff0844,
+    3px 6px 0 0 #ff0844,
+    5px 6px 0 0 #ff0844,
+    /* Center eye - yellow - 2x2 */ 1px 0px 0 0 #ffff00,
+    3px 0px 0 0 #ffff00,
+    1px 2px 0 0 #ffff00,
+    3px 2px 0 0 #ffff00,
+    /* Engine glow */ -3px 8px 0 0 rgba(255, 200, 100, 0.6),
+    7px 8px 0 0 rgba(255, 200, 100, 0.6);
+}
+
+/* Type 2 enemy - #ff3366 */
+.enemy-ship-2::before {
+  background: #ff3366;
+  box-shadow:
+    /* Top bar */
+    -3px -2px 0 0 #ff3366,
+    -1px -2px 0 0 #ff3366,
+    1px -2px 0 0 #ff3366,
+    3px -2px 0 0 #ff3366,
+    5px -2px 0 0 #ff3366,
+    /* Wide middle section */ -5px 0px 0 0 #ff3366,
+    -3px 0px 0 0 #ff3366,
+    -1px 0px 0 0 #ff3366,
+    1px 0px 0 0 #ff3366,
+    3px 0px 0 0 #ff3366,
+    5px 0px 0 0 #ff3366,
+    7px 0px 0 0 #ff3366,
+    -5px 2px 0 0 #ff3366,
+    7px 2px 0 0 #ff3366,
+    /* Bottom legs */ -3px 4px 0 0 #ff3366,
+    -3px 6px 0 0 #ff3366,
+    5px 4px 0 0 #ff3366,
+    5px 6px 0 0 #ff3366,
+    /* Eyes - green */ -1px 1px 0 0 #00ff00,
+    3px 1px 0 0 #00ff00,
+    /* Engine glow */ -3px 8px 0 0 rgba(255, 200, 100, 0.6),
+    5px 8px 0 0 rgba(255, 200, 100, 0.6);
+}
+
+/* Type 3 enemy - #ff5588 */
+.enemy-ship-3::before {
+  background: #ff5588;
+  box-shadow:
+    /* Side wings - left */
+    -6px -2px 0 0 #ff5588,
+    -6px 0px 0 0 #ff5588,
+    -6px 2px 0 0 #ff5588,
+    -6px 4px 0 0 #ff5588,
+    /* Side wings - right */ 8px -2px 0 0 #ff5588,
+    8px 0px 0 0 #ff5588,
+    8px 2px 0 0 #ff5588,
+    8px 4px 0 0 #ff5588,
+    /* Center body */ -2px 0px 0 0 #ff5588,
+    0px 0px 0 0 #ff5588,
+    2px 0px 0 0 #ff5588,
+    4px 0px 0 0 #ff5588,
+    6px 0px 0 0 #ff5588,
+    -2px 2px 0 0 #ff5588,
+    6px 2px 0 0 #ff5588,
+    /* Eyes - cyan */ 0px 1px 0 0 #00ffff,
+    4px 1px 0 0 #00ffff,
+    /* Engine glow */ -2px 8px 0 0 rgba(255, 200, 100, 0.6),
+    6px 8px 0 0 rgba(255, 200, 100, 0.6);
+}
+
+/* Type 4 enemy - #ff88aa */
+.enemy-ship-4::before {
+  background: #ff88aa;
+  box-shadow:
+    /* Vertical center body */
+    1px -4px 0 0 #ff88aa,
+    3px -4px 0 0 #ff88aa,
+    5px -4px 0 0 #ff88aa,
+    1px -2px 0 0 #ff88aa,
+    5px -2px 0 0 #ff88aa,
+    1px 0px 0 0 #ff88aa,
+    5px 0px 0 0 #ff88aa,
+    1px 2px 0 0 #ff88aa,
+    5px 2px 0 0 #ff88aa,
+    1px 4px 0 0 #ff88aa,
+    3px 4px 0 0 #ff88aa,
+    5px 4px 0 0 #ff88aa,
+    /* Wide horizontal section */ -5px -1px 0 0 #ff88aa,
+    -3px -1px 0 0 #ff88aa,
+    7px -1px 0 0 #ff88aa,
+    9px -1px 0 0 #ff88aa,
+    -5px 1px 0 0 #ff88aa,
+    9px 1px 0 0 #ff88aa,
+    -5px 3px 0 0 #ff88aa,
+    9px 3px 0 0 #ff88aa,
+    /* Center eye - magenta - 2x2 */ 2px 0px 0 0 #ff00ff,
+    4px 0px 0 0 #ff00ff,
+    2px 2px 0 0 #ff00ff,
+    4px 2px 0 0 #ff00ff,
+    /* Side details */ -4px 0px 0 0 #ff88aa,
+    -4px 2px 0 0 #ff88aa,
+    8px 0px 0 0 #ff88aa,
+    8px 2px 0 0 #ff88aa,
+    /* Engine glow */ 1px 8px 0 0 rgba(255, 200, 100, 0.6),
+    5px 8px 0 0 rgba(255, 200, 100, 0.6);
+}
+
+.enemy-ship::after {
+  content: '';
+  display: none;
+}
+
+/* Player ship styles - exact copy of default grey battleship */
+.player-ship {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.player-ship::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 2px;
+  height: 2px;
+  background: #888888;
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+  box-shadow:
+    /* Main hull (central body) - medium grey #888888 - from x:-6 to x:6, y:-12 to y:12 */
+    -6px -12px 0 0 #888888,
+    -4px -12px 0 0 #888888,
+    -2px -12px 0 0 #888888,
+    0px -12px 0 0 #888888,
+    2px -12px 0 0 #888888,
+    4px -12px 0 0 #888888,
+    6px -12px 0 0 #888888,
+    -6px -10px 0 0 #888888,
+    -4px -10px 0 0 #888888,
+    -2px -10px 0 0 #888888,
+    0px -10px 0 0 #888888,
+    2px -10px 0 0 #888888,
+    4px -10px 0 0 #888888,
+    6px -10px 0 0 #888888,
+    -6px -8px 0 0 #888888,
+    -4px -8px 0 0 #888888,
+    -2px -8px 0 0 #888888,
+    0px -8px 0 0 #888888,
+    2px -8px 0 0 #888888,
+    4px -8px 0 0 #888888,
+    6px -8px 0 0 #888888,
+    -6px -6px 0 0 #888888,
+    -4px -6px 0 0 #888888,
+    -2px -6px 0 0 #888888,
+    0px -6px 0 0 #888888,
+    2px -6px 0 0 #888888,
+    4px -6px 0 0 #888888,
+    6px -6px 0 0 #888888,
+    -6px -4px 0 0 #888888,
+    -4px -4px 0 0 #888888,
+    -2px -4px 0 0 #888888,
+    0px -4px 0 0 #888888,
+    2px -4px 0 0 #888888,
+    4px -4px 0 0 #888888,
+    6px -4px 0 0 #888888,
+    -6px -2px 0 0 #888888,
+    -4px -2px 0 0 #888888,
+    -2px -2px 0 0 #888888,
+    0px -2px 0 0 #888888,
+    2px -2px 0 0 #888888,
+    4px -2px 0 0 #888888,
+    6px -2px 0 0 #888888,
+    -6px 0px 0 0 #888888,
+    -4px 0px 0 0 #888888,
+    -2px 0px 0 0 #888888,
+    0px 0px 0 0 #888888,
+    2px 0px 0 0 #888888,
+    4px 0px 0 0 #888888,
+    6px 0px 0 0 #888888,
+    -6px 2px 0 0 #888888,
+    -4px 2px 0 0 #888888,
+    -2px 2px 0 0 #888888,
+    0px 2px 0 0 #888888,
+    2px 2px 0 0 #888888,
+    4px 2px 0 0 #888888,
+    6px 2px 0 0 #888888,
+    -6px 4px 0 0 #888888,
+    -4px 4px 0 0 #888888,
+    -2px 4px 0 0 #888888,
+    0px 4px 0 0 #888888,
+    2px 4px 0 0 #888888,
+    4px 4px 0 0 #888888,
+    6px 4px 0 0 #888888,
+    -6px 6px 0 0 #888888,
+    -4px 6px 0 0 #888888,
+    -2px 6px 0 0 #888888,
+    0px 6px 0 0 #888888,
+    2px 6px 0 0 #888888,
+    4px 6px 0 0 #888888,
+    6px 6px 0 0 #888888,
+    -6px 8px 0 0 #888888,
+    -4px 8px 0 0 #888888,
+    -2px 8px 0 0 #888888,
+    0px 8px 0 0 #888888,
+    2px 8px 0 0 #888888,
+    4px 8px 0 0 #888888,
+    6px 8px 0 0 #888888,
+    -6px 10px 0 0 #888888,
+    -4px 10px 0 0 #888888,
+    -2px 10px 0 0 #888888,
+    0px 10px 0 0 #888888,
+    2px 10px 0 0 #888888,
+    4px 10px 0 0 #888888,
+    6px 10px 0 0 #888888,
+    -6px 12px 0 0 #888888,
+    -4px 12px 0 0 #888888,
+    -2px 12px 0 0 #888888,
+    0px 12px 0 0 #888888,
+    2px 12px 0 0 #888888,
+    4px 12px 0 0 #888888,
+    6px 12px 0 0 #888888,
+    /* Cockpit/nose - light grey #aaaaaa */ -4px -20px 0 0 #aaaaaa,
+    -2px -20px 0 0 #aaaaaa,
+    0px -20px 0 0 #aaaaaa,
+    2px -20px 0 0 #aaaaaa,
+    4px -20px 0 0 #aaaaaa,
+    -2px -22px 0 0 #aaaaaa,
+    0px -22px 0 0 #aaaaaa,
+    2px -22px 0 0 #aaaaaa,
+    -4px -18px 0 0 #aaaaaa,
+    -2px -18px 0 0 #aaaaaa,
+    0px -18px 0 0 #aaaaaa,
+    2px -18px 0 0 #aaaaaa,
+    4px -18px 0 0 #aaaaaa,
+    -4px -16px 0 0 #aaaaaa,
+    -2px -16px 0 0 #aaaaaa,
+    0px -16px 0 0 #aaaaaa,
+    2px -16px 0 0 #aaaaaa,
+    4px -16px 0 0 #aaaaaa,
+    /* Left wing */ -20px -4px 0 0 #888888,
+    -18px -4px 0 0 #888888,
+    -16px -4px 0 0 #888888,
+    -14px -4px 0 0 #888888,
+    -12px -4px 0 0 #888888,
+    -10px -4px 0 0 #888888,
+    -8px -4px 0 0 #888888,
+    -20px -2px 0 0 #888888,
+    -18px -2px 0 0 #888888,
+    -16px -2px 0 0 #888888,
+    -14px -2px 0 0 #888888,
+    -12px -2px 0 0 #888888,
+    -10px -2px 0 0 #888888,
+    -8px -2px 0 0 #888888,
+    -20px 0px 0 0 #888888,
+    -18px 0px 0 0 #888888,
+    -16px 0px 0 0 #888888,
+    -14px 0px 0 0 #888888,
+    -12px 0px 0 0 #888888,
+    -10px 0px 0 0 #888888,
+    -8px 0px 0 0 #888888,
+    -20px 2px 0 0 #888888,
+    -18px 2px 0 0 #888888,
+    -16px 2px 0 0 #888888,
+    -14px 2px 0 0 #888888,
+    -12px 2px 0 0 #888888,
+    -10px 2px 0 0 #888888,
+    -8px 2px 0 0 #888888,
+    -20px 4px 0 0 #888888,
+    -18px 4px 0 0 #888888,
+    -16px 4px 0 0 #888888,
+    -14px 4px 0 0 #888888,
+    -12px 4px 0 0 #888888,
+    -10px 4px 0 0 #888888,
+    -8px 4px 0 0 #888888,
+    -20px 6px 0 0 #888888,
+    -18px 6px 0 0 #888888,
+    -16px 6px 0 0 #888888,
+    -14px 6px 0 0 #888888,
+    -12px 6px 0 0 #888888,
+    -10px 6px 0 0 #888888,
+    -8px 6px 0 0 #888888,
+    /* Right wing */ 8px -4px 0 0 #888888,
+    10px -4px 0 0 #888888,
+    12px -4px 0 0 #888888,
+    14px -4px 0 0 #888888,
+    16px -4px 0 0 #888888,
+    18px -4px 0 0 #888888,
+    20px -4px 0 0 #888888,
+    8px -2px 0 0 #888888,
+    10px -2px 0 0 #888888,
+    12px -2px 0 0 #888888,
+    14px -2px 0 0 #888888,
+    16px -2px 0 0 #888888,
+    18px -2px 0 0 #888888,
+    20px -2px 0 0 #888888,
+    8px 0px 0 0 #888888,
+    10px 0px 0 0 #888888,
+    12px 0px 0 0 #888888,
+    14px 0px 0 0 #888888,
+    16px 0px 0 0 #888888,
+    18px 0px 0 0 #888888,
+    20px 0px 0 0 #888888,
+    8px 2px 0 0 #888888,
+    10px 2px 0 0 #888888,
+    12px 2px 0 0 #888888,
+    14px 2px 0 0 #888888,
+    16px 2px 0 0 #888888,
+    18px 2px 0 0 #888888,
+    20px 2px 0 0 #888888,
+    8px 4px 0 0 #888888,
+    10px 4px 0 0 #888888,
+    12px 4px 0 0 #888888,
+    14px 4px 0 0 #888888,
+    16px 4px 0 0 #888888,
+    18px 4px 0 0 #888888,
+    20px 4px 0 0 #888888,
+    8px 6px 0 0 #888888,
+    10px 6px 0 0 #888888,
+    12px 6px 0 0 #888888,
+    14px 6px 0 0 #888888,
+    16px 6px 0 0 #888888,
+    18px 6px 0 0 #888888,
+    20px 6px 0 0 #888888,
+    /* Dark hull details #555555 */ -18px -2px 0 0 #555555,
+    -16px -2px 0 0 #555555,
+    -14px -2px 0 0 #555555,
+    -18px 0px 0 0 #555555,
+    -16px 0px 0 0 #555555,
+    -14px 0px 0 0 #555555,
+    14px -2px 0 0 #555555,
+    16px -2px 0 0 #555555,
+    18px -2px 0 0 #555555,
+    14px 0px 0 0 #555555,
+    16px 0px 0 0 #555555,
+    18px 0px 0 0 #555555,
+    -4px -8px 0 0 #555555,
+    -2px -8px 0 0 #555555,
+    0px -8px 0 0 #555555,
+    2px -8px 0 0 #555555,
+    4px -8px 0 0 #555555,
+    -4px -6px 0 0 #555555,
+    -2px -6px 0 0 #555555,
+    0px -6px 0 0 #555555,
+    2px -6px 0 0 #555555,
+    4px -6px 0 0 #555555,
+    -4px 2px 0 0 #555555,
+    -2px 2px 0 0 #555555,
+    0px 2px 0 0 #555555,
+    2px 2px 0 0 #555555,
+    4px 2px 0 0 #555555,
+    -4px 4px 0 0 #555555,
+    -2px 4px 0 0 #555555,
+    0px 4px 0 0 #555555,
+    2px 4px 0 0 #555555,
+    4px 4px 0 0 #555555,
+    -4px 6px 0 0 #555555,
+    -2px 6px 0 0 #555555,
+    0px 6px 0 0 #555555,
+    2px 6px 0 0 #555555,
+    4px 6px 0 0 #555555,
+    /* Bridge window - cyan #00ffff */ -2px -14px 0 0 #00ffff,
+    0px -14px 0 0 #00ffff,
+    2px -14px 0 0 #00ffff,
+    /* Engine housings - dark grey #444444 */ -4px 12px 0 0 #444444,
+    -2px 12px 0 0 #444444,
+    -4px 14px 0 0 #444444,
+    -2px 14px 0 0 #444444,
+    -4px 16px 0 0 #444444,
+    -2px 16px 0 0 #444444,
+    2px 12px 0 0 #444444,
+    4px 12px 0 0 #444444,
+    2px 14px 0 0 #444444,
+    4px 14px 0 0 #444444,
+    2px 16px 0 0 #444444,
+    4px 16px 0 0 #444444,
+    /* Engine cores - orange/yellow #ffaa00 */ -4px 14px 0 0 #ffaa00,
+    -2px 14px 0 0 #ffaa00,
+    2px 14px 0 0 #ffaa00,
+    4px 14px 0 0 #ffaa00,
+    /* Wing tip lights - red #ff0000 */ -20px -2px 0 0 #ff0000,
+    20px -2px 0 0 #ff0000,
+    /* Additional hull highlights - light grey #bbbbbb */ -2px -4px 0 0 #bbbbbb,
+    0px -4px 0 0 #bbbbbb,
+    2px -4px 0 0 #bbbbbb,
+    -2px 4px 0 0 #bbbbbb,
+    0px 4px 0 0 #bbbbbb,
+    2px 4px 0 0 #bbbbbb;
+  filter: drop-shadow(0 0 8px rgba(136, 136, 136, 0.3));
+}
+
+.player-ship::after {
+  content: '';
+  display: none;
+}
+
+/* Individual ship animations */
+.enemy-ship-1 {
+  top: 10%;
+  animation: flyAcross1 15s linear infinite;
+}
+
+.enemy-ship-2 {
+  top: 25%;
+  animation: flyAcross2 18s linear infinite 3s;
+}
+
+.enemy-ship-3 {
+  top: 60%;
+  animation: flyAcross3 20s linear infinite 6s;
+}
+
+.enemy-ship-4 {
+  top: 80%;
+  animation: flyDiagonal1 22s linear infinite 2s;
+}
+
+.player-ship-1 {
+  top: 40%;
+  animation: flyAcross4 16s linear infinite 1s;
+}
+
+.player-ship-2 {
+  top: 70%;
+  animation: flyDiagonal2 19s linear infinite 5s;
+}
+
+.player-ship-3 {
+  top: 15%;
+  animation: flyAcross5 17s linear infinite 8s;
+}
+
+/* Ship flight animations */
+@keyframes flyAcross1 {
+  0% {
+    left: -60px;
+    transform: rotate(90deg);
+  }
+  100% {
+    left: calc(100% + 60px);
+    transform: rotate(90deg);
+  }
+}
+
+@keyframes flyAcross2 {
+  0% {
+    left: calc(100% + 60px);
+    transform: rotate(-90deg);
+  }
+  100% {
+    left: -60px;
+    transform: rotate(-90deg);
+  }
+}
+
+@keyframes flyAcross3 {
+  0% {
+    left: -60px;
+    transform: rotate(90deg);
+  }
+  100% {
+    left: calc(100% + 60px);
+    transform: rotate(90deg);
+  }
+}
+
+@keyframes flyAcross4 {
+  0% {
+    left: calc(100% + 60px);
+    transform: rotate(-90deg);
+  }
+  100% {
+    left: -60px;
+    transform: rotate(-90deg);
+  }
+}
+
+@keyframes flyAcross5 {
+  0% {
+    left: -60px;
+    transform: rotate(90deg);
+  }
+  100% {
+    left: calc(100% + 60px);
+    transform: rotate(90deg);
+  }
+}
+
+@keyframes flyDiagonal1 {
+  0% {
+    left: -60px;
+    top: 80%;
+    transform: rotate(45deg);
+  }
+  100% {
+    left: calc(100% + 60px);
+    top: 20%;
+    transform: rotate(45deg);
+  }
+}
+
+@keyframes flyDiagonal2 {
+  0% {
+    left: calc(100% + 60px);
+    top: 70%;
+    transform: rotate(-135deg);
+  }
+  100% {
+    left: -60px;
+    top: 30%;
+    transform: rotate(-135deg);
   }
 }
