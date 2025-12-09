@@ -1314,6 +1314,65 @@ section h1 {
   }
 }
 
+/* Responsive styles for homepage buttons on smaller screens */
+@media (max-width: 1440px) {
+  .start-btn {
+    font-size: 2.5rem;
+    padding: 0.9rem 2.5rem;
+    letter-spacing: 0.15rem;
+  }
+
+  .go-to-leaderboard {
+    font-size: 1.75rem;
+    padding: 0.7rem 1.75rem;
+    letter-spacing: 0.15rem;
+  }
+
+  .option-btn {
+    padding: 1.5rem 2.5rem;
+  }
+
+  .option-icon {
+    font-size: 2.5rem;
+  }
+
+  .option-text {
+    font-size: 1.3rem;
+    letter-spacing: 0.08rem;
+  }
+}
+
+@media (max-width: 1024px) {
+  .start-btn {
+    font-size: 2rem;
+    padding: 0.8rem 2rem;
+    letter-spacing: 0.1rem;
+  }
+
+  .go-to-leaderboard {
+    font-size: 1.5rem;
+    padding: 0.6rem 1.5rem;
+    letter-spacing: 0.1rem;
+  }
+
+  .options-container {
+    gap: 1.5rem;
+  }
+
+  .option-btn {
+    padding: 1.2rem 2rem;
+  }
+
+  .option-icon {
+    font-size: 2rem;
+  }
+
+  .option-text {
+    font-size: 1.1rem;
+    letter-spacing: 0.05rem;
+  }
+}
+
 /* ==========================================
    FLYING SHIPS ANIMATION - HOMEPAGE
    ========================================== */
