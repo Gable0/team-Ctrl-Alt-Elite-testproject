@@ -295,54 +295,61 @@ difficulty-buttons button:hover {
   margin: 1.5rem 0;
   padding: 1.25rem 2.5rem;
   font-size: 2.25rem;
-  background: linear-gradient(180deg, #00d9ff 0%, #0099cc 100%);
+  background: #00ff41;
   color: #000;
-  border: 0.2rem solid #00d9ff;
-  border-radius: 0.25rem;
+  border: 0.2rem solid #00ff41;
+  border-radius: 0.5rem;
   cursor: pointer;
   text-transform: uppercase;
   letter-spacing: 0.25rem;
-  transition: all 0.1s;
+  box-shadow: 0 0 1.5rem #00ff41;
+  transition: all 0.2s;
   position: relative;
 }
 
 .pause-menu-button:hover {
-  background: linear-gradient(180deg, #00d9ff 0%, #00ccee 100%);
+  background: #33ff66;
+  box-shadow: 0 0 2rem #00ff41;
   transform: scale(1.05);
 }
 
 .pause-menu-button:active {
   top: 0.25rem;
-  box-shadow:
-    0 0 1.5rem rgba(0, 217, 255, 0.5),
-    0 0.15rem 0 #006688;
+  box-shadow: 0 0 1rem #00ff41;
+  transform: scale(0.98);
 }
 
 .pause-menu-settings {
-  background: linear-gradient(180deg, #ff9526 0%, #cc7720 100%) !important;
+  background: #ff9526 !important;
   border-color: #ff9526 !important;
+  box-shadow: 0 0 1.5rem #ff9526 !important;
 }
 
 .pause-menu-settings:hover {
-  background: linear-gradient(180deg, #ffaa44 0%, #dd8833 100%) !important;
+  background: #ffaa44 !important;
+  box-shadow: 0 0 2rem #ff9526 !important;
 }
 
 .pause-menu-button:nth-child(4) {
-  background: linear-gradient(180deg, #ffdd00 0%, #ccaa00 100%);
+  background: #ffdd00;
   border-color: #ffdd00;
+  box-shadow: 0 0 1.5rem #ffdd00;
 }
 
 .pause-menu-button:nth-child(4):hover {
-  background: linear-gradient(180deg, #ffee44 0%, #ddbb00 100%);
+  background: #ffee44;
+  box-shadow: 0 0 2rem #ffdd00;
 }
 
 .pause-menu-button:nth-child(5) {
-  background: linear-gradient(180deg, #ff0844 0%, #cc0033 100%);
+  background: #ff0844;
   border-color: #ff0844;
+  box-shadow: 0 0 1.5rem #ff0844;
 }
 
 .pause-menu-button:nth-child(5):hover {
-  background: linear-gradient(180deg, #ff3366 0%, #dd0044 100%);
+  background: #ff3366;
+  box-shadow: 0 0 2rem #ff0844;
 }
 
 /* ==========================================
@@ -461,16 +468,22 @@ settings-modal {
   margin-top: 1rem;
   padding: 0.75rem 1.5rem;
   font-size: 1.5rem;
-  border: none;
+  border: 2px solid #00d9ff;
   background: #00d9ff;
   color: #000;
   cursor: pointer;
-  border-radius: 0.25rem;
-  transition: all 0.1s;
+  border-radius: 0.5rem;
+  box-shadow: 0 0 1rem #00d9ff;
+  transition: all 0.2s;
+  text-transform: uppercase;
+  letter-spacing: 0.1rem;
+  font-family: 'Jersey 10', monospace, sans-serif;
 }
 
 .settings-content .close-settings:hover {
-  background: #00ff41;
+  background: #33e6ff;
+  box-shadow: 0 0 1.5rem #00d9ff;
+  transform: scale(1.05);
 }
 
 /* ==========================================
@@ -500,42 +513,42 @@ settings-modal {
   font-size: 1.5rem;
   font-family: 'Jersey 10', monospace, sans-serif;
   border: 2px solid #ff0844;
-  background: linear-gradient(180deg, #ff0844 0%, #cc0033 100%);
+  background: #ff0844;
   color: #fff;
   cursor: pointer;
   border-radius: 0.5rem;
   transition: all 0.2s;
   text-transform: uppercase;
   letter-spacing: 0.1rem;
-  box-shadow: 0 0 15px rgba(255, 8, 68, 0.4);
+  box-shadow: 0 0 1rem #ff0844;
 }
 
 .fun-mode-btn:hover {
-  background: linear-gradient(180deg, #ff3366 0%, #dd0044 100%);
+  background: #ff3366;
   transform: scale(1.05);
-  box-shadow: 0 0 25px rgba(255, 8, 68, 0.7);
+  box-shadow: 0 0 1.5rem #ff0844;
 }
 
 .fun-mode-btn.active {
-  background: linear-gradient(180deg, #00ff41 0%, #00cc33 100%);
+  background: #00ff41;
   border-color: #00ff41;
   color: #000;
-  box-shadow: 0 0 20px rgba(0, 255, 65, 0.6);
+  box-shadow: 0 0 1.5rem #00ff41;
   animation: funPulse 1.5s ease-in-out infinite;
 }
 
 .fun-mode-btn.active:hover {
-  background: linear-gradient(180deg, #33ff66 0%, #00dd44 100%);
-  box-shadow: 0 0 30px rgba(0, 255, 65, 0.9);
+  background: #33ff66;
+  box-shadow: 0 0 2rem #00ff41;
 }
 
 @keyframes funPulse {
   0%,
   100% {
-    box-shadow: 0 0 20px rgba(0, 255, 65, 0.6);
+    box-shadow: 0 0 1.5rem #00ff41;
   }
   50% {
-    box-shadow: 0 0 35px rgba(0, 255, 65, 1);
+    box-shadow: 0 0 2.5rem #00ff41;
   }
 }
 

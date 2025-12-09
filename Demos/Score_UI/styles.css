@@ -80,8 +80,8 @@ body {
   height: 100vh;
   background: linear-gradient(
     180deg,
-    rgba(0, 0, 0, 0.95) 0%,
-    rgba(20, 0, 40, 0.95) 100%
+    rgba(0, 8, 20, 0.95) 0%,
+    rgba(0, 0, 0, 0.95) 100%
   );
   display: none;
   flex-direction: column;
@@ -159,13 +159,13 @@ body {
 #gameOverTitle {
   font-family: 'Jersey 10', sans-serif;
   font-size: 12.5rem; /* 200px */
-  color: #ff0040;
+  color: #ff0844;
   font-weight: normal;
   margin-bottom: 3.75rem; /* 60px */
   text-shadow:
-    0 0 1.25rem #ff0040,
-    0 0 2.5rem #ff0040,
-    0 0 3.75rem #ff0040,
+    0 0 1.25rem #ff0844,
+    0 0 2.5rem #ff0844,
+    0 0 3.75rem #ff0844,
     0.25rem 0.25rem 0px rgba(0, 0, 0, 0.8);
   animation:
     pulse 2s ease-in-out infinite,
@@ -181,12 +181,12 @@ body {
 #finalScore {
   font-family: 'Jersey 10', sans-serif;
   font-size: 2.5rem; /* 40px */
-  color: #00ffff;
+  color: #00d9ff;
   text-align: center;
   margin-bottom: 3.75rem; /* 60px */
   text-shadow:
-    0 0 0.625rem #00ffff,
-    0 0 1.25rem #00ffff,
+    0 0 0.625rem #00d9ff,
+    0 0 1.25rem #00d9ff,
     0.125rem 0.125rem 0px rgba(0, 0, 0, 0.8);
   line-height: 1.8;
   letter-spacing: 0.25rem; /* 4px */
@@ -197,12 +197,12 @@ body {
 
 #finalScoreValue {
   font-size: 4.5rem; /* 72px */
-  color: #ffff00;
+  color: #ffdd00;
   display: block;
   margin-top: 0.625rem; /* 10px */
   text-shadow:
-    0 0 0.9375rem #ffff00,
-    0 0 1.875rem #ffff00,
+    0 0 0.9375rem #ffdd00,
+    0 0 1.875rem #ffdd00,
     0.1875rem 0.1875rem 0px rgba(0, 0, 0, 0.8);
   animation: scoreFlash 1.5s ease-in-out infinite;
 }
@@ -212,18 +212,15 @@ body {
   padding: 1.25rem 3.75rem; /* 20px 60px */
   font-size: 2.625rem; /* 42px */
   font-weight: normal;
-  background: linear-gradient(180deg, #00ffff 0%, #00cccc 100%);
+  background: #00ff41;
   color: #000;
-  border: 0.25rem solid #00ffff; /* 4px */
-  border-radius: 0;
+  border: 0.25rem solid #00ff41; /* 4px */
+  border-radius: 0.5rem;
   cursor: pointer;
   text-transform: uppercase;
   letter-spacing: 0.25rem; /* 4px */
-  box-shadow:
-    0 0 1.25rem #00ffff,
-    0 0.5rem 0 #008888,
-    /* 8px */ 0 0.5rem 1.25rem rgba(0, 0, 0, 0.5);
-  transition: all 0.1s;
+  box-shadow: 0 0 1.5rem #00ff41;
+  transition: all 0.2s;
   position: relative;
   top: 0;
   margin-bottom: 1.25rem; /* 20px */
@@ -233,20 +230,15 @@ body {
 }
 
 #restartLevelButton:hover {
-  background: linear-gradient(180deg, #00ffff 0%, #00eeee 100%);
-  box-shadow:
-    0 0 1.875rem #00ffff,
-    0 0.5rem 0 #008888,
-    0 0.5rem 1.875rem rgba(0, 255, 255, 0.5);
+  background: #33ff66;
+  box-shadow: 0 0 2rem #00ff41;
   transform: scale(1.05);
 }
 
 #restartLevelButton:active {
   top: 0.25rem; /* 4px */
-  box-shadow:
-    0 0 1.25rem #00ffff,
-    0 0.25rem 0 #008888,
-    0 0.25rem 0.625rem rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 1rem #00ff41;
+  transform: scale(0.98);
 }
 
 #levelsButton {
@@ -254,18 +246,15 @@ body {
   padding: 1.25rem 3.75rem; /* 20px 60px */
   font-size: 2.625rem; /* 42px */
   font-weight: normal;
-  background: linear-gradient(180deg, #ffff00 0%, #cccc00 100%);
+  background: #00d9ff;
   color: #000;
-  border: 0.25rem solid #ffff00; /* 4px */
-  border-radius: 0;
+  border: 0.25rem solid #00d9ff; /* 4px */
+  border-radius: 0.5rem;
   cursor: pointer;
   text-transform: uppercase;
   letter-spacing: 0.25rem; /* 4px */
-  box-shadow:
-    0 0 1.25rem #ffff00,
-    0 0.5rem 0 #888800,
-    /* 8px */ 0 0.5rem 1.25rem rgba(0, 0, 0, 0.5);
-  transition: all 0.1s;
+  box-shadow: 0 0 1.5rem #00d9ff;
+  transition: all 0.2s;
   position: relative;
   top: 0;
   margin-bottom: 1.25rem; /* 20px */
@@ -275,20 +264,15 @@ body {
 }
 
 #levelsButton:hover {
-  background: linear-gradient(180deg, #ffff44 0%, #eeee00 100%);
-  box-shadow:
-    0 0 1.875rem #ffff00,
-    0 0.5rem 0 #888800,
-    0 0.5rem 1.875rem rgba(255, 255, 0, 0.5);
+  background: #33e6ff;
+  box-shadow: 0 0 2rem #00d9ff;
   transform: scale(1.05);
 }
 
 #levelsButton:active {
   top: 0.25rem; /* 4px */
-  box-shadow:
-    0 0 1.25rem #ffff00,
-    0 0.25rem 0 #888800,
-    0 0.25rem 0.625rem rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 1rem #00d9ff;
+  transform: scale(0.98);
 }
 
 /* Bottom Center Instructions */
@@ -319,9 +303,34 @@ body {
   padding: 1.25rem 3.75rem; /* 20px 60px */
   font-size: 2.625rem; /* 42px */
   font-weight: normal;
-  background: linear-gradient(180deg, #888 0%, #666 100%);
-  color: #fff;
-  border: 0.25rem solid #aaa; /* 4px */
+  background: #001a33;
+  color: #00d9ff;
+  border: 0.25rem solid #00d9ff; /* 4px */
+  border-radius: 0.5rem;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.25rem;
+  box-shadow: 0 0 1rem #00d9ff;
+  transition: all 0.2s;
+  position: relative;
+  top: 0;
+  margin-bottom: 1.25rem;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#homeButton:hover {
+  background: #002244;
+  color: #00ff41;
+  box-shadow: 0 0 1.5rem #00ff41;
+  transform: scale(1.05);
+}
+
+#homeButton:active {
+  top: 0.25rem;
+  box-shadow: 0 0 1rem #00d9ff;
+  transform: scale(0.98);
 }
 
 /* Animations */
@@ -388,23 +397,23 @@ body {
   90%,
   100% {
     text-shadow:
-      0 0 1.25rem #ff0040,
-      0 0 2.5rem #ff0040,
-      0 0 3.75rem #ff0040,
+      0 0 1.25rem #ff0844,
+      0 0 2.5rem #ff0844,
+      0 0 3.75rem #ff0844,
       0.25rem 0.25rem 0px rgba(0, 0, 0, 0.8);
   }
   92% {
     text-shadow:
-      -0.125rem 0 1.25rem #ff0040,
-      0.125rem 0.125rem 2.5rem #00ffff,
-      0 0 3.75rem #ff0040,
+      -0.125rem 0 1.25rem #ff0844,
+      0.125rem 0.125rem 2.5rem #00d9ff,
+      0 0 3.75rem #ff0844,
       0.25rem 0.25rem 0px rgba(0, 0, 0, 0.8);
   }
   94% {
     text-shadow:
-      0.125rem 0 1.25rem #ff0040,
-      -0.125rem -0.125rem 2.5rem #ffff00,
-      0 0 3.75rem #ff0040,
+      0.125rem 0 1.25rem #ff0844,
+      -0.125rem -0.125rem 2.5rem #ffdd00,
+      0 0 3.75rem #ff0844,
       0.25rem 0.25rem 0px rgba(0, 0, 0, 0.8);
   }
 }
