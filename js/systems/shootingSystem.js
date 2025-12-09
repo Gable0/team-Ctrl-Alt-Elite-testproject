@@ -24,7 +24,6 @@ export function initShooting(canvas) {
  * @returns {Object} Shot object with update() method.
  */
 export function createPlayerShot(x, y, angle = 0) {
-  audioManager.playShootSound();
 
   const speed = 800;
   return {
