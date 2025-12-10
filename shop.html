@@ -57,38 +57,63 @@
 
         grid.innerHTML = '';
 
+        // Map skin IDs to coin prices
+        const skinPrices = {
+          squarePack: 15,
+          starPack: 25,
+          prof: 50
+        };
+
         function addSkin(skinId, name, desc) {
+          const price = skinPrices[skinId] || 0;
           const card = document.createElement('article');
           card.className = 'skin-card';
           card.innerHTML = `
         <h3>${name}</h3>
         <p>${desc}</p>
-        <button class="purchase-btn" data-skin="${skinId}">Buy (Free)</button>
+        <button class="purchase-btn" data-skin="${skinId}" data-price="${price}">Buy (¢${price})</button>
+        <div class="shop-msg" aria-live="polite"></div>
       `;
           grid.appendChild(card);
 
-          const btn = card.querySelector('button');
+          const btn = card.querySelector('button.purchase-btn');
+          const msg = card.querySelector('.shop-msg');
           const ownedKey = `${skinId}Owned`;
 
-          if (localStorage.getItem(ownedKey) === 'true') {
+          function markOwned() {
+            localStorage.setItem(ownedKey, 'true');
             btn.textContent = 'Owned';
             btn.disabled = true;
-          } else {
-            btn.addEventListener('click', () => {
-              localStorage.setItem(ownedKey, 'true');
-              btn.textContent = 'Owned';
-              btn.disabled = true;
-            });
+            if (msg) msg.textContent = '';
           }
+
+          // Initial ownership check
+          if (localStorage.getItem(ownedKey) === 'true') {
+            markOwned();
+            return;
+          }
+
+          btn.addEventListener('click', () => {
+            const coinCount = Number(localStorage.getItem('coinCount') || 0);
+            if (coinCount >= price) {
+              // Deduct coins and set ownership
+              const newCoins = coinCount - price;
+              localStorage.setItem('coinCount', String(newCoins));
+              markOwned();
+            } else {
+              if (msg) msg.textContent = `Not enough coins (need ¢${price}).`;
+              // Small accessibility hint
+              btn.setAttribute('aria-disabled', 'true');
+              setTimeout(() => btn.removeAttribute('aria-disabled'), 1200);
+            }
+          });
         }
 
-        addSkin(
-          'squarePack',
-          'Square Pack',
-          'Blocky vibes for ships and foes.'
-        );
+        addSkin('squarePack', 'Square Pack', 'Blocky vibes for ships and foes.');
         addSkin('starPack', 'Star Pack', 'Stellar shapes for ships and foes.');
         addSkin('prof', 'Prof Pack', 'The Professor invades your fleet!');
+
+        // end initShop
       }
 
       initShop();
@@ -99,11 +124,31 @@
         if (el) el.textContent = Number(localStorage.getItem('coinCount') || 0);
       }
 
-      window.addEventListener(
-        'storage',
-        e => e.key === 'coinCount' && updateCoinDisplay()
-      );
-      updateCoinDisplay();
+      // Refresh button states based on current coins and ownership
+      function refreshShopButtons() {
+        const coinCount = Number(localStorage.getItem('coinCount') || 0);
+        document.querySelectorAll('.purchase-btn').forEach(btn => {
+          const skinId = btn.dataset.skin;
+          const price = Number(btn.dataset.price || 0);
+          const ownedKey = `${skinId}Owned`;
+          if (localStorage.getItem(ownedKey) === 'true') {
+            btn.textContent = 'Owned';
+            btn.disabled = true;
+          } else {
+            btn.textContent = `Buy (¢${price})`;
+            btn.disabled = coinCount < price;
+          }
+        });
+      }
+
+      // Update UI when coins change
+      function updateCoinDisplayAndButtons() {
+        updateCoinDisplay();
+        refreshShopButtons();
+      }
+
+      window.addEventListener('storage', e => e.key === 'coinCount' && updateCoinDisplayAndButtons());
+      updateCoinDisplayAndButtons();
     </script>
   </body>
 </html>
