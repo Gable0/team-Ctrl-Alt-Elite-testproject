@@ -252,7 +252,37 @@ class AudioManager {
 
   /** Plays the enemy kill sound effect - quick Galaga-style. */
   playKillEnemySound() {
-    this.playSound('kill-enemy');
+    if (!this.enabled) {
+      console.log('Audio is disabled');
+      return;
+    }
+
+    if (!this.sounds['kill-enemy']) {
+      console.warn('Sound not found: kill-enemy');
+      return;
+    }
+
+    console.log('Playing sound: kill-enemy');
+
+    try {
+      const sound = this.sounds['kill-enemy'].cloneNode();
+      sound.volume = this.volume;
+      sound.playbackRate = 1.3; // Speed up for snappier sound
+
+      sound
+        .play()
+        .then(() => {
+          console.log('Successfully played: kill-enemy');
+          // Cut off the sound after 150ms for a quick, Galaga-style effect
+          setTimeout(() => {
+            sound.pause();
+            sound.currentTime = 0;
+          }, 150);
+        })
+        .catch(err => console.warn('Failed to play: kill-enemy', err));
+    } catch (error) {
+      console.error('Error playing sound: kill-enemy', error);
+    }
   }
 
   /** Plays the laser hits player sound effect. */
@@ -364,6 +394,7 @@ export function initAudio() {
   console.log('🎵 Initializing audio system...');
 
   // Sound effects
+  audioManager.loadSound('shoot', 'assets/sounds/reg game sounds/shoot.wav');
   audioManager.loadSound('chloe-shoot', 'assets/sounds/Chloe-shooting.wav');
   audioManager.loadSound(
     'kill-enemy',
