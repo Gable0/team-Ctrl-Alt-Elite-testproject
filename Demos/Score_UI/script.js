@@ -16,16 +16,22 @@ window.addEventListener('DOMContentLoaded', () => {
 document.getElementById('restartLevelButton')?.addEventListener('click', () => {
   localStorage.removeItem('finalScore');
   localStorage.removeItem('finalLevel');
+  sessionStorage.setItem('stopIntroAudio', 'true');
   window.location.href = '../../game.html';
 });
 
-// Handle levels button
+// Handle levels button - Navigate back to index with difficulty page
 document.getElementById('levelsButton')?.addEventListener('click', () => {
-  // Navigate to levels page if you have one
-  window.location.href = '../../difficulty.html';
+  // Clear the stop flag so intro music plays
+  sessionStorage.removeItem('stopIntroAudio');
+  // Navigate to index.html which will load difficulty.html
+  window.location.href = '../../index.html?page=difficulty';
 });
 
-// Handle back to home button
+// Handle back to home button - Navigate to index
 document.getElementById('gameOverBackHome')?.addEventListener('click', () => {
-  window.location.href = '../../homepage.html';
+  // Clear the stop flag so intro music plays
+  sessionStorage.removeItem('stopIntroAudio');
+  // Navigate to index.html which will load homepage
+  window.location.href = '../../index.html';
 });
