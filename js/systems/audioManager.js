@@ -246,11 +246,11 @@ class AudioManager {
     const currentFunMode = localStorage.getItem('funMode') === 'true';
     this.funMode = currentFunMode;
 
-    const soundName = this.funMode ? 'chloe-shoot' : 'shoot';
+    const soundName = this.funMode ? 'chloe-shoot' : 'player-shoot';
     this.playSound(soundName);
   }
 
-  /** Plays the enemy kill sound effect - quick Galaga-style. */
+  /** Plays the enemy kill sound effect. */
   playKillEnemySound() {
     if (!this.enabled) {
       console.log('Audio is disabled');
@@ -267,17 +267,11 @@ class AudioManager {
     try {
       const sound = this.sounds['kill-enemy'].cloneNode();
       sound.volume = this.volume;
-      sound.playbackRate = 1.3; // Speed up for snappier sound
 
       sound
         .play()
         .then(() => {
           console.log('Successfully played: kill-enemy');
-          // Cut off the sound after 150ms for a quick, Galaga-style effect
-          setTimeout(() => {
-            sound.pause();
-            sound.currentTime = 0;
-          }, 150);
         })
         .catch(err => console.warn('Failed to play: kill-enemy', err));
     } catch (error) {
@@ -395,6 +389,10 @@ export function initAudio() {
 
   // Sound effects
   audioManager.loadSound('shoot', 'assets/sounds/reg game sounds/shoot.wav');
+  audioManager.loadSound(
+    'player-shoot',
+    'assets/sounds/reg game sounds/player-shoot.wav'
+  );
   audioManager.loadSound('chloe-shoot', 'assets/sounds/Chloe-shooting.wav');
   audioManager.loadSound(
     'kill-enemy',

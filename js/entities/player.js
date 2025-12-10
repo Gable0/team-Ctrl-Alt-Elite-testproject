@@ -1,6 +1,7 @@
 // js/entities/player.js
 
 import { isKeyPressed } from '../core/input.js';
+import { audioManager } from '../systems/audioManager.js';
 
 /**
  * Creates the player ship object with default position and properties.
@@ -72,6 +73,9 @@ export function updatePlayer(game, delta, canvas, barrierY, createPlayerShot) {
         createPlayerShot(player.x, player.y - player.size, 0)
       );
     }
+
+    // Play shoot sound
+    audioManager.playShootSound();
 
     // Simple cooldown
     game.canShoot = false;
