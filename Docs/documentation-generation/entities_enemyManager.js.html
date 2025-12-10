@@ -1,51 +1,53 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
+<head>
+    <meta charset="utf-8">
     <title>JSDoc: Source: entities/enemyManager.js</title>
 
-    <script src="../scripts/prettify/prettify.js"></script>
-    <script src="../scripts/prettify/lang-css.js"></script>
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
     <!--[if lt IE 9]>
       <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-    <link
-      type="text/css"
-      rel="stylesheet"
-      href="../styles/prettify-tomorrow.css"
-    />
-    <link type="text/css" rel="stylesheet" href="../styles/jsdoc-default.css" />
-  </head>
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
 
-  <body>
-    <div id="main">
-      <h1 class="page-title">Source: entities/enemyManager.js</h1>
+<body>
 
-      <section>
+<div id="main">
+
+    <h1 class="page-title">Source: entities/enemyManager.js</h1>
+
+    
+
+
+
+    
+    <section>
         <article>
-          <pre
-            class="prettyprint source linenums"
-          ><code>// js/entities/enemyManager.js
-
+            <pre class="prettyprint source linenums"><code>// js/entities/enemyManager.js
+import { getActiveSkin } from '../skins/skinsManager.js';
+import { getEnemySkinImage } from '../skins/skinAssets.js';
 /**
  * Configuration for the enemy formation layout.
  */
 const formationConfig = {
-    rows: 4,
-    columns: 10,
-    spacingX: 60,
-    spacingY: 45,
-    top: 120,
+  rows: 4,
+  columns: 10,
+  spacingX: 60,
+  spacingY: 45,
+  top: 120,
 };
 
 /**
  * Enemy type definitions – each row uses the corresponding type (top to bottom).
  */
 const enemyTypes = [
-    { color: '#ff0844', size: 14, enterSpeed: 210 },
-    { color: '#ff3366', size: 15, enterSpeed: 205 },
-    { color: '#ff5588', size: 16, enterSpeed: 200 },
-    { color: '#ff88aa', size: 18, enterSpeed: 195 },
+  { color: '#ff0844', size: 14, enterSpeed: 210 },
+  { color: '#ff3366', size: 15, enterSpeed: 205 },
+  { color: '#ff5588', size: 16, enterSpeed: 200 },
+  { color: '#ff88aa', size: 18, enterSpeed: 195 },
 ];
 
 /** @type {HTMLCanvasElement|null} */
@@ -60,8 +62,8 @@ let ctxRef = null;
  * @param {CanvasRenderingContext2D} ctx
  */
 export function initEnemyModule(canvas, ctx) {
-    canvasRef = canvas;
-    ctxRef = ctx;
+  canvasRef = canvas;
+  ctxRef = ctx;
 }
 
 /**
@@ -70,39 +72,39 @@ export function initEnemyModule(canvas, ctx) {
  * @param {Object} game - The global game state object.
  */
 export function spawnEnemyWave(game) {
-    if (!canvasRef) return;
+  if (!canvasRef) return;
 
-    const { rows, columns, spacingX, spacingY, top } = formationConfig;
-    const totalWidth = spacingX * (columns - 1);
-    const leftEdge = (canvasRef.width - totalWidth) / 2;
+  const { rows, columns, spacingX, spacingY, top } = formationConfig;
+  const totalWidth = spacingX * (columns - 1);
+  const leftEdge = (canvasRef.width - totalWidth) / 2;
 
-    let index = 0;
-    game.enemies = [];
-    game.pendingWaveTimer = 0;
-    game.playerShootingUnlocked = false;
-    game.canShoot = false;
-    game.globalEnemyShotTimer = game.baseFireRateDelay;
+  let index = 0;
+  game.enemies = [];
+  game.pendingWaveTimer = 0;
+  game.playerShootingUnlocked = false;
+  game.canShoot = false;
+  game.globalEnemyShotTimer = game.baseFireRateDelay;
 
-    for (let row = 0; row &lt; rows; row++) {
-        for (let col = 0; col &lt; columns; col++) {
-            const finalX = leftEdge + col * spacingX;
-            const finalY = top + row * spacingY;
-            const type = enemyTypes[Math.min(row, enemyTypes.length - 1)];
-            const fromLeft = (row + col) % 2 === 0;
-            const entryDelay = row * 0.25 + col * 0.12;
-            game.enemies.push(
-                createEnemy({
-                    id: index++,
-                    finalX,
-                    finalY,
-                    type,
-                    fromLeft,
-                    entryDelay,
-                    col,
-                })
-            );
-        }
+  for (let row = 0; row &lt; rows; row++) {
+    for (let col = 0; col &lt; columns; col++) {
+      const finalX = leftEdge + col * spacingX;
+      const finalY = top + row * spacingY;
+      const type = enemyTypes[Math.min(row, enemyTypes.length - 1)];
+      const fromLeft = (row + col) % 2 === 0;
+      const entryDelay = row * 0.25 + col * 0.12;
+      game.enemies.push(
+        createEnemy({
+          id: index++,
+          finalX,
+          finalY,
+          type,
+          fromLeft,
+          entryDelay,
+          col,
+        })
+      );
     }
+  }
 }
 
 /**
@@ -119,30 +121,30 @@ export function spawnEnemyWave(game) {
  * @returns {Object} Enemy instance
  */
 function createEnemy({ id, finalX, finalY, type, fromLeft, entryDelay, col }) {
-    const path = generateEntryPath(finalX, finalY, fromLeft, col);
-    const [startPoint] = path;
+  const path = generateEntryPath(finalX, finalY, fromLeft, col);
+  const [startPoint] = path;
 
-    return {
-        id,
-        x: startPoint.x,
-        y: startPoint.y,
-        finalX,
-        finalY,
-        color: type.color,
-        size: type.size,
-        enterSpeed: type.enterSpeed,
-        state: 'waiting',
-        entryDelay,
-        path,
-        pathIndex: 0,
-        oscillationPhase: Math.random() * Math.PI * 2,
-        waveOffset: col * 0.4,
-        dyingTimer: 0,
-        isAttacking: false,
-        attackPath: null,
-        attackPathIndex: 0,
-        attackSpeed: 0,
-    };
+  return {
+    id,
+    x: startPoint.x,
+    y: startPoint.y,
+    finalX,
+    finalY,
+    color: type.color,
+    size: type.size,
+    enterSpeed: type.enterSpeed,
+    state: 'waiting',
+    entryDelay,
+    path,
+    pathIndex: 0,
+    oscillationPhase: Math.random() * Math.PI * 2,
+    waveOffset: col * 0.4,
+    dyingTimer: 0,
+    isAttacking: false,
+    attackPath: null,
+    attackPathIndex: 0,
+    attackSpeed: 0,
+  };
 }
 
 /**
@@ -155,21 +157,21 @@ function createEnemy({ id, finalX, finalY, type, fromLeft, entryDelay, col }) {
  * @returns {Array&lt;{x:number,y:number}>}
  */
 function generateEntryPath(finalX, finalY, fromLeft, columnIndex) {
-    if (!canvasRef) return [];
-    const horizontalBias = canvasRef.width * 0.15 + (columnIndex % 3) * 20;
-    const startX = fromLeft ? -80 : canvasRef.width + 80;
-    const midX = fromLeft ? horizontalBias : canvasRef.width - horizontalBias;
-    const midY = canvasRef.height * 0.3;
-    const loopY = canvasRef.height * 0.55;
-    const turnX = canvasRef.width / 2 + (fromLeft ? -90 : 90);
+  if (!canvasRef) return [];
+  const horizontalBias = canvasRef.width * 0.15 + (columnIndex % 3) * 20;
+  const startX = fromLeft ? -80 : canvasRef.width + 80;
+  const midX = fromLeft ? horizontalBias : canvasRef.width - horizontalBias;
+  const midY = canvasRef.height * 0.3;
+  const loopY = canvasRef.height * 0.55;
+  const turnX = canvasRef.width / 2 + (fromLeft ? -90 : 90);
 
-    return [
-        { x: startX, y: canvasRef.height * 0.8 },
-        { x: midX, y: midY },
-        { x: turnX, y: loopY },
-        { x: turnX, y: finalY - 40 },
-        { x: finalX, y: finalY },
-    ];
+  return [
+    { x: startX, y: canvasRef.height * 0.8 },
+    { x: midX, y: midY },
+    { x: turnX, y: loopY },
+    { x: turnX, y: finalY - 40 },
+    { x: finalX, y: finalY },
+  ];
 }
 
 /**
@@ -179,32 +181,32 @@ function generateEntryPath(finalX, finalY, fromLeft, columnIndex) {
  * @param {number} delta
  */
 function advanceEnemyAlongPath(enemy, delta) {
-    let remaining = enemy.enterSpeed * delta;
+  let remaining = enemy.enterSpeed * delta;
 
-    while (remaining > 0 &amp;&amp; enemy.pathIndex &lt; enemy.path.length - 1) {
-        const currentTarget = enemy.path[enemy.pathIndex + 1];
-        const dx = currentTarget.x - enemy.x;
-        const dy = currentTarget.y - enemy.y;
-        const distance = Math.hypot(dx, dy);
+  while (remaining > 0 &amp;&amp; enemy.pathIndex &lt; enemy.path.length - 1) {
+    const currentTarget = enemy.path[enemy.pathIndex + 1];
+    const dx = currentTarget.x - enemy.x;
+    const dy = currentTarget.y - enemy.y;
+    const distance = Math.hypot(dx, dy);
 
-        if (distance &lt;= remaining) {
-            enemy.x = currentTarget.x;
-            enemy.y = currentTarget.y;
-            enemy.pathIndex += 1;
-            remaining -= distance;
-        } else {
-            const ratio = remaining / distance;
-            enemy.x += dx * ratio;
-            enemy.y += dy * ratio;
-            remaining = 0;
-        }
+    if (distance &lt;= remaining) {
+      enemy.x = currentTarget.x;
+      enemy.y = currentTarget.y;
+      enemy.pathIndex += 1;
+      remaining -= distance;
+    } else {
+      const ratio = remaining / distance;
+      enemy.x += dx * ratio;
+      enemy.y += dy * ratio;
+      remaining = 0;
     }
+  }
 
-    if (enemy.pathIndex >= enemy.path.length - 1) {
-        enemy.state = 'formation';
-        enemy.x = enemy.finalX;
-        enemy.y = enemy.finalY;
-    }
+  if (enemy.pathIndex >= enemy.path.length - 1) {
+    enemy.state = 'formation';
+    enemy.x = enemy.finalX;
+    enemy.y = enemy.finalY;
+  }
 }
 
 /**
@@ -214,12 +216,12 @@ function advanceEnemyAlongPath(enemy, delta) {
  * @param {number} delta
  */
 function moveEnemyInFormation(enemy, delta) {
-    enemy.oscillationPhase += delta * 2;
-    enemy.x =
-        enemy.finalX + Math.sin(enemy.oscillationPhase + enemy.waveOffset) * 12;
-    enemy.y =
-        enemy.finalY +
-        Math.sin(enemy.oscillationPhase * 0.5 + enemy.waveOffset) * 6;
+  enemy.oscillationPhase += delta * 2;
+  enemy.x =
+    enemy.finalX + Math.sin(enemy.oscillationPhase + enemy.waveOffset) * 12;
+  enemy.y =
+    enemy.finalY +
+    Math.sin(enemy.oscillationPhase * 0.5 + enemy.waveOffset) * 6;
 }
 
 /**
@@ -228,10 +230,10 @@ function moveEnemyInFormation(enemy, delta) {
  * @param {Object} enemy
  */
 export function killEnemy(enemy) {
-    if (enemy.state === 'dying') return;
-    enemy.state = 'dying';
-    enemy.dyingTimer = 0.3;
-    enemy.isAttacking = false;
+  if (enemy.state === 'dying') return;
+  enemy.state = 'dying';
+  enemy.dyingTimer = 0.3;
+  enemy.isAttacking = false;
 }
 
 /**
@@ -241,43 +243,43 @@ export function killEnemy(enemy) {
  * @param {number} delta - Delta time in seconds.
  */
 export function updateEnemies(game, delta) {
-    if (!game.enemies.length) {
-        return;
+  if (!game.enemies.length) {
+    return;
+  }
+
+  const alive = [];
+  for (const enemy of game.enemies) {
+    if (enemy.state === 'waiting') {
+      enemy.entryDelay -= delta;
+      if (enemy.entryDelay &lt;= 0) {
+        enemy.state = 'entering';
+      }
+    } else if (enemy.state === 'entering') {
+      advanceEnemyAlongPath(enemy, delta);
+    } else if (enemy.state === 'formation') {
+      moveEnemyInFormation(enemy, delta);
+    } else if (enemy.state === 'dying') {
+      enemy.dyingTimer -= delta;
     }
+    // Note: 'attacking' state is handled by systems/enemyAttack module
 
-    const alive = [];
-    for (const enemy of game.enemies) {
-        if (enemy.state === 'waiting') {
-            enemy.entryDelay -= delta;
-            if (enemy.entryDelay &lt;= 0) {
-                enemy.state = 'entering';
-            }
-        } else if (enemy.state === 'entering') {
-            advanceEnemyAlongPath(enemy, delta);
-        } else if (enemy.state === 'formation') {
-            moveEnemyInFormation(enemy, delta);
-        } else if (enemy.state === 'dying') {
-            enemy.dyingTimer -= delta;
-        }
-        // Note: 'attacking' state is handled by systems/enemyAttack module
-
-        if (enemy.state !== 'dying' || enemy.dyingTimer > 0) {
-            alive.push(enemy);
-        }
+    if (enemy.state !== 'dying' || enemy.dyingTimer > 0) {
+      alive.push(enemy);
     }
+  }
 
-    game.enemies = alive;
+  game.enemies = alive;
 
-    if (!game.playerShootingUnlocked &amp;&amp; game.enemies.length > 0) {
-        const allEnemiesReady = game.enemies.every(
-            enemy => enemy.state !== 'waiting' &amp;&amp; enemy.state !== 'entering'
-        );
+  if (!game.playerShootingUnlocked &amp;&amp; game.enemies.length > 0) {
+    const allEnemiesReady = game.enemies.every(
+      enemy => enemy.state !== 'waiting' &amp;&amp; enemy.state !== 'entering'
+    );
 
-        if (allEnemiesReady) {
-            game.playerShootingUnlocked = true;
-            game.canShoot = true;
-        }
+    if (allEnemiesReady) {
+      game.playerShootingUnlocked = true;
+      game.canShoot = true;
     }
+  }
 }
 
 /**
@@ -287,205 +289,131 @@ export function updateEnemies(game, delta) {
  * @param {Object} game - Global game state (provides activeSkin).
  */
 export function drawEnemies(enemies, game) {
-    if (!ctxRef) return;
+  if (!ctxRef) return;
 
-    for (const enemy of enemies) {
-        ctxRef.save();
-        ctxRef.translate(enemy.x, enemy.y);
+  // Static imports — put these at the top of the file!
+  // import { getActiveSkin } from '../skins/skinsManager.js';
+  // import { getEnemySkinImage } from '../skins/skinAssets.js';
 
-        if (enemy.state === 'dying') {
-            const progress = Math.max(enemy.dyingTimer / 0.3, 0);
-            ctxRef.globalAlpha = progress;
-            ctxRef.fillStyle = '#fef08a';
-            ctxRef.beginPath();
-            ctxRef.arc(0, 0, enemy.size * (1.5 - progress), 0, Math.PI * 2);
-            ctxRef.fill();
-            ctxRef.restore();
-            continue;
-        }
+  const activeSkin = getActiveSkin();
+  const skinImg = getEnemySkinImage(activeSkin);
 
-        // Visual indicator for attacking enemies
-        if (enemy.state === 'attacking') {
-            ctxRef.fillStyle = '#ff0000';
-            ctxRef.globalAlpha = 0.3;
-            ctxRef.beginPath();
-            ctxRef.arc(0, 0, enemy.size * 1.5, 0, Math.PI * 2);
-            ctxRef.fill();
-            ctxRef.globalAlpha = 1.0;
-        }
+  for (const enemy of enemies) {
+    ctxRef.save();
+    ctxRef.translate(enemy.x, enemy.y);
 
-        ctxRef.fillStyle = enemy.color;
-        if (game.activeSkin === 'squarePack') {
-            // Square skin
-            ctxRef.fillRect(-enemy.size / 2, -enemy.size / 2, enemy.size, enemy.size);
-        } else if (game.activeSkin === 'starPack') {
-            // Star skin (simple 5-point star)
-            const r1 = enemy.size * 0.8;
-            const r2 = enemy.size * 0.32;
-            ctxRef.beginPath();
-            for (let i = 0; i &lt; 5; i++) {
-                const angle = (Math.PI / 2.5) * i * 2;
-                ctxRef.lineTo(Math.cos(angle) * r1, Math.sin(angle) * r1);
-                ctxRef.lineTo(
-                    Math.cos(angle + Math.PI / 5) * r2,
-                    Math.sin(angle + Math.PI / 5) * r2
-                );
-            }
-            ctxRef.closePath();
-            ctxRef.fill();
-        } else {
-            // Original triangle
-            ctxRef.beginPath();
-            ctxRef.moveTo(0, -enemy.size * 0.8);
-            ctxRef.lineTo(enemy.size, enemy.size * 0.9);
-            ctxRef.lineTo(-enemy.size, enemy.size * 0.9);
-            ctxRef.closePath();
-            ctxRef.fill();
-        }
-
-        ctxRef.fillStyle = '#ffffff';
-        ctxRef.fillRect(-enemy.size * 0.4, 0, enemy.size * 0.3, 3);
-        ctxRef.fillRect(enemy.size * 0.1, 0, enemy.size * 0.3, 3);
-        ctxRef.restore();
+    // Dying explosion
+    if (enemy.state === 'dying') {
+      const progress = Math.max(enemy.dyingTimer / 0.3, 0);
+      ctxRef.globalAlpha = progress;
+      ctxRef.fillStyle = '#fef08a';
+      ctxRef.beginPath();
+      ctxRef.arc(0, 0, enemy.size * (1.5 - progress), 0, Math.PI * 2);
+      ctxRef.fill();
+      ctxRef.restore();
+      continue;
     }
-}</code></pre>
+
+    // Attacking glow
+    if (enemy.state === 'attacking') {
+      ctxRef.fillStyle = '#ff0000';
+      ctxRef.globalAlpha = 0.3;
+      ctxRef.beginPath();
+      ctxRef.arc(0, 0, enemy.size * 1.5, 0, Math.PI * 2);
+      ctxRef.fill();
+      ctxRef.globalAlpha = 1.0;
+    }
+
+    // CUSTOM IMAGE SKIN (Prof.jpg, etc.)
+    if (skinImg) {
+      const drawSize = enemy.size * 2.4;
+      ctxRef.drawImage(
+        skinImg,
+        -drawSize / 2,
+        -drawSize / 2,
+        drawSize,
+        drawSize
+      );
+    }
+    // ORIGINAL PIXEL-ART ALIENS (your beautiful code)
+    else {
+      ctxRef.fillStyle = enemy.color;
+      const px = enemy.size * 0.15;
+      ctxRef.imageSmoothingEnabled = false;
+
+      if (enemy.color === '#ff0844') {
+        ctxRef.fillRect(-px * 3, -px * 2, px * 6, px);
+        ctxRef.fillRect(-px * 3, -px * 2, px, px * 4);
+        ctxRef.fillRect(px * 2, -px * 2, px, px * 4);
+        ctxRef.fillRect(-px * 2, px * 2, px * 4, px);
+        ctxRef.fillStyle = '#ffff00';
+        ctxRef.fillRect(-px, -px, px * 2, px * 2);
+      } else if (enemy.color === '#ff3366') {
+        ctxRef.fillRect(-px * 2.5, -px * 2, px * 5, px);
+        ctxRef.fillRect(-px * 3.5, -px, px * 7, px * 2);
+        ctxRef.fillRect(-px * 2.5, px, px, px * 2);
+        ctxRef.fillRect(px * 1.5, px, px, px * 2);
+        ctxRef.fillStyle = '#00ff00';
+        ctxRef.fillRect(-px * 1.5, -px * 0.5, px, px);
+        ctxRef.fillRect(px * 0.5, -px * 0.5, px, px);
+      } else if (enemy.color === '#ff5588') {
+        ctxRef.fillRect(-px * 4, -px * 2, px * 1.5, px * 4);
+        ctxRef.fillRect(px * 2.5, -px * 2, px * 1.5, px * 4);
+        ctxRef.fillRect(-px * 2, -px, px * 4, px * 2);
+        ctxRef.fillStyle = '#00ffff';
+        ctxRef.fillRect(-px, -px * 0.5, px * 0.7, px);
+        ctxRef.fillRect(px * 0.3, -px * 0.5, px * 0.7, px);
+      } else {
+        ctxRef.fillRect(-px * 1.5, -px * 3, px * 3, px * 6);
+        ctxRef.fillRect(-px * 4, -px * 1.5, px * 8, px * 3);
+        ctxRef.fillStyle = '#ff00ff';
+        ctxRef.fillRect(-px, -px, px * 2, px * 2);
+        ctxRef.fillStyle = enemy.color;
+        ctxRef.fillRect(-px * 3.5, -px * 1, px, px * 2);
+        ctxRef.fillRect(px * 2.5, -px * 1, px, px * 2);
+      }
+
+      ctxRef.imageSmoothingEnabled = true;
+    }
+
+    // Engine glow (on top of both skins)
+    ctxRef.fillStyle = 'rgba(255, 200, 100, 0.6)';
+    ctxRef.fillRect(
+      -enemy.size * 0.3,
+      enemy.size * 0.5,
+      enemy.size * 0.2,
+      enemy.size * 0.3
+    );
+    ctxRef.fillRect(
+      enemy.size * 0.1,
+      enemy.size * 0.5,
+      enemy.size * 0.2,
+      enemy.size * 0.3
+    );
+
+    ctxRef.restore();
+  }
+}
+</code></pre>
         </article>
-      </section>
-    </div>
+    </section>
 
-    <nav>
-      <h2><a href="index.html">Home</a></h2>
-      <h3>Classes</h3>
-      <ul>
-        <li>
-          <a href="PersistentAudioManager.html">PersistentAudioManager</a>
-        </li>
-      </ul>
-      <h3>Global</h3>
-      <ul>
-        <li><a href="global.html#Game">Game</a></li>
-        <li>
-          <a href="global.html#advanceEnemyAlongPath">advanceEnemyAlongPath</a>
-        </li>
-        <li><a href="global.html#audioManager">audioManager</a></li>
-        <li><a href="global.html#barrierY">barrierY</a></li>
-        <li><a href="global.html#boxesOverlap">boxesOverlap</a></li>
-        <li><a href="global.html#canvas">canvas</a></li>
-        <li><a href="global.html#canvasRef">canvasRef</a></li>
-        <li>
-          <a href="global.html#checkEnemyShotCollisions"
-            >checkEnemyShotCollisions</a
-          >
-        </li>
-        <li>
-          <a href="global.html#checkPlayerEnemyCollision"
-            >checkPlayerEnemyCollision</a
-          >
-        </li>
-        <li>
-          <a href="global.html#checkPlayerShotCollisions"
-            >checkPlayerShotCollisions</a
-          >
-        </li>
-        <li><a href="global.html#createEnemy">createEnemy</a></li>
-        <li><a href="global.html#createInitialGame">createInitialGame</a></li>
-        <li><a href="global.html#createPlayer">createPlayer</a></li>
-        <li><a href="global.html#createPlayerShot">createPlayerShot</a></li>
-        <li><a href="global.html#ctx">ctx</a></li>
-        <li><a href="global.html#ctxRef">ctxRef</a></li>
-        <li><a href="global.html#draw">draw</a></li>
-        <li><a href="global.html#drawBackground">drawBackground</a></li>
-        <li><a href="global.html#drawEnemies">drawEnemies</a></li>
-        <li><a href="global.html#drawEnemyShots">drawEnemyShots</a></li>
-        <li><a href="global.html#drawPlayer">drawPlayer</a></li>
-        <li><a href="global.html#drawPlayerShots">drawPlayerShots</a></li>
-        <li><a href="global.html#enemyTypes">enemyTypes</a></li>
-        <li><a href="global.html#equipSkin">equipSkin</a></li>
-        <li><a href="global.html#fireEnemyShot">fireEnemyShot</a></li>
-        <li><a href="global.html#formationConfig">formationConfig</a></li>
-        <li><a href="global.html#generateAttackPath">generateAttackPath</a></li>
-        <li><a href="global.html#generateEntryPath">generateEntryPath</a></li>
-        <li><a href="global.html#getActiveSkin">getActiveSkin</a></li>
-        <li><a href="global.html#getEnemyHitbox">getEnemyHitbox</a></li>
-        <li><a href="global.html#getEnemyShotHitbox">getEnemyShotHitbox</a></li>
-        <li><a href="global.html#getPlayerHitbox">getPlayerHitbox</a></li>
-        <li><a href="global.html#getShotHitbox">getShotHitbox</a></li>
-        <li><a href="global.html#handleEnemyKilled">handleEnemyKilled</a></li>
-        <li>
-          <a href="global.html#handleLevelProgression"
-            >handleLevelProgression</a
-          >
-        </li>
-        <li><a href="global.html#handlePlayerHit">handlePlayerHit</a></li>
-        <li><a href="global.html#initAudio">initAudio</a></li>
-        <li><a href="global.html#initBackground">initBackground</a></li>
-        <li><a href="global.html#initEnemyAttack">initEnemyAttack</a></li>
-        <li><a href="global.html#initEnemyModule">initEnemyModule</a></li>
-        <li><a href="global.html#initInput">initInput</a></li>
-        <li><a href="global.html#initPauseMenu">initPauseMenu</a></li>
-        <li><a href="global.html#initSharedAudio">initSharedAudio</a></li>
-        <li><a href="global.html#initShooting">initShooting</a></li>
-        <li><a href="global.html#initialized">initialized</a></li>
-        <li><a href="global.html#isGamePaused">isGamePaused</a></li>
-        <li><a href="global.html#isKeyPressed">isKeyPressed</a></li>
-        <li><a href="global.html#isSkinOwned">isSkinOwned</a></li>
-        <li><a href="global.html#killEnemy">killEnemy</a></li>
-        <li><a href="global.html#loop">loop</a></li>
-        <li>
-          <a href="global.html#moveEnemyInFormation">moveEnemyInFormation</a>
-        </li>
-        <li><a href="global.html#ownedSkins">ownedSkins</a></li>
-        <li>
-          <a href="global.html#playBackgroundGameMusic"
-            >playBackgroundGameMusic</a
-          >
-        </li>
-        <li><a href="global.html#playIntroMusic">playIntroMusic</a></li>
-        <li><a href="global.html#pressedKeys">pressedKeys</a></li>
-        <li>
-          <a href="global.html#scheduleEnemyAttacks">scheduleEnemyAttacks</a>
-        </li>
-        <li>
-          <a href="global.html#selectAttackingEnemy">selectAttackingEnemy</a>
-        </li>
-        <li><a href="global.html#spawnEnemyWave">spawnEnemyWave</a></li>
-        <li><a href="global.html#stars">stars</a></li>
-        <li><a href="global.html#start">start</a></li>
-        <li><a href="global.html#startEnemyAttack">startEnemyAttack</a></li>
-        <li><a href="global.html#startNextLevel">startNextLevel</a></li>
-        <li><a href="global.html#togglePause">togglePause</a></li>
-        <li><a href="global.html#update">update</a></li>
-        <li>
-          <a href="global.html#updateAttackingEnemy">updateAttackingEnemy</a>
-        </li>
-        <li><a href="global.html#updateBackground">updateBackground</a></li>
-        <li><a href="global.html#updateEnemies">updateEnemies</a></li>
-        <li><a href="global.html#updateEnemyShots">updateEnemyShots</a></li>
-        <li>
-          <a href="global.html#updateFunModeButton">updateFunModeButton</a>
-        </li>
-        <li>
-          <a href="global.html#updateInvincibility">updateInvincibility</a>
-        </li>
-        <li>
-          <a href="global.html#updateLevelTransition">updateLevelTransition</a>
-        </li>
-        <li><a href="global.html#updatePlayer">updatePlayer</a></li>
-        <li><a href="global.html#updatePlayerShots">updatePlayerShots</a></li>
-      </ul>
-    </nav>
 
-    <br class="clear" />
 
-    <footer>
-      Documentation generated by
-      <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Sat Dec 06
-      2025 18:39:50 GMT-0800 (Pacific Standard Time)
-    </footer>
 
-    <script>
-      prettyPrint();
-    </script>
-    <script src="../scripts/linenumber.js"></script>
-  </body>
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="PersistentAudioManager.html">PersistentAudioManager</a></li></ul><h3>Global</h3><ul><li><a href="global.html#Game">Game</a></li><li><a href="global.html#advanceEnemyAlongPath">advanceEnemyAlongPath</a></li><li><a href="global.html#audioManager">audioManager</a></li><li><a href="global.html#barrierY">barrierY</a></li><li><a href="global.html#boxesOverlap">boxesOverlap</a></li><li><a href="global.html#canvas">canvas</a></li><li><a href="global.html#canvasRef">canvasRef</a></li><li><a href="global.html#checkEnemyShotCollisions">checkEnemyShotCollisions</a></li><li><a href="global.html#checkPlayerEnemyCollision">checkPlayerEnemyCollision</a></li><li><a href="global.html#checkPlayerShotCollisions">checkPlayerShotCollisions</a></li><li><a href="global.html#createEnemy">createEnemy</a></li><li><a href="global.html#createInitialGame">createInitialGame</a></li><li><a href="global.html#createPlayer">createPlayer</a></li><li><a href="global.html#createPlayerShot">createPlayerShot</a></li><li><a href="global.html#ctx">ctx</a></li><li><a href="global.html#ctxRef">ctxRef</a></li><li><a href="global.html#draw">draw</a></li><li><a href="global.html#drawBackground">drawBackground</a></li><li><a href="global.html#drawEnemies">drawEnemies</a></li><li><a href="global.html#drawEnemyShots">drawEnemyShots</a></li><li><a href="global.html#drawPlayer">drawPlayer</a></li><li><a href="global.html#drawPlayerShots">drawPlayerShots</a></li><li><a href="global.html#enemyTypes">enemyTypes</a></li><li><a href="global.html#equipSkin">equipSkin</a></li><li><a href="global.html#fireEnemyShot">fireEnemyShot</a></li><li><a href="global.html#formationConfig">formationConfig</a></li><li><a href="global.html#generateAttackPath">generateAttackPath</a></li><li><a href="global.html#generateEntryPath">generateEntryPath</a></li><li><a href="global.html#getActiveSkin">getActiveSkin</a></li><li><a href="global.html#getEnemyHitbox">getEnemyHitbox</a></li><li><a href="global.html#getEnemyShotHitbox">getEnemyShotHitbox</a></li><li><a href="global.html#getEnemySkinImage">getEnemySkinImage</a></li><li><a href="global.html#getOwnedSkins">getOwnedSkins</a></li><li><a href="global.html#getPlayerHitbox">getPlayerHitbox</a></li><li><a href="global.html#getShotHitbox">getShotHitbox</a></li><li><a href="global.html#handleEnemyKilled">handleEnemyKilled</a></li><li><a href="global.html#handleLevelProgression">handleLevelProgression</a></li><li><a href="global.html#handlePlayerHit">handlePlayerHit</a></li><li><a href="global.html#initAudio">initAudio</a></li><li><a href="global.html#initBackground">initBackground</a></li><li><a href="global.html#initEnemyAttack">initEnemyAttack</a></li><li><a href="global.html#initEnemyModule">initEnemyModule</a></li><li><a href="global.html#initInput">initInput</a></li><li><a href="global.html#initPauseMenu">initPauseMenu</a></li><li><a href="global.html#initSharedAudio">initSharedAudio</a></li><li><a href="global.html#initShooting">initShooting</a></li><li><a href="global.html#initialized">initialized</a></li><li><a href="global.html#isGamePaused">isGamePaused</a></li><li><a href="global.html#isKeyPressed">isKeyPressed</a></li><li><a href="global.html#isSkinOwned">isSkinOwned</a></li><li><a href="global.html#killEnemy">killEnemy</a></li><li><a href="global.html#loadEnemySkinImage">loadEnemySkinImage</a></li><li><a href="global.html#loop">loop</a></li><li><a href="global.html#moveEnemyInFormation">moveEnemyInFormation</a></li><li><a href="global.html#playBackgroundGameMusic">playBackgroundGameMusic</a></li><li><a href="global.html#playIntroMusic">playIntroMusic</a></li><li><a href="global.html#pressedKeys">pressedKeys</a></li><li><a href="global.html#scheduleEnemyAttacks">scheduleEnemyAttacks</a></li><li><a href="global.html#selectAttackingEnemy">selectAttackingEnemy</a></li><li><a href="global.html#spawnEnemyWave">spawnEnemyWave</a></li><li><a href="global.html#stars">stars</a></li><li><a href="global.html#start">start</a></li><li><a href="global.html#startEnemyAttack">startEnemyAttack</a></li><li><a href="global.html#startNextLevel">startNextLevel</a></li><li><a href="global.html#togglePause">togglePause</a></li><li><a href="global.html#update">update</a></li><li><a href="global.html#updateAttackingEnemy">updateAttackingEnemy</a></li><li><a href="global.html#updateBackground">updateBackground</a></li><li><a href="global.html#updateEnemies">updateEnemies</a></li><li><a href="global.html#updateEnemyShots">updateEnemyShots</a></li><li><a href="global.html#updateInvincibility">updateInvincibility</a></li><li><a href="global.html#updateLevelTransition">updateLevelTransition</a></li><li><a href="global.html#updatePlayer">updatePlayer</a></li><li><a href="global.html#updatePlayerShots">updatePlayerShots</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Wed Dec 10 2025 10:27:16 GMT-0800 (Pacific Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
 </html>

@@ -16,7 +16,9 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --check .",
     "format:fix": "prettier --write .",
-    "coverage": "vitest run --coverage"
+    "coverage": "vitest run --coverage",
+    "docs": "jsdoc js -r -d docs/documentation-generation",
+    "docs:open": "npm run docs && open docs/index.html"
   },
   "type": "module",
   "repository": {
@@ -43,7 +45,8 @@
     "jsdom": "^27.2.0",
     "playwright": "^1.57.0",
     "prettier": "^3.7.4",
-    "vitest": "^4.0.14"
+    "vitest": "^4.0.14",
+    "jsdoc": "^4.0.3"
   },
   "directories": {
     "test": "tests"

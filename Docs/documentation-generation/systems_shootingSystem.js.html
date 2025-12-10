@@ -1,31 +1,32 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
+<head>
+    <meta charset="utf-8">
     <title>JSDoc: Source: systems/shootingSystem.js</title>
 
-    <script src="../scripts/prettify/prettify.js"></script>
-    <script src="../scripts/prettify/lang-css.js"></script>
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
     <!--[if lt IE 9]>
       <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-    <link
-      type="text/css"
-      rel="stylesheet"
-      href="../styles/prettify-tomorrow.css"
-    />
-    <link type="text/css" rel="stylesheet" href="../styles/jsdoc-default.css" />
-  </head>
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
 
-  <body>
-    <div id="main">
-      <h1 class="page-title">Source: systems/shootingSystem.js</h1>
+<body>
 
-      <section>
+<div id="main">
+
+    <h1 class="page-title">Source: systems/shootingSystem.js</h1>
+
+    
+
+
+
+    
+    <section>
         <article>
-          <pre
-            class="prettyprint source linenums"
-          ><code>// js/systems/shootingSystem.js
+            <pre class="prettyprint source linenums"><code>// js/systems/shootingSystem.js
 // Handles creation, movement, firing logic, and rendering of all projectiles.
 
 import { audioManager } from './audioManager.js';
@@ -39,7 +40,7 @@ let canvasRef = null;
  * @param {HTMLCanvasElement} canvas
  */
 export function initShooting(canvas) {
-    canvasRef = canvas;
+  canvasRef = canvas;
 }
 
 /**
@@ -51,30 +52,24 @@ export function initShooting(canvas) {
  * @returns {Object} Shot object with update() method.
  */
 export function createPlayerShot(x, y, angle = 0) {
-    audioManager.playShootSound();
+  const speed = 800;
+  return {
+    x: x,
+    y: y - 20,
+    vx: Math.sin(angle) * speed,
+    vy: -Math.cos(angle) * speed,
+    speed: speed,
+    active: true,
 
-    const speed = 800;
-    return {
-        x: x,
-        y: y - 20,
-        vx: Math.sin(angle) * speed,
-        vy: -Math.cos(angle) * speed,
-        speed: speed,
-        active: true,
-
-        /** Updates shot position and deactivates when off-screen */
-        update(delta) {
-            this.x += this.vx * delta;
-            this.y += this.vy * delta;
-            if (
-                this.y &lt; -50 ||
-                this.x &lt; -50 ||
-                this.x > canvasRef.width + 50
-            ) {
-                this.active = false;
-            }
-        },
-    };
+    /** Updates shot position and deactivates when off-screen */
+    update(delta) {
+      this.x += this.vx * delta;
+      this.y += this.vy * delta;
+      if (this.y &lt; -50 || this.x &lt; -50 || this.x > canvasRef.width + 50) {
+        this.active = false;
+      }
+    },
+  };
 }
 
 /**
@@ -84,9 +79,9 @@ export function createPlayerShot(x, y, angle = 0) {
  * @param {number} delta - Delta time in seconds.
  */
 export function updatePlayerShots(game, delta) {
-    for (const shot of game.playerShots) {
-        if (shot.active !== false) shot.update(delta);
-    }
+  for (const shot of game.playerShots) {
+    if (shot.active !== false) shot.update(delta);
+  }
 }
 
 /**
@@ -96,24 +91,24 @@ export function updatePlayerShots(game, delta) {
  * @param {Object} game - Game state (used for player position and shot array).
  */
 export function fireEnemyShot(enemy, game) {
-    if (game.enemyShots.length >= 8) return;
+  if (game.enemyShots.length >= 8) return;
 
-    const p = game.player;
-    const dx = p.x - enemy.x + (Math.random() * 80 - 40);
-    const dy = p.y - enemy.y + (Math.random() * 60 - 30);
-    const dist = Math.hypot(dx, dy) || 1;
+  const p = game.player;
+  const dx = p.x - enemy.x + (Math.random() * 80 - 40);
+  const dy = p.y - enemy.y + (Math.random() * 60 - 30);
+  const dist = Math.hypot(dx, dy) || 1;
 
-    const baseSpeed = 180;
-    const speedMultiplier = 1 + (game.level - 1) * 0.5;
-    const speed = baseSpeed * speedMultiplier;
+  const baseSpeed = 180;
+  const speedMultiplier = 1 + (game.level - 1) * 0.5;
+  const speed = baseSpeed * speedMultiplier;
 
-    game.enemyShots.push({
-        x: enemy.x,
-        y: enemy.y + enemy.size,
-        vx: (dx / dist) * speed,
-        vy: (dy / dist) * speed,
-        size: 6,
-    });
+  game.enemyShots.push({
+    x: enemy.x,
+    y: enemy.y + enemy.size,
+    vx: (dx / dist) * speed,
+    vy: (dy / dist) * speed,
+    size: 6,
+  });
 }
 
 /**
@@ -123,47 +118,47 @@ export function fireEnemyShot(enemy, game) {
  * @param {number} delta - Delta time in seconds.
  */
 export function updateEnemyShots(game, delta) {
-    if (!canvasRef) return;
+  if (!canvasRef) return;
 
-    // No enemy shooting until player is allowed to shoot
-    if (!game.playerShootingUnlocked) {
-        game.globalEnemyShotTimer = Math.max(game.globalEnemyShotTimer, 0);
-        return;
+  // No enemy shooting until player is allowed to shoot
+  if (!game.playerShootingUnlocked) {
+    game.globalEnemyShotTimer = Math.max(game.globalEnemyShotTimer, 0);
+    return;
+  }
+
+  // Scale fire rate with level
+  const fireRateMultiplier = Math.pow(0.9, game.level - 1);
+  const currentDelay = game.baseFireRateDelay * fireRateMultiplier;
+  const currentVariance = game.baseFireRateVariance * fireRateMultiplier;
+
+  // Formation enemies fire on a global timer
+  game.globalEnemyShotTimer -= delta;
+  if (game.globalEnemyShotTimer &lt;= 0) {
+    const shooters = game.enemies.filter(e => e.state === 'formation');
+    if (shooters.length > 0 &amp;&amp; Math.random() &lt; 0.8) {
+      const shooter = shooters[Math.floor(Math.random() * shooters.length)];
+      fireEnemyShot(shooter, game);
     }
+    game.globalEnemyShotTimer = Math.random() * currentVariance + currentDelay;
+  }
 
-    // Scale fire rate with level
-    const fireRateMultiplier = Math.pow(0.9, game.level - 1);
-    const currentDelay = game.baseFireRateDelay * fireRateMultiplier;
-    const currentVariance = game.baseFireRateVariance * fireRateMultiplier;
+  // Dive-attacking enemies fire more aggressively
+  for (const enemy of game.enemies) {
+    let diveFireChance = 0.04;
+    if (game.difficulty === 'easy') diveFireChance = 0.01;
+    else if (game.difficulty === 'hard') diveFireChance = 0.08;
 
-    // Formation enemies fire on a global timer
-    game.globalEnemyShotTimer -= delta;
-    if (game.globalEnemyShotTimer &lt;= 0) {
-        const shooters = game.enemies.filter(e => e.state === 'formation');
-        if (shooters.length > 0 &amp;&amp; Math.random() &lt; 0.8) {
-            const shooter = shooters[Math.floor(Math.random() * shooters.length)];
-            fireEnemyShot(shooter, game);
-        }
-        game.globalEnemyShotTimer = Math.random() * currentVariance + currentDelay;
+    if (enemy.state === 'attacking' &amp;&amp; Math.random() &lt; diveFireChance) {
+      fireEnemyShot(enemy, game);
     }
+  }
 
-    // Dive-attacking enemies fire more aggressively
-    for (const enemy of game.enemies) {
-        let diveFireChance = 0.04;
-        if (game.difficulty === 'easy') diveFireChance = 0.01;
-        else if (game.difficulty === 'hard') diveFireChance = 0.08;
-
-        if (enemy.state === 'attacking' &amp;&amp; Math.random() &lt; diveFireChance) {
-            fireEnemyShot(enemy, game);
-        }
-    }
-
-    // Update positions and remove off-screen shots
-    game.enemyShots = game.enemyShots.filter(shot => {
-        shot.x += shot.vx * delta;
-        shot.y += shot.vy * delta;
-        return shot.y &lt;= canvasRef.height + 50;
-    });
+  // Update positions and remove off-screen shots
+  game.enemyShots = game.enemyShots.filter(shot => {
+    shot.x += shot.vx * delta;
+    shot.y += shot.vy * delta;
+    return shot.y &lt;= canvasRef.height + 50;
+  });
 }
 
 /**
@@ -173,15 +168,15 @@ export function updateEnemyShots(game, delta) {
  * @param {Array&lt;Object>} shots - Array of player shot objects.
  */
 export function drawPlayerShots(ctx, shots) {
-    ctx.fillStyle = '#00ff41';
-    ctx.shadowBlur = 18;
-    ctx.shadowColor = '#00ff41';
-    for (const shot of shots) {
-        if (shot.active !== false) {
-            ctx.fillRect(shot.x - 2.5, shot.y - 13, 5, 26);
-        }
+  ctx.fillStyle = '#00ff41';
+  ctx.shadowBlur = 18;
+  ctx.shadowColor = '#00ff41';
+  for (const shot of shots) {
+    if (shot.active !== false) {
+      ctx.fillRect(shot.x - 2.5, shot.y - 13, 5, 26);
     }
-    ctx.shadowBlur = 0;
+  }
+  ctx.shadowBlur = 0;
 }
 
 /**
@@ -191,153 +186,36 @@ export function drawPlayerShots(ctx, shots) {
  * @param {Array&lt;Object>} shots - Array of enemy shot objects.
  */
 export function drawEnemyShots(ctx, shots) {
-    ctx.fillStyle = '#ff0844';
-    ctx.shadowBlur = 10;
-    ctx.shadowColor = '#ff0844';
-    for (const shot of shots) {
-        ctx.beginPath();
-        ctx.arc(shot.x, shot.y, shot.size, 0, Math.PI * 2);
-        ctx.fill();
-    }
-    ctx.shadowBlur = 0;
-}</code></pre>
+  ctx.fillStyle = '#ff0844';
+  ctx.shadowBlur = 10;
+  ctx.shadowColor = '#ff0844';
+  for (const shot of shots) {
+    ctx.beginPath();
+    ctx.arc(shot.x, shot.y, shot.size, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  ctx.shadowBlur = 0;
+}
+</code></pre>
         </article>
-      </section>
-    </div>
+    </section>
 
-    <nav>
-      <h2><a href="index.html">Home</a></h2>
-      <h3>Classes</h3>
-      <ul>
-        <li>
-          <a href="PersistentAudioManager.html">PersistentAudioManager</a>
-        </li>
-      </ul>
-      <h3>Global</h3>
-      <ul>
-        <li><a href="global.html#Game">Game</a></li>
-        <li>
-          <a href="global.html#advanceEnemyAlongPath">advanceEnemyAlongPath</a>
-        </li>
-        <li><a href="global.html#audioManager">audioManager</a></li>
-        <li><a href="global.html#barrierY">barrierY</a></li>
-        <li><a href="global.html#boxesOverlap">boxesOverlap</a></li>
-        <li><a href="global.html#canvas">canvas</a></li>
-        <li><a href="global.html#canvasRef">canvasRef</a></li>
-        <li>
-          <a href="global.html#checkEnemyShotCollisions"
-            >checkEnemyShotCollisions</a
-          >
-        </li>
-        <li>
-          <a href="global.html#checkPlayerEnemyCollision"
-            >checkPlayerEnemyCollision</a
-          >
-        </li>
-        <li>
-          <a href="global.html#checkPlayerShotCollisions"
-            >checkPlayerShotCollisions</a
-          >
-        </li>
-        <li><a href="global.html#createEnemy">createEnemy</a></li>
-        <li><a href="global.html#createInitialGame">createInitialGame</a></li>
-        <li><a href="global.html#createPlayer">createPlayer</a></li>
-        <li><a href="global.html#createPlayerShot">createPlayerShot</a></li>
-        <li><a href="global.html#ctx">ctx</a></li>
-        <li><a href="global.html#ctxRef">ctxRef</a></li>
-        <li><a href="global.html#draw">draw</a></li>
-        <li><a href="global.html#drawBackground">drawBackground</a></li>
-        <li><a href="global.html#drawEnemies">drawEnemies</a></li>
-        <li><a href="global.html#drawEnemyShots">drawEnemyShots</a></li>
-        <li><a href="global.html#drawPlayer">drawPlayer</a></li>
-        <li><a href="global.html#drawPlayerShots">drawPlayerShots</a></li>
-        <li><a href="global.html#enemyTypes">enemyTypes</a></li>
-        <li><a href="global.html#equipSkin">equipSkin</a></li>
-        <li><a href="global.html#fireEnemyShot">fireEnemyShot</a></li>
-        <li><a href="global.html#formationConfig">formationConfig</a></li>
-        <li><a href="global.html#generateAttackPath">generateAttackPath</a></li>
-        <li><a href="global.html#generateEntryPath">generateEntryPath</a></li>
-        <li><a href="global.html#getActiveSkin">getActiveSkin</a></li>
-        <li><a href="global.html#getEnemyHitbox">getEnemyHitbox</a></li>
-        <li><a href="global.html#getEnemyShotHitbox">getEnemyShotHitbox</a></li>
-        <li><a href="global.html#getPlayerHitbox">getPlayerHitbox</a></li>
-        <li><a href="global.html#getShotHitbox">getShotHitbox</a></li>
-        <li><a href="global.html#handleEnemyKilled">handleEnemyKilled</a></li>
-        <li>
-          <a href="global.html#handleLevelProgression"
-            >handleLevelProgression</a
-          >
-        </li>
-        <li><a href="global.html#handlePlayerHit">handlePlayerHit</a></li>
-        <li><a href="global.html#initAudio">initAudio</a></li>
-        <li><a href="global.html#initBackground">initBackground</a></li>
-        <li><a href="global.html#initEnemyAttack">initEnemyAttack</a></li>
-        <li><a href="global.html#initEnemyModule">initEnemyModule</a></li>
-        <li><a href="global.html#initInput">initInput</a></li>
-        <li><a href="global.html#initPauseMenu">initPauseMenu</a></li>
-        <li><a href="global.html#initSharedAudio">initSharedAudio</a></li>
-        <li><a href="global.html#initShooting">initShooting</a></li>
-        <li><a href="global.html#initialized">initialized</a></li>
-        <li><a href="global.html#isGamePaused">isGamePaused</a></li>
-        <li><a href="global.html#isKeyPressed">isKeyPressed</a></li>
-        <li><a href="global.html#isSkinOwned">isSkinOwned</a></li>
-        <li><a href="global.html#killEnemy">killEnemy</a></li>
-        <li><a href="global.html#loop">loop</a></li>
-        <li>
-          <a href="global.html#moveEnemyInFormation">moveEnemyInFormation</a>
-        </li>
-        <li><a href="global.html#ownedSkins">ownedSkins</a></li>
-        <li>
-          <a href="global.html#playBackgroundGameMusic"
-            >playBackgroundGameMusic</a
-          >
-        </li>
-        <li><a href="global.html#playIntroMusic">playIntroMusic</a></li>
-        <li><a href="global.html#pressedKeys">pressedKeys</a></li>
-        <li>
-          <a href="global.html#scheduleEnemyAttacks">scheduleEnemyAttacks</a>
-        </li>
-        <li>
-          <a href="global.html#selectAttackingEnemy">selectAttackingEnemy</a>
-        </li>
-        <li><a href="global.html#spawnEnemyWave">spawnEnemyWave</a></li>
-        <li><a href="global.html#stars">stars</a></li>
-        <li><a href="global.html#start">start</a></li>
-        <li><a href="global.html#startEnemyAttack">startEnemyAttack</a></li>
-        <li><a href="global.html#startNextLevel">startNextLevel</a></li>
-        <li><a href="global.html#togglePause">togglePause</a></li>
-        <li><a href="global.html#update">update</a></li>
-        <li>
-          <a href="global.html#updateAttackingEnemy">updateAttackingEnemy</a>
-        </li>
-        <li><a href="global.html#updateBackground">updateBackground</a></li>
-        <li><a href="global.html#updateEnemies">updateEnemies</a></li>
-        <li><a href="global.html#updateEnemyShots">updateEnemyShots</a></li>
-        <li>
-          <a href="global.html#updateFunModeButton">updateFunModeButton</a>
-        </li>
-        <li>
-          <a href="global.html#updateInvincibility">updateInvincibility</a>
-        </li>
-        <li>
-          <a href="global.html#updateLevelTransition">updateLevelTransition</a>
-        </li>
-        <li><a href="global.html#updatePlayer">updatePlayer</a></li>
-        <li><a href="global.html#updatePlayerShots">updatePlayerShots</a></li>
-      </ul>
-    </nav>
 
-    <br class="clear" />
 
-    <footer>
-      Documentation generated by
-      <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Sat Dec 06
-      2025 18:39:50 GMT-0800 (Pacific Standard Time)
-    </footer>
 
-    <script>
-      prettyPrint();
-    </script>
-    <script src="../scripts/linenumber.js"></script>
-  </body>
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="PersistentAudioManager.html">PersistentAudioManager</a></li></ul><h3>Global</h3><ul><li><a href="global.html#Game">Game</a></li><li><a href="global.html#advanceEnemyAlongPath">advanceEnemyAlongPath</a></li><li><a href="global.html#audioManager">audioManager</a></li><li><a href="global.html#barrierY">barrierY</a></li><li><a href="global.html#boxesOverlap">boxesOverlap</a></li><li><a href="global.html#canvas">canvas</a></li><li><a href="global.html#canvasRef">canvasRef</a></li><li><a href="global.html#checkEnemyShotCollisions">checkEnemyShotCollisions</a></li><li><a href="global.html#checkPlayerEnemyCollision">checkPlayerEnemyCollision</a></li><li><a href="global.html#checkPlayerShotCollisions">checkPlayerShotCollisions</a></li><li><a href="global.html#createEnemy">createEnemy</a></li><li><a href="global.html#createInitialGame">createInitialGame</a></li><li><a href="global.html#createPlayer">createPlayer</a></li><li><a href="global.html#createPlayerShot">createPlayerShot</a></li><li><a href="global.html#ctx">ctx</a></li><li><a href="global.html#ctxRef">ctxRef</a></li><li><a href="global.html#draw">draw</a></li><li><a href="global.html#drawBackground">drawBackground</a></li><li><a href="global.html#drawEnemies">drawEnemies</a></li><li><a href="global.html#drawEnemyShots">drawEnemyShots</a></li><li><a href="global.html#drawPlayer">drawPlayer</a></li><li><a href="global.html#drawPlayerShots">drawPlayerShots</a></li><li><a href="global.html#enemyTypes">enemyTypes</a></li><li><a href="global.html#equipSkin">equipSkin</a></li><li><a href="global.html#fireEnemyShot">fireEnemyShot</a></li><li><a href="global.html#formationConfig">formationConfig</a></li><li><a href="global.html#generateAttackPath">generateAttackPath</a></li><li><a href="global.html#generateEntryPath">generateEntryPath</a></li><li><a href="global.html#getActiveSkin">getActiveSkin</a></li><li><a href="global.html#getEnemyHitbox">getEnemyHitbox</a></li><li><a href="global.html#getEnemyShotHitbox">getEnemyShotHitbox</a></li><li><a href="global.html#getEnemySkinImage">getEnemySkinImage</a></li><li><a href="global.html#getOwnedSkins">getOwnedSkins</a></li><li><a href="global.html#getPlayerHitbox">getPlayerHitbox</a></li><li><a href="global.html#getShotHitbox">getShotHitbox</a></li><li><a href="global.html#handleEnemyKilled">handleEnemyKilled</a></li><li><a href="global.html#handleLevelProgression">handleLevelProgression</a></li><li><a href="global.html#handlePlayerHit">handlePlayerHit</a></li><li><a href="global.html#initAudio">initAudio</a></li><li><a href="global.html#initBackground">initBackground</a></li><li><a href="global.html#initEnemyAttack">initEnemyAttack</a></li><li><a href="global.html#initEnemyModule">initEnemyModule</a></li><li><a href="global.html#initInput">initInput</a></li><li><a href="global.html#initPauseMenu">initPauseMenu</a></li><li><a href="global.html#initSharedAudio">initSharedAudio</a></li><li><a href="global.html#initShooting">initShooting</a></li><li><a href="global.html#initialized">initialized</a></li><li><a href="global.html#isGamePaused">isGamePaused</a></li><li><a href="global.html#isKeyPressed">isKeyPressed</a></li><li><a href="global.html#isSkinOwned">isSkinOwned</a></li><li><a href="global.html#killEnemy">killEnemy</a></li><li><a href="global.html#loadEnemySkinImage">loadEnemySkinImage</a></li><li><a href="global.html#loop">loop</a></li><li><a href="global.html#moveEnemyInFormation">moveEnemyInFormation</a></li><li><a href="global.html#playBackgroundGameMusic">playBackgroundGameMusic</a></li><li><a href="global.html#playIntroMusic">playIntroMusic</a></li><li><a href="global.html#pressedKeys">pressedKeys</a></li><li><a href="global.html#scheduleEnemyAttacks">scheduleEnemyAttacks</a></li><li><a href="global.html#selectAttackingEnemy">selectAttackingEnemy</a></li><li><a href="global.html#spawnEnemyWave">spawnEnemyWave</a></li><li><a href="global.html#stars">stars</a></li><li><a href="global.html#start">start</a></li><li><a href="global.html#startEnemyAttack">startEnemyAttack</a></li><li><a href="global.html#startNextLevel">startNextLevel</a></li><li><a href="global.html#togglePause">togglePause</a></li><li><a href="global.html#update">update</a></li><li><a href="global.html#updateAttackingEnemy">updateAttackingEnemy</a></li><li><a href="global.html#updateBackground">updateBackground</a></li><li><a href="global.html#updateEnemies">updateEnemies</a></li><li><a href="global.html#updateEnemyShots">updateEnemyShots</a></li><li><a href="global.html#updateInvincibility">updateInvincibility</a></li><li><a href="global.html#updateLevelTransition">updateLevelTransition</a></li><li><a href="global.html#updatePlayer">updatePlayer</a></li><li><a href="global.html#updatePlayerShots">updatePlayerShots</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Wed Dec 10 2025 10:27:16 GMT-0800 (Pacific Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
 </html>
