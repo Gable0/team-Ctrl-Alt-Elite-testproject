@@ -65,6 +65,7 @@ This release marks the point where RetroGa became a **functional, playable arcad
 ## [0.7.0] – 2025-12-10
 
 ### Added
+
 - New HTML backgrounds for homepage and arcade mode, bringing a fresh retro vibe to the game's visual style
 - ESLint and Prettier configured and functional for code quality, ensuring consistent formatting and early bug catching across the team
 - High score board feature, allowing players to track and compete for top rankings with seamless integration into the game over screen
@@ -72,5 +73,6 @@ This release marks the point where RetroGa became a **functional, playable arcad
 - Currency system for purchasing skin packs, enabling players to earn and spend in-game coins on new cosmetic options like the Prof Pack
 
 ### Improvements
+
 - Refined skin equipping logic for smoother transitions and better compatibility with new packs
 - Overall performance tweaks to support the new features without impacting gameplay smoothness

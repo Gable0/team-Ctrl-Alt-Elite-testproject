@@ -18,7 +18,8 @@
     "format:fix": "prettier --write .",
     "coverage": "vitest run --coverage",
     "docs": "jsdoc js -r -d docs/documentation-generation",
-    "docs:open": "npm run docs && start docs/documentation-generation/index.html"  },
+    "docs:open": "npm run docs && start docs/documentation-generation/index.html"
+  },
   "type": "module",
   "repository": {
     "type": "git",

@@ -64,24 +64,25 @@ npm run docs:open    # generate docs + open in browser
    → Takes you to difficulty selection
 
 3. **Choose your difficulty**
-    - **Easy** (green) – forgiving for newcomers
-    - **Medium** (yellow) – balanced challenge
-    - **Hard** (red) – pure arcade fury
+   - **Easy** (green) – forgiving for newcomers
+   - **Medium** (yellow) – balanced challenge
+   - **Hard** (red) – pure arcade fury
 
 4. **Blast aliens!**
-    - **Move**: Arrow Keys or WASD
-    - **Shoot**: Spacebar
-    - **Pause**: ESC (Resume/Restart/Exit)
-    - **Settings**: pause icon (volume, language)
+   - **Move**: Arrow Keys or WASD
+   - **Shoot**: Spacebar
+   - **Pause**: ESC (Resume/Restart/Exit)
+   - **Settings**: pause icon (volume, language)
 
 ## Pro Tips
+
 - Destroy enemies for coins → spend in **Shop** (new looks!)
 - **Skins Library** – equip your purchased packs
 - Earn power-ups for triple-shot mayhem
 - Survive waves → level up → high scores await!
 
 **High Score? Share it with the team!**  
-*Blast off → RetroGa awaits.*
+_Blast off → RetroGa awaits._
 
 Credits
 Made with passion by Team Ctrl-Alt-Elite
