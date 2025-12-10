@@ -7,6 +7,54 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
+    <!-- Game page background elements -->
+    <div class="game-scanlines"></div>
+    <div class="game-grid-overlay"></div>
+
+    <!-- Corner decorations -->
+    <div class="game-corner-decoration top-left"></div>
+    <div class="game-corner-decoration top-right"></div>
+    <div class="game-corner-decoration bottom-left"></div>
+    <div class="game-corner-decoration bottom-right"></div>
+
+    <!-- Floating particles -->
+    <div class="game-particle"></div>
+    <div class="game-particle"></div>
+    <div class="game-particle"></div>
+    <div class="game-particle"></div>
+    <div class="game-particle"></div>
+    <div class="game-particle"></div>
+
+    <!-- Power indicator -->
+    <div class="game-power-indicator">
+      <div class="game-power-dot"></div>
+      <span class="game-power-text">SYSTEMS ONLINE</span>
+    </div>
+
+    <!-- Left side panel -->
+    <div class="game-side-panel left">
+      <div class="game-stat-display">
+        <div class="game-stat-label">WAVE</div>
+        <div class="game-stat-value" id="wave-display">1</div>
+      </div>
+      <div class="game-stat-display">
+        <div class="game-stat-label">ENEMIES</div>
+        <div class="game-stat-value" id="enemies-display">40</div>
+      </div>
+    </div>
+
+    <!-- Right side panel -->
+    <div class="game-side-panel right">
+      <div class="game-stat-display">
+        <div class="game-stat-label">HITS</div>
+        <div class="game-stat-value" id="hits-display">0</div>
+      </div>
+      <div class="game-stat-display">
+        <div class="game-stat-label">SHOTS</div>
+        <div class="game-stat-value" id="shots-display">0</div>
+      </div>
+    </div>
+
     <main>
       <canvas
         id="game"
@@ -21,6 +69,7 @@
         <p translate="fireInstructions">[Space] to fire.</p>
       </section>
     </main>
+
     <script type="module">
       import { injectSettings } from './js/ui/settingsComponent.js';
       import { persistentAudio } from './js/core/persistentAudio.js';
@@ -33,6 +82,71 @@
       window.addEventListener('languagechange', () =>
         applyTranslations(document)
       );
+    </script>
+
+    <!-- Update side panel stats from game state -->
+    <script type="module">
+      // Connect side panels to actual game state
+      function updateGameStats() {
+        // Wait for Game object to be available
+        if (typeof window.Game === 'undefined') {
+          setTimeout(updateGameStats, 100);
+          return;
+        }
+
+        const waveDisplay = document.getElementById('wave-display');
+        const enemiesDisplay = document.getElementById('enemies-display');
+        const hitsDisplay = document.getElementById('hits-display');
+        const shotsDisplay = document.getElementById('shots-display');
+
+        // Initialize tracking variables
+        let totalShots = 0;
+        let totalHits = 0;
+
+        // Track shots fired
+        const originalCreateShot = window.Game.playerShots?.push;
+        if (window.Game.playerShots) {
+          // Count initial shots
+          setInterval(() => {
+            if (window.Game.playerShots) {
+              const currentShots = window.Game.playerShots.length;
+              if (currentShots > totalShots) {
+                totalShots++;
+                if (shotsDisplay) {
+                  shotsDisplay.textContent = totalShots;
+                }
+              }
+            }
+          }, 100);
+        }
+
+        // Update display every frame
+        function updateDisplay() {
+          if (window.Game) {
+            // Update wave (level)
+            if (waveDisplay) {
+              waveDisplay.textContent = window.Game.level || 1;
+            }
+
+            // Update enemy count
+            if (enemiesDisplay && window.Game.enemies) {
+              enemiesDisplay.textContent = window.Game.enemies.length;
+            }
+
+            // Update hits (approximation based on score)
+            if (hitsDisplay) {
+              totalHits = Math.floor((window.Game.score || 0) / 100);
+              hitsDisplay.textContent = totalHits;
+            }
+          }
+          requestAnimationFrame(updateDisplay);
+        }
+
+        updateDisplay();
+      }
+
+      // Start updating stats
+      updateGameStats();
     </script>
   </body>
 </html>

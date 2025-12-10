@@ -1894,3 +1894,312 @@ section h1 {
     transform: rotate(-135deg);
   }
 }
+
+/* ==========================================
+   GAME PAGE BACKGROUND ENHANCEMENTS
+   Add these styles to enhance the game.html page
+   ========================================== */
+
+/* ==========================================
+   GAME PAGE BACKGROUND ENHANCEMENTS
+   Add these styles to enhance the game.html page
+   ========================================== */
+
+/* Only apply these backgrounds to game page */
+body:has(#game) {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Animated starfield background for game page */
+body:has(#game)::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    radial-gradient(2px 2px at 20% 30%, white, transparent),
+    radial-gradient(2px 2px at 60% 70%, white, transparent),
+    radial-gradient(1px 1px at 50% 50%, white, transparent),
+    radial-gradient(1px 1px at 80% 10%, white, transparent),
+    radial-gradient(2px 2px at 90% 60%, white, transparent),
+    radial-gradient(1px 1px at 33% 80%, white, transparent),
+    radial-gradient(1px 1px at 15% 90%, white, transparent);
+  background-size: 200% 200%;
+  animation: starMove 40s linear infinite;
+  opacity: 0.4;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Nebula clouds for game page */
+body:has(#game)::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    radial-gradient(ellipse at 10% 20%, rgba(138, 43, 226, 0.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 90% 80%, rgba(75, 0, 130, 0.1) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 50%, rgba(0, 100, 255, 0.08) 0%, transparent 50%);
+  z-index: 1;
+  animation: nebulaShift 30s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+/* Scanlines for retro CRT effect on game page */
+.game-scanlines {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.15) 0px,
+    rgba(0, 0, 0, 0.15) 2px,
+    transparent 2px,
+    transparent 4px
+  );
+  pointer-events: none;
+  z-index: 10;
+  opacity: 0.3;
+  animation: scanline 8s linear infinite;
+}
+
+/* Corner decorations for game page */
+.game-corner-decoration {
+  position: fixed;
+  width: 150px;
+  height: 150px;
+  border: 2px solid #00d9ff;
+  opacity: 0.3;
+  z-index: 3;
+  animation: cornerPulse 3s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.game-corner-decoration.top-left {
+  top: 20px;
+  left: 20px;
+  border-right: none;
+  border-bottom: none;
+}
+
+.game-corner-decoration.top-right {
+  top: 20px;
+  right: 20px;
+  border-left: none;
+  border-bottom: none;
+}
+
+.game-corner-decoration.bottom-left {
+  bottom: 20px;
+  left: 20px;
+  border-right: none;
+  border-top: none;
+}
+
+.game-corner-decoration.bottom-right {
+  bottom: 20px;
+  right: 20px;
+  border-left: none;
+  border-top: none;
+}
+
+/* Floating particles for game page */
+.game-particle {
+  position: fixed;
+  width: 4px;
+  height: 4px;
+  background: #00d9ff;
+  border-radius: 50%;
+  opacity: 0;
+  z-index: 2;
+  animation: float 15s linear infinite;
+  box-shadow: 0 0 10px #00d9ff;
+  pointer-events: none;
+}
+
+.game-particle:nth-child(1) { left: 10%; animation-delay: 0s; }
+.game-particle:nth-child(2) { left: 20%; animation-delay: 3s; }
+.game-particle:nth-child(3) { left: 30%; animation-delay: 6s; }
+.game-particle:nth-child(4) { left: 70%; animation-delay: 2s; }
+.game-particle:nth-child(5) { left: 80%; animation-delay: 5s; }
+.game-particle:nth-child(6) { left: 90%; animation-delay: 8s; }
+
+/* Grid overlay for game page */
+.game-grid-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    linear-gradient(rgba(0, 217, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 217, 255, 0.05) 1px, transparent 1px);
+  background-size: 50px 50px;
+  z-index: 1;
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+/* Enhanced canvas styling for game page */
+body:has(#game) canvas {
+  position: relative;
+  z-index: 9;
+  border: 3px solid #00d9ff;
+  box-shadow: 
+    0 0 30px rgba(0, 217, 255, 0.5),
+    0 0 60px rgba(0, 217, 255, 0.3),
+    inset 0 0 30px rgba(0, 217, 255, 0.1);
+}
+
+/* Enhanced status text for game page */
+body:has(#game) #status {
+  position: relative;
+  z-index: 9;
+}
+
+/* Power indicator */
+.game-power-indicator {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(0, 8, 20, 0.7);
+  border: 2px solid #00ff41;
+  border-radius: 8px;
+  padding: 10px 20px;
+  z-index: 11;
+  box-shadow: 0 0 20px rgba(0, 255, 65, 0.4);
+}
+
+.game-power-text {
+  font-family: 'Jersey 10', monospace;
+  font-size: 1rem;
+  color: #00ff41;
+  text-shadow: 0 0 10px #00ff41;
+}
+
+.game-power-dot {
+  width: 12px;
+  height: 12px;
+  background: #00ff41;
+  border-radius: 50%;
+  box-shadow: 0 0 15px #00ff41;
+  animation: powerPulse 1.5s ease-in-out infinite;
+}
+
+/* Side panel decorations */
+.game-side-panel {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 200px;
+  z-index: 5;
+}
+
+.game-side-panel.left {
+  left: 20px;
+}
+
+.game-side-panel.right {
+  right: 20px;
+}
+
+.game-stat-display {
+  background: rgba(0, 8, 20, 0.7);
+  border: 2px solid #00d9ff;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 20px;
+  box-shadow: 
+    0 0 20px rgba(0, 217, 255, 0.3),
+    inset 0 0 20px rgba(0, 217, 255, 0.1);
+}
+
+.game-stat-label {
+  font-family: 'Jersey 10', monospace;
+  font-size: 1.2rem;
+  color: #ffdd00;
+  margin-bottom: 8px;
+  text-shadow: 0 0 10px #ffdd00;
+}
+
+.game-stat-value {
+  font-family: 'Jersey 10', monospace;
+  font-size: 2rem;
+  color: #00ff41;
+  text-shadow: 0 0 15px #00ff41;
+}
+
+/* New animations for game page */
+@keyframes nebulaShift {
+  0% { 
+    opacity: 0.6; 
+    transform: scale(1); 
+  }
+  100% { 
+    opacity: 0.8; 
+    transform: scale(1.1); 
+  }
+}
+
+@keyframes cornerPulse {
+  0%, 100% { 
+    opacity: 0.3; 
+    box-shadow: 0 0 10px rgba(0, 217, 255, 0.3);
+  }
+  50% { 
+    opacity: 0.6; 
+    box-shadow: 0 0 20px rgba(0, 217, 255, 0.6);
+  }
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(100vh);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.8;
+  }
+  90% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(-100px);
+    opacity: 0;
+  }
+}
+
+@keyframes powerPulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 15px #00ff41;
+  }
+  50% {
+    transform: scale(1.2);
+    box-shadow: 0 0 25px #00ff41;
+  }
+}
+
+/* Responsive adjustments for game page */
+@media (max-width: 1200px) {
+  .game-side-panel {
+    display: none;
+  }
+  
+  .game-corner-decoration {
+    width: 100px;
+    height: 100px;
+  }
+}
