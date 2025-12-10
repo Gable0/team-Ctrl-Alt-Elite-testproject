@@ -1,18 +1,7 @@
 /**
  * @file Central hub for all skin logic: ownership, equipping, and active state.
- * Scalable for new skins — add to ownedSkins and you're done.
+ * Scalable for new skins — add to the ownership check and you're done.
  */
-
-/**
- * Ownership flags for all available skins, loaded from localStorage.
- * @type {Object<string, boolean>}
- */
-const ownedSkins = {
-  squarePack: localStorage.getItem('squarePackOwned') === 'true',
-  starPack: localStorage.getItem('starPackOwned') === 'true',
-  prof: localStorage.getItem('profOwned') === 'true', // ← FIXED: Add Prof here
-  // Add new: neonPack: localStorage.getItem('neonPackOwned') === 'true',
-};
 
 /**
  * Returns the currently equipped skin name.
@@ -25,11 +14,14 @@ export function getActiveSkin() {
 
 /**
  * Checks if the player owns a specific skin.
+ * Reads directly from localStorage to ensure fresh data after navigation.
  * @param {string} skinName - Skin identifier (e.g. 'squarePack', 'prof')
  * @returns {boolean} True if owned
  */
 export function isSkinOwned(skinName) {
-  return ownedSkins[skinName] || false;
+  // Read directly from localStorage instead of using a cached object
+  const storageKey = `${skinName}Owned`;
+  return localStorage.getItem(storageKey) === 'true';
 }
 
 /**
@@ -40,10 +32,20 @@ export function isSkinOwned(skinName) {
  * @returns {string} Updated active skin name
  */
 export function equipSkin(skinName) {
-  if (!isSkinOwned(skinName) || skinName === 'default') {
+  if (skinName === 'default' || !isSkinOwned(skinName)) {
     localStorage.setItem('activeSkin', 'default');
   } else {
     localStorage.setItem('activeSkin', skinName);
   }
   return getActiveSkin();
+}
+
+/**
+ * Gets all owned skin names.
+ * Useful for rendering skin libraries.
+ * @returns {string[]} Array of owned skin identifiers
+ */
+export function getOwnedSkins() {
+  const allSkins = ['squarePack', 'starPack', 'prof'];
+  return allSkins.filter(skinName => isSkinOwned(skinName));
 }
