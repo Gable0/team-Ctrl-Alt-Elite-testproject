@@ -67,11 +67,13 @@ export function updatePlayer(game, delta, canvas, barrierY, createPlayerShot) {
       game.playerShots.push(
         createPlayerShot(player.x, player.y - player.size, angleOffset)
       );
+      game.shotsFired += 3;
     } else {
       // Normal single shot
       game.playerShots.push(
         createPlayerShot(player.x, player.y - player.size, 0)
       );
+      game.shotsFired++;
     }
 
     // Play shoot sound

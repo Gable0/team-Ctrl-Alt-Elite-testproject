@@ -1928,10 +1928,10 @@ body:has(#game)::before {
     radial-gradient(1px 1px at 33% 80%, white, transparent),
     radial-gradient(1px 1px at 15% 90%, white, transparent);
   background-size: 200% 200%;
-  animation: starMove 40s linear infinite;
   opacity: 0.4;
   pointer-events: none;
   z-index: 1;
+  will-change: transform;
 }
 
 /* Nebula clouds for game page */
@@ -1959,8 +1959,8 @@ body:has(#game)::after {
       transparent 50%
     );
   z-index: 1;
-  animation: nebulaShift 30s ease-in-out infinite alternate;
   pointer-events: none;
+  opacity: 0.7;
 }
 
 /* Scanlines for retro CRT effect on game page */
@@ -1980,7 +1980,6 @@ body:has(#game)::after {
   pointer-events: none;
   z-index: 10;
   opacity: 0.3;
-  animation: scanline 8s linear infinite;
 }
 
 /* Corner decorations for game page */
@@ -1991,7 +1990,6 @@ body:has(#game)::after {
   border: 2px solid #00d9ff;
   opacity: 0.3;
   z-index: 3;
-  animation: cornerPulse 3s ease-in-out infinite;
   pointer-events: none;
 }
 
@@ -2032,9 +2030,8 @@ body:has(#game)::after {
   border-radius: 50%;
   opacity: 0;
   z-index: 2;
-  animation: float 15s linear infinite;
-  box-shadow: 0 0 10px #00d9ff;
   pointer-events: none;
+  display: none;
 }
 
 .game-particle:nth-child(1) {
@@ -2083,10 +2080,7 @@ body:has(#game) canvas {
   position: relative;
   z-index: 9;
   border: 3px solid #00d9ff;
-  box-shadow:
-    0 0 30px rgba(0, 217, 255, 0.5),
-    0 0 60px rgba(0, 217, 255, 0.3),
-    inset 0 0 30px rgba(0, 217, 255, 0.1);
+  box-shadow: 0 0 20px rgba(0, 217, 255, 0.4);
 }
 
 /* Enhanced status text for game page */
@@ -2109,7 +2103,7 @@ body:has(#game) #status {
   border-radius: 8px;
   padding: 10px 20px;
   z-index: 11;
-  box-shadow: 0 0 20px rgba(0, 255, 65, 0.4);
+  box-shadow: 0 0 10px rgba(0, 255, 65, 0.4);
 }
 
 .game-power-text {
@@ -2124,8 +2118,7 @@ body:has(#game) #status {
   height: 12px;
   background: #00ff41;
   border-radius: 50%;
-  box-shadow: 0 0 15px #00ff41;
-  animation: powerPulse 1.5s ease-in-out infinite;
+  box-shadow: 0 0 10px #00ff41;
 }
 
 /* Side panel decorations */
@@ -2151,9 +2144,7 @@ body:has(#game) #status {
   border-radius: 8px;
   padding: 15px;
   margin-bottom: 20px;
-  box-shadow:
-    0 0 20px rgba(0, 217, 255, 0.3),
-    inset 0 0 20px rgba(0, 217, 255, 0.1);
+  box-shadow: 0 0 10px rgba(0, 217, 255, 0.3);
 }
 
 .game-stat-label {

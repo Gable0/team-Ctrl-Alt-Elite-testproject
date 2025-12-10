@@ -50,6 +50,7 @@ export function createInitialGame() {
     difficulty: difficulty,
     tripleShotTimer: 0,
     coinCount: Number(localStorage.getItem('coinCount') || 0),
+    shotsFired: 0,
   };
 }
 

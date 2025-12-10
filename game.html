@@ -99,44 +99,41 @@
         const hitsDisplay = document.getElementById('hits-display');
         const shotsDisplay = document.getElementById('shots-display');
 
-        // Initialize tracking variables
-        let totalShots = 0;
-        let totalHits = 0;
+        // Cache previous values to avoid unnecessary DOM updates
+        let prevWave = 0;
+        let prevEnemies = 0;
+        let prevHits = 0;
+        let prevShots = 0;
 
-        // Track shots fired
-        const originalCreateShot = window.Game.playerShots?.push;
-        if (window.Game.playerShots) {
-          // Count initial shots
-          setInterval(() => {
-            if (window.Game.playerShots) {
-              const currentShots = window.Game.playerShots.length;
-              if (currentShots > totalShots) {
-                totalShots++;
-                if (shotsDisplay) {
-                  shotsDisplay.textContent = totalShots;
-                }
-              }
-            }
-          }, 100);
-        }
-
-        // Update display every frame
+        // Update display - only when values change
         function updateDisplay() {
           if (window.Game) {
-            // Update wave (level)
-            if (waveDisplay) {
-              waveDisplay.textContent = window.Game.level || 1;
+            // Update wave (level) - only if changed
+            const currentWave = window.Game.level || 1;
+            if (currentWave !== prevWave) {
+              waveDisplay.textContent = currentWave;
+              prevWave = currentWave;
             }
 
-            // Update enemy count
-            if (enemiesDisplay && window.Game.enemies) {
-              enemiesDisplay.textContent = window.Game.enemies.length;
+            // Update enemy count - only if changed
+            const currentEnemies = window.Game.enemies?.length || 0;
+            if (currentEnemies !== prevEnemies) {
+              enemiesDisplay.textContent = currentEnemies;
+              prevEnemies = currentEnemies;
             }
 
-            // Update hits (approximation based on score)
-            if (hitsDisplay) {
-              totalHits = Math.floor((window.Game.score || 0) / 100);
-              hitsDisplay.textContent = totalHits;
+            // Update hits (approximation based on score) - only if changed
+            const currentHits = Math.floor((window.Game.score || 0) / 100);
+            if (currentHits !== prevHits) {
+              hitsDisplay.textContent = currentHits;
+              prevHits = currentHits;
+            }
+
+            // Update shots - only if changed
+            const currentShots = window.Game.shotsFired || 0;
+            if (currentShots !== prevShots) {
+              shotsDisplay.textContent = currentShots;
+              prevShots = currentShots;
             }
           }
           requestAnimationFrame(updateDisplay);
