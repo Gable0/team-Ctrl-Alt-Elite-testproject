@@ -60,15 +60,15 @@
         </section>
 
         <div style="text-align: center; margin-top: 1.5rem">
-          <button id="back-homepage" onclick="location.href = 'homepage.html'">
-            Back to Home
-          </button>
+          <!-- FIXED: Remove onclick, add id for event listener -->
+          <button id="back-homepage">Back to Home</button>
         </div>
       </div>
     </main>
 
     <script type="module">
       import { renderAllBoards, addScore } from './js/ui/leaderboard.js';
+      import { persistentAudio } from './js/core/persistentAudio.js';
 
       function initLeaderboard() {
         // Force font application
@@ -135,6 +135,12 @@
             renderAllBoards();
           }, 100);
         }
+      });
+
+      // FIXED: Use persistentAudio navigation for back button
+      document.getElementById('back-homepage').addEventListener('click', e => {
+        e.preventDefault();
+        persistentAudio.navigateTo('homepage.html');
       });
     </script>
 
