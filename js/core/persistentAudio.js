@@ -275,69 +275,69 @@ class PersistentAudioManager {
    * Loads a new page via fetch.
    */
   async loadPage(path) {
-  try {
-    const response = await fetch(path);
-    const html = await response.text();
+    try {
+      const response = await fetch(path);
+      const html = await response.text();
 
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(html, 'text/html');
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(html, 'text/html');
 
-    const newBodyContent = doc.body.innerHTML;
+      const newBodyContent = doc.body.innerHTML;
 
-    // Save audio element
-    const audioElement = this.audio;
+      // Save audio element
+      const audioElement = this.audio;
 
-    // Replace body
-    document.body.innerHTML = newBodyContent;
+      // Replace body
+      document.body.innerHTML = newBodyContent;
 
-    // Restore audio element
-    if (audioElement) {
-      document.body.appendChild(audioElement);
+      // Restore audio element
+      if (audioElement) {
+        document.body.appendChild(audioElement);
+      }
+
+      // Update title
+      document.title = doc.title;
+
+      // Execute scripts from new page
+      const scripts = doc.querySelectorAll('script');
+      for (const oldScript of scripts) {
+        const newScript = document.createElement('script');
+
+        if (oldScript.src) {
+          newScript.src = oldScript.src;
+        } else {
+          newScript.textContent = oldScript.textContent;
+        }
+
+        if (oldScript.type) {
+          newScript.type = oldScript.type;
+        }
+
+        // CRITICAL FIX: Append the script and wait for it to load
+        document.body.appendChild(newScript);
+
+        // Wait for module scripts to fully load before continuing
+        if (oldScript.type === 'module' || oldScript.src) {
+          await new Promise(resolve => {
+            if (oldScript.src) {
+              newScript.onload = resolve;
+              newScript.onerror = resolve;
+            } else {
+              // Inline module scripts execute immediately but we need a small delay
+              setTimeout(resolve, 10);
+            }
+          });
+        }
+      }
+
+      // Re-intercept navigation on new page
+      this.interceptNavigation();
+
+      console.log('📄 Page loaded:', path);
+    } catch (error) {
+      console.error('❌ Error loading page:', error);
     }
-
-    // Update title
-    document.title = doc.title;
-
-    // Execute scripts from new page
-    const scripts = doc.querySelectorAll('script');
-    for (const oldScript of scripts) {
-      const newScript = document.createElement('script');
-
-      if (oldScript.src) {
-        newScript.src = oldScript.src;
-      } else {
-        newScript.textContent = oldScript.textContent;
-      }
-
-      if (oldScript.type) {
-        newScript.type = oldScript.type;
-      }
-
-      // CRITICAL FIX: Append the script and wait for it to load
-      document.body.appendChild(newScript);
-
-      // Wait for module scripts to fully load before continuing
-      if (oldScript.type === 'module' || oldScript.src) {
-        await new Promise(resolve => {
-          if (oldScript.src) {
-            newScript.onload = resolve;
-            newScript.onerror = resolve;
-          } else {
-            // Inline module scripts execute immediately but we need a small delay
-            setTimeout(resolve, 10);
-          }
-        });
-      }
-    }
-
-    // Re-intercept navigation on new page
-    this.interceptNavigation();
-
-    console.log('📄 Page loaded:', path);
-  } catch (error) {
-    console.error('❌ Error loading page:', error);
   }
-}
 
   /**
    * Sets the volume.

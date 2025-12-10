@@ -61,7 +61,7 @@
         const skinPrices = {
           squarePack: 15,
           starPack: 25,
-          prof: 50
+          prof: 50,
         };
 
         function addSkin(skinId, name, desc) {
@@ -109,7 +109,11 @@
           });
         }
 
-        addSkin('squarePack', 'Square Pack', 'Blocky vibes for ships and foes.');
+        addSkin(
+          'squarePack',
+          'Square Pack',
+          'Blocky vibes for ships and foes.'
+        );
         addSkin('starPack', 'Star Pack', 'Stellar shapes for ships and foes.');
         addSkin('prof', 'Prof Pack', 'The Professor invades your fleet!');
 
@@ -147,7 +151,10 @@
         refreshShopButtons();
       }
 
-      window.addEventListener('storage', e => e.key === 'coinCount' && updateCoinDisplayAndButtons());
+      window.addEventListener(
+        'storage',
+        e => e.key === 'coinCount' && updateCoinDisplayAndButtons()
+      );
       updateCoinDisplayAndButtons();
     </script>
   </body>
