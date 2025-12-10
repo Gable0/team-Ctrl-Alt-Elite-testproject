@@ -29,102 +29,108 @@
       <button id="back-homepage" translate="backToHome">Back to Home</button>
     </skins-container>
 
+    <script type="module">
+      import { injectSettings } from './js/ui/settingsComponent.js';
+      import { persistentAudio } from './js/core/persistentAudio.js';
+
+      injectSettings();
+
+      // FIXED: Use persistentAudio navigation
+      document.getElementById('back-shop').addEventListener('click', e => {
+        e.preventDefault();
+        persistentAudio.navigateTo('shop.html');
+      });
+
+      document.getElementById('back-homepage').addEventListener('click', e => {
+        e.preventDefault();
+        persistentAudio.navigateTo('homepage.html');
+      });
+    </script>
 
     <script type="module">
-  import { injectSettings } from './js/ui/settingsComponent.js';
-  import { persistentAudio } from './js/core/persistentAudio.js';
+      import {
+        getActiveSkin,
+        isSkinOwned,
+        equipSkin,
+      } from './js/skins/skinsManager.js';
 
-  injectSettings();
+      function initSkins() {
+        console.log('🎨 initSkins() called');
+        const grid = document.getElementById('skins-grid');
+        if (!grid) {
+          console.log('⏳ Grid not found, retrying...');
+          setTimeout(initSkins, 50);
+          return;
+        }
 
-  // FIXED: Use persistentAudio navigation
-  document.getElementById('back-shop').addEventListener('click', e => {
-    e.preventDefault();
-    persistentAudio.navigateTo('shop.html');
-  });
+        console.log('✅ Grid found, checking skins...');
 
-  document.getElementById('back-homepage').addEventListener('click', e => {
-    e.preventDefault();
-    persistentAudio.navigateTo('homepage.html');
-  });
-</script>
+        // Clear any existing content
+        grid.innerHTML = '';
 
-<script type="module">
-  import {
-    getActiveSkin,
-    isSkinOwned,
-    equipSkin,
-  } from './js/skins/skinsManager.js';
+        const activeSkin = getActiveSkin();
+        console.log('Active skin:', activeSkin);
 
-  function initSkins() {
-    console.log('🎨 initSkins() called');
-    const grid = document.getElementById('skins-grid');
-    if (!grid) {
-      console.log('⏳ Grid not found, retrying...');
-      setTimeout(initSkins, 50);
-      return;
-    }
+        // Check what's in localStorage
+        console.log(
+          'squarePackOwned:',
+          localStorage.getItem('squarePackOwned')
+        );
+        console.log('starPackOwned:', localStorage.getItem('starPackOwned'));
+        console.log('profOwned:', localStorage.getItem('profOwned'));
 
-    console.log('✅ Grid found, checking skins...');
+        function addSkin(skinId, name, desc) {
+          const owned = isSkinOwned(skinId);
+          console.log(`Checking ${skinId}: owned = ${owned}`);
 
-    // Clear any existing content
-    grid.innerHTML = '';
+          if (!owned) return;
 
-    const activeSkin = getActiveSkin();
-    console.log('Active skin:', activeSkin);
-
-    // Check what's in localStorage
-    console.log('squarePackOwned:', localStorage.getItem('squarePackOwned'));
-    console.log('starPackOwned:', localStorage.getItem('starPackOwned'));
-    console.log('profOwned:', localStorage.getItem('profOwned'));
-
-    function addSkin(skinId, name, desc) {
-      const owned = isSkinOwned(skinId);
-      console.log(`Checking ${skinId}: owned = ${owned}`);
-
-      if (!owned) return;
-
-      const card = document.createElement('article');
-      card.className = 'skin-card';
-      card.innerHTML = `
+          const card = document.createElement('article');
+          card.className = 'skin-card';
+          card.innerHTML = `
         <h3>${name}</h3>
         <p>${desc}</p>
         <button class="equip-btn">
           ${activeSkin === skinId ? 'Equipped' : 'Equip'}
         </button>
       `;
-      grid.appendChild(card);
+          grid.appendChild(card);
 
-      card.querySelector('button').addEventListener('click', () => {
-        equipSkin(activeSkin === skinId ? 'default' : skinId);
-        location.reload();
-      });
-    }
+          card.querySelector('button').addEventListener('click', () => {
+            equipSkin(activeSkin === skinId ? 'default' : skinId);
+            location.reload();
+          });
+        }
 
-    addSkin('squarePack', 'Square Pack', 'Blocky vibes for ships and foes.');
-    addSkin('starPack', 'Star Pack', 'Stellar shapes for ships and foes.');
-    addSkin('prof', 'Prof Pack', 'The Professor invades your fleet!');
+        addSkin(
+          'squarePack',
+          'Square Pack',
+          'Blocky vibes for ships and foes.'
+        );
+        addSkin('starPack', 'Star Pack', 'Stellar shapes for ships and foes.');
+        addSkin('prof', 'Prof Pack', 'The Professor invades your fleet!');
 
-    console.log(`📊 Total skins shown: ${grid.children.length}`);
+        console.log(`📊 Total skins shown: ${grid.children.length}`);
 
-    if (grid.children.length === 0) {
-      const emptyMsg = document.createElement('p');
-      emptyMsg.textContent = 'No skins owned yet. Visit the shop!';
-      emptyMsg.style.textAlign = 'center';
-      emptyMsg.style.gridColumn = '1 / -1';
-      grid.appendChild(emptyMsg);
-    }
-  }
+        if (grid.children.length === 0) {
+          const emptyMsg = document.createElement('p');
+          emptyMsg.textContent = 'No skins owned yet. Visit the shop!';
+          emptyMsg.style.textAlign = 'center';
+          emptyMsg.style.gridColumn = '1 / -1';
+          grid.appendChild(emptyMsg);
+        }
+      }
 
-  // Initialize immediately
-  initSkins();
-</script>
+      // Initialize immediately
+      initSkins();
+    </script>
 
-<script type="module">
-  import { applyTranslations } from './js/ui/translations.js';
-  applyTranslations(document);
-  window.addEventListener('languagechange', () =>
-    applyTranslations(document)
-  );
-</script>
+    <script type="module">
+      import { applyTranslations } from './js/ui/translations.js';
+      applyTranslations(document);
+      window.addEventListener('languagechange', () =>
+        applyTranslations(document)
+      );
+    </script>
   </body>
 </html>
