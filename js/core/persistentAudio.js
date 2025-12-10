@@ -249,7 +249,7 @@ class PersistentAudioManager {
     );
 
     // Handle browser back/forward
-    window.addEventListener('popstate', e => {
+    window.addEventListener('popstate', () => {
       this.loadPage(window.location.pathname);
     });
 

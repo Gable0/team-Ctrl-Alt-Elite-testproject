@@ -88,19 +88,3 @@ export function injectSettings() {
     .querySelector('.close-settings')
     .addEventListener('click', () => modal.classList.add('hidden'));
 }
-
-/**
- * Updates the Fun Mode button text and active class.
- *
- * @param {HTMLButtonElement} button
- * @param {boolean} isFunMode
- */
-function updateFunModeButton(button, isFunMode) {
-  if (isFunMode) {
-    button.textContent = '🎉 Fun Mode ON!';
-    button.classList.add('active');
-  } else {
-    button.textContent = 'Have Some Fun!';
-    button.classList.remove('active');
-  }
-}

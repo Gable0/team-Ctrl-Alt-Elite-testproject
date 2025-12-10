@@ -35,7 +35,7 @@ export function updateCoins(game, delta, canvas) {
       game.coinCount = (game.coinCount || 0) + (coin.value || 1);
       try {
         localStorage.setItem('coinCount', String(game.coinCount));
-      } catch (e) {
+      } catch {
         // ignore storage errors
       }
 

@@ -8,6 +8,7 @@ export default [
       'coverage/**',
       'playwright-report/**',
       '.git/**',
+      'Docs/**',
     ],
   },
   // Main JS files
@@ -41,11 +42,33 @@ export default [
         NodeList: 'readonly',
         getComputedStyle: 'readonly',
         navigator: 'readonly',
+        CustomEvent: 'readonly',
+        prompt: 'readonly',
         // Library/module globals
         define: 'readonly',
         module: 'readonly',
         PR: 'readonly',
         Split: 'readonly',
+      },
+    },
+    rules: {
+      'no-unused-vars': 'warn',
+      'no-undef': 'error',
+    },
+  },
+  // Service Worker
+  {
+    files: ['service-worker.js'],
+    languageOptions: {
+      ecmaVersion: 2022,
+      sourceType: 'script',
+      globals: {
+        self: 'readonly',
+        caches: 'readonly',
+        clients: 'readonly',
+        console: 'readonly',
+        fetch: 'readonly',
+        Promise: 'readonly',
       },
     },
     rules: {

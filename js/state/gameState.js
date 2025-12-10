@@ -99,7 +99,7 @@ export function handlePlayerHit(game, hitType = 'laser') {
       let playerName = null;
       try {
         playerName = prompt(promptText, 'Player');
-      } catch (e) {
+      } catch {
         // prompt may be blocked in some environments
         playerName = null;
       }
@@ -117,18 +117,18 @@ export function handlePlayerHit(game, hitType = 'laser') {
       // Try to add the score directly to leaderboards (this will persist top-5)
       try {
         addScore(game.difficulty || 'medium', { name, score: game.score });
-      } catch (e) {
+      } catch {
         // If the leaderboard helper isn't available for some reason, fall back to storing recentScore
         try {
           localStorage.setItem(
             'recentScore',
             JSON.stringify({ score: game.score, difficulty: game.difficulty })
           );
-        } catch (e2) {
+        } catch {
           // ignore
         }
       }
-    } catch (e) {
+    } catch {
       // ignore any storage/prompt errors
     }
 

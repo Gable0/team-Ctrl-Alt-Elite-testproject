@@ -8,7 +8,7 @@ const DIFFICULTY_KEYS = {
 function safeParse(raw) {
   try {
     return JSON.parse(raw);
-  } catch (e) {
+  } catch {
     return null;
   }
 }
