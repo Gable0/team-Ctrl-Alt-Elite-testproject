@@ -39,9 +39,10 @@ class PersistentAudioManager {
 
       const source = document.createElement('source');
       // Use relative path from root that works on both local and GitHub Pages
-      const basePath = window.location.hostname === 'gable0.github.io'
-        ? '/team-Ctrl-Alt-Elite-testproject'
-        : '';
+      const basePath =
+        window.location.hostname === 'gable0.github.io'
+          ? '/team-Ctrl-Alt-Elite-testproject'
+          : '';
       source.src = `${basePath}/assets/sounds/reg game sounds/intro.wav`;
       source.type = 'audio/wav';
 

@@ -365,9 +365,10 @@ export function initAudio() {
   console.log('🎵 Initializing audio system...');
 
   // Determine base path for GitHub Pages or local development
-  const basePath = window.location.hostname === 'gable0.github.io'
-    ? '/team-Ctrl-Alt-Elite-testproject'
-    : '';
+  const basePath =
+    window.location.hostname === 'gable0.github.io'
+      ? '/team-Ctrl-Alt-Elite-testproject'
+      : '';
 
   // Sound effects
   audioManager.loadSound(
