@@ -37,7 +37,6 @@ export function updateBackground(delta, canvas) {
   for (const star of stars) {
     star.y += star.speed * delta;
 
-    // Wrap around when star goes off screen
     if (star.y > canvas.height) {
       star.y = 0;
       star.x = Math.random() * canvas.width;
