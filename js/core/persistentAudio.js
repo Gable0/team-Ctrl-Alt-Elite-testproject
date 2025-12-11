@@ -385,11 +385,13 @@ class PersistentAudioManager {
 // Create singleton instance
 export const persistentAudio = new PersistentAudioManager();
 
-// Auto-initialize when the DOM is ready
-if (typeof window !== 'undefined') {
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => persistentAudio.init());
-  } else {
-    persistentAudio.init();
-  }
-}
+// Auto-initialize when the DOM is ready - DISABLED FOR NETLIFY
+// Navigation interception causes issues with static hosting
+// If you need persistent audio, manually call persistentAudio.init() in your pages
+// if (typeof window !== 'undefined') {
+//   if (document.readyState === 'loading') {
+//     document.addEventListener('DOMContentLoaded', () => persistentAudio.init());
+//   } else {
+//     persistentAudio.init();
+//   }
+// }
