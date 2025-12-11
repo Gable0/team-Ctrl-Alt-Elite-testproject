@@ -17,6 +17,8 @@ Play it now → https://gable0.github.io/team-Ctrl-Alt-Elite-testproject/
 - Pause menu, difficulty selection, responsive design
 - 100% ES Modules, mobile-friendly, works offline
 
+
+
 ## Quick Start
 
 ```bash
@@ -34,6 +36,9 @@ npm run test:e2e     # run Playwright end-to-end tests
 npm run docs         # generate API documentation
 npm run docs:open    # generate docs + open in browser
 
+#Running FPS Test
+npx serve -l 3000    #Create a test server to run game in one terminal
+npm run test:fps     # In a second terminal run this and once the game opens move around
 
 ├── assets/                  # images, audio, skins
 ├── docs/
