@@ -9,7 +9,7 @@
     "test:coverage": "vitest run --coverage",
     "test:e2e": "playwright test",
     "test:e2e:headed": "playwright test --headed",
-    "test:fps": "playwright test tests/e2e/fps",
+    "test:fps": " node tests/fps/fps-check.js",
     "test:fps:headed": "playwright test tests/e2e/fps --headed",
     "dev": "serve",
     "lint": "eslint .",
