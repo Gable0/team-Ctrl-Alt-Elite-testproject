@@ -20,12 +20,12 @@ document.getElementById('restartLevelButton')?.addEventListener('click', () => {
   window.location.href = '../../game.html';
 });
 
-// Handle levels button - Navigate back to index with difficulty page
+// Handle levels button - Navigate to difficulty page
 document.getElementById('levelsButton')?.addEventListener('click', () => {
   // Clear the stop flag so intro music plays
   sessionStorage.removeItem('stopIntroAudio');
-  // Navigate to index.html which will load difficulty.html
-  window.location.href = '../../index.html?page=difficulty';
+  // Navigate to difficulty.html
+  window.location.href = '../../difficulty.html';
 });
 
 // Handle back to home button - Navigate to index

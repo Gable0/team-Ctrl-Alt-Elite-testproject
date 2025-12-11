@@ -6,7 +6,6 @@ const urlsToCache = [
   // Root files
   '/',
   '/index.html',
-  '/homepage.html',
   '/game.html',
   '/difficulty.html',
   '/leaderboard.html',

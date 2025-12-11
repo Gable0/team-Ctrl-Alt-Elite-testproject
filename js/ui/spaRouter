@@ -16,7 +16,7 @@ export function initSPARouter() {
             e.preventDefault();
             
             const url = new URL(target.href);
-            const page = url.pathname.split('/').pop() || 'homepage.html';
+            const page = url.pathname.split('/').pop() || 'index.html';
             
             // Update browser history
             history.pushState({ page }, '', target.href);
@@ -34,7 +34,7 @@ export function initSPARouter() {
     });
     
     // Set initial state
-    const currentPage = window.location.pathname.split('/').pop() || 'homepage.html';
+    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
     history.replaceState({ page: currentPage }, '', window.location.href);
 }
 

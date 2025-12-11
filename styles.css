@@ -64,7 +64,6 @@ homepage-galaga {
   justify-content: flex-start;
   width: 100%;
   min-height: 100vh;
-  min-height: 800px;
   overflow: hidden;
   position: relative;
   font-family: 'Jersey 10', sans-serif;
