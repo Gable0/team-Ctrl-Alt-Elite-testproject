@@ -364,64 +364,69 @@ window.audioManger = audioManager;
 export function initAudio() {
   console.log('🎵 Initializing audio system...');
 
+  // Determine base path for GitHub Pages or local development
+  const basePath = window.location.pathname.includes('/team-Ctrl-Alt-Elite-testproject/')
+    ? '/team-Ctrl-Alt-Elite-testproject'
+    : '';
+
   // Sound effects
   audioManager.loadSound(
     'shoot',
-    '/assets/sounds/reg game sounds/shoot.wav'
+    `${basePath}/assets/sounds/reg game sounds/shoot.wav`
   );
   audioManager.loadSound(
     'player-shoot',
-    '/assets/sounds/reg game sounds/player-shoot.wav'
+    `${basePath}/assets/sounds/reg game sounds/player-shoot.wav`
   );
   audioManager.loadSound(
     'kill-enemy',
-    '/assets/sounds/reg game sounds/kill-enemy.wav'
+    `${basePath}/assets/sounds/reg game sounds/kill-enemy.wav`
   );
   audioManager.loadSound(
     'game-over',
-    '/assets/sounds/reg game sounds/game-over.wav'
+    `${basePath}/assets/sounds/reg game sounds/game-over.wav`
   );
   audioManager.loadSound(
     'start-game',
-    '/assets/sounds/reg game sounds/start-game.wav'
+    `${basePath}/assets/sounds/reg game sounds/start-game.wav`
   );
   audioManager.loadSound(
     'power-up',
-    '/assets/sounds/reg game sounds/power-up.wav'
+    `${basePath}/assets/sounds/reg game sounds/power-up.wav`
   );
   audioManager.loadSound(
     'laser-hits-player',
-    '/assets/sounds/reg game sounds/laser-hits-player.wav'
+    `${basePath}/assets/sounds/reg game sounds/laser-hits-player.wav`
   );
   audioManager.loadSound(
     'enemy-hits-player',
-    '/assets/sounds/reg game sounds/enemy-hits-player.wav'
+    `${basePath}/assets/sounds/reg game sounds/enemy-hits-player.wav`
   );
 
   // Background music (looped)
   audioManager.loadSound(
     'intro',
-    '/assets/sounds/reg game sounds/intro.wav',
+    `${basePath}/assets/sounds/reg game sounds/intro.wav`,
     true
   );
   audioManager.loadSound(
     'background-music-1-2',
-    '/assets/sounds/reg game sounds/background-music-1-2.wav',
+    `${basePath}/assets/sounds/reg game sounds/background-music-1-2.wav`,
     true
   );
   audioManager.loadSound(
     'background-music-3-4',
-    '/assets/sounds/reg game sounds/background-music-3-4.wav',
+    `${basePath}/assets/sounds/reg game sounds/background-music-3-4.wav`,
     true
   );
   audioManager.loadSound(
     'background-music-5',
-    '/assets/sounds/reg game sounds/background-music-5.wav',
+    `${basePath}/assets/sounds/reg game sounds/background-music-5.wav`,
     true
   );
   audioManager.loadSound(
     'game-over-background',
-    '/assets/sounds/reg game sounds/game-over-background.wav',
+    `${basePath}/assets/sounds/reg game sounds/game-over-background.wav`,
     true
   );
 

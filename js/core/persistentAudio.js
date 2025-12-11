@@ -38,7 +38,11 @@ class PersistentAudioManager {
       this.audio.muted = true;
 
       const source = document.createElement('source');
-      source.src = '/assets/sounds/reg game sounds/intro.wav';
+      // Use relative path from root that works on both local and GitHub Pages
+      const basePath = window.location.pathname.includes('/team-Ctrl-Alt-Elite-testproject/')
+        ? '/team-Ctrl-Alt-Elite-testproject'
+        : '';
+      source.src = `${basePath}/assets/sounds/reg game sounds/intro.wav`;
       source.type = 'audio/wav';
 
       this.audio.appendChild(source);
