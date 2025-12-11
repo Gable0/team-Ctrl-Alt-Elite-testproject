@@ -55,7 +55,6 @@ import { initAudio } from '../systems/audioManager.js';
 import { persistentAudio } from './persistentAudio.js';
 import { loadEnemySkinImage } from '../skins/skinAssets.js';
 
-
 // Preload all custom enemy skins
 await loadEnemySkinImage('prof', 'assets/images/prof.jpg'); // Prof skin
 

@@ -1,18 +1,13 @@
 // js/ui/settingsComponent.js
 // Dynamically injects a settings button + modal into any page that calls injectSettings().
 
-
 import { applyTranslations, getCurrentLanguage } from './translations.js';
-import { persistentAudio } from '../core/persistentAudio.js'
-
+import { persistentAudio } from '../core/persistentAudio.js';
 
 export function injectSettings() {
-
-
   const settingsBtn = document.createElement('button');
   settingsBtn.className = 'settings-btn';
   settingsBtn.textContent = '⚙️';
-
 
   // Modal overlay
   const modal = document.createElement('settings-modal');
@@ -45,18 +40,14 @@ export function injectSettings() {
    </div>
  `;
 
-
   // Append to page
   document.body.appendChild(settingsBtn);
   document.body.appendChild(modal);
 
-
   applyTranslations(modal);
-
 
   const languageSelect = modal.querySelector('#language-select');
   languageSelect.value = getCurrentLanguage(); // <-- set saved language on load
-
 
   languageSelect.addEventListener('change', e => {
     import('./translations.js').then(({ setLanguage }) => {
@@ -64,20 +55,16 @@ export function injectSettings() {
     });
   });
 
-
   // Dynamically import audioManager only when the modal is created
   import('../systems/audioManager.js').then(module => {
     const { audioManager } = module;
 
-
     const musicSlider = modal.querySelector('#audio-volume'); // Music volume (Background music)
     const sfxSlider = modal.querySelector('#sfx-volume'); // Sound effects
-
 
     // Load saved values
     musicSlider.value = Math.round(audioManager.getMusicVolume() * 100);
     sfxSlider.value = Math.round(audioManager.getSFXVolume() * 100);
-
 
     // Music volume change
     musicSlider.addEventListener('input', () => {
@@ -86,14 +73,12 @@ export function injectSettings() {
       persistentAudio.setVolume(newVol);
     });
 
-
     // SFX volume change
     sfxSlider.addEventListener('input', () => {
       const newVol = Number(sfxSlider.value) / 100;
       audioManager.setVolume(newVol);
     });
   });
-
 
   // Open / close modal
   settingsBtn.addEventListener('click', () => modal.classList.toggle('hidden'));

@@ -3,12 +3,10 @@
 // Provides a singleton that survives page navigation, keeps intro music playing,
 // and enables SPA-style navigation without full reloads.
 
-
 /**
  * Singleton manager that keeps the intro music playing across page navigations
  * and intercepts internal link clicks to perform client-side routing.
  */
-
 
 class PersistentAudioManager {
   constructor() {
@@ -26,12 +24,10 @@ class PersistentAudioManager {
     this.unmuted = false;
   }
 
-
   /**
    * Initializes the persistent audio element and navigation interception.
    */
   init() {
-
     // Create audio element if it doesn't exist
     if (!this.audio) {
       this.audio = document.createElement('audio');
@@ -41,26 +37,20 @@ class PersistentAudioManager {
       // FIREFOX FIX: Start muted to bypass autoplay restrictions
       this.audio.muted = true;
 
-
       const source = document.createElement('source');
       source.src = '../../assets/sounds/reg game sounds/intro.wav';
       source.type = 'audio/wav';
 
-
       this.audio.appendChild(source);
       document.body.appendChild(this.audio);
-
 
       const savedVolume = parseFloat(localStorage.getItem('musicVolume'));
       const volume = isNaN(savedVolume) ? 1 : savedVolume;
 
-
       this.audio.volume = volume;
-
 
       console.log('🎵 Persistent audio element created (starting muted)');
     }
-
 
     // FIREFOX FIX: Start playing immediately while muted (this is allowed)
     if (!this.manuallyStopped) {
@@ -68,11 +58,9 @@ class PersistentAudioManager {
       this.setupUnmuteListener();
     }
 
-
     // Intercept navigation to prevent page reloads
     this.interceptNavigation();
   }
-
 
   /**
    * FIREFOX FIX: Starts playback while muted (always works)
@@ -80,15 +68,12 @@ class PersistentAudioManager {
   startMuted() {
     if (this.started) return;
 
-
     this.audio.currentTime = 25;
     this.audio.playbackRate = 0.9;
     this.audio.volume = 1; // Set volume but keep muted
     this.audio.muted = true;
 
-
     const playPromise = this.audio.play();
-
 
     if (playPromise !== undefined) {
       playPromise
@@ -106,24 +91,20 @@ class PersistentAudioManager {
     }
   }
 
-
   /**
    * FIREFOX FIX: Unmutes audio on first user interaction
    */
   setupUnmuteListener() {
     const interactionEvents = ['click', 'touchstart', 'keydown', 'mousedown'];
 
-
     const unmuteOnce = () => {
       if (!this.unmuted && this.audio) {
         console.log('👆 User interaction detected - unmuting audio');
-
 
         // If audio hasn't started yet, start it now
         if (!this.started) {
           this.startMuted();
         }
-
 
         // Unmute and fade in
         setTimeout(() => {
@@ -136,7 +117,6 @@ class PersistentAudioManager {
       }
     };
 
-
     interactionEvents.forEach(eventType => {
       document.addEventListener(eventType, unmuteOnce, {
         once: true,
@@ -146,7 +126,6 @@ class PersistentAudioManager {
     });
   }
 
-
   /**
    * Performs a smooth fade-in of the background music.
    */
@@ -154,17 +133,14 @@ class PersistentAudioManager {
     if (this.fadingIn || !this.audio) return;
     this.fadingIn = true;
 
-
     // Start from 0 and fade to full volume
     this.audio.volume = 0;
-
 
     const fadeDuration = 2000;
     const fadeSteps = 50;
     const targetVolume = 1;
     const volumeIncrement = targetVolume / fadeSteps;
     const stepDuration = fadeDuration / fadeSteps;
-
 
     let currentStep = 0;
     const fadeInInterval = setInterval(() => {
@@ -173,10 +149,8 @@ class PersistentAudioManager {
         return;
       }
 
-
       currentStep++;
       this.audio.volume = Math.min(currentStep * volumeIncrement, targetVolume);
-
 
       if (currentStep >= fadeSteps) {
         clearInterval(fadeInInterval);
@@ -186,7 +160,6 @@ class PersistentAudioManager {
       }
     }, stepDuration);
   }
-
 
   /**
    * Stops the music completely.
@@ -205,7 +178,6 @@ class PersistentAudioManager {
     }
   }
 
-
   /**
    * Resumes audio (used when coming back from game)
    */
@@ -216,14 +188,12 @@ class PersistentAudioManager {
     this.init();
   }
 
-
   /**
    * Intercepts internal navigation to keep audio alive.
    */
   interceptNavigation() {
     if (this.navigationIntercepted) return;
     this.navigationIntercepted = true;
-
 
     // Intercept all link clicks
     document.addEventListener(
@@ -243,7 +213,6 @@ class PersistentAudioManager {
       },
       true
     );
-
 
     // Intercept button clicks with location.href
     document.addEventListener(
@@ -265,7 +234,6 @@ class PersistentAudioManager {
             }
           }
 
-
           if (button.onclick) {
             const onclickStr = button.onclick.toString();
             if (onclickStr.includes('location.href')) {
@@ -285,12 +253,10 @@ class PersistentAudioManager {
       true
     );
 
-
     // Handle browser back/forward
     window.addEventListener('popstate', () => {
       this.loadPage(window.location.pathname);
     });
-
 
     // Push initial state
     if (!window.history.state) {
@@ -302,7 +268,6 @@ class PersistentAudioManager {
     }
   }
 
-
   /**
    * Navigates to a new page without reload.
    */
@@ -310,7 +275,6 @@ class PersistentAudioManager {
     window.history.pushState({ path: path }, '', path);
     await this.loadPage(path);
   }
-
 
   /**
    * Loads a new page via fetch.
@@ -320,13 +284,10 @@ class PersistentAudioManager {
       const response = await fetch(path);
       const html = await response.text();
 
-
       const parser = new DOMParser();
       const doc = parser.parseFromString(html, 'text/html');
 
-
       const newBodyContent = doc.body.innerHTML;
-
 
       // CRITICAL FIX: Save audio element and its state BEFORE replacing body
       const audioElement = this.audio;
@@ -335,16 +296,13 @@ class PersistentAudioManager {
       const audioVolume = audioElement ? audioElement.volume : 1;
       const audioMuted = audioElement ? audioElement.muted : false;
 
-
       // Replace body
       document.body.innerHTML = newBodyContent;
-
 
       // CRITICAL FIX: Restore audio element AFTER body replacement
       if (audioElement && audioElement.parentNode === null) {
         // Audio element was removed, re-append it
         document.body.appendChild(audioElement);
-
 
         // Restore audio state and resume playback
         if (!this.manuallyStopped) {
@@ -352,7 +310,7 @@ class PersistentAudioManager {
           audioElement.volume = audioVolume;
 
           //Unmute if we had user interaction
-          if(this.unmuted) {
+          if (this.unmuted) {
             audioElement.muted = false;
           }
           // Resume playback
@@ -362,16 +320,13 @@ class PersistentAudioManager {
         }
       }
 
-
       // Update title
       document.title = doc.title;
-
 
       // Execute scripts from new page
       const scripts = doc.querySelectorAll('script');
       for (const oldScript of scripts) {
         const newScript = document.createElement('script');
-
 
         if (oldScript.src) {
           newScript.src = oldScript.src;
@@ -379,15 +334,12 @@ class PersistentAudioManager {
           newScript.textContent = oldScript.textContent;
         }
 
-
         if (oldScript.type) {
           newScript.type = oldScript.type;
         }
 
-
         // CRITICAL FIX: Append the script and wait for it to load
         document.body.appendChild(newScript);
-
 
         // Wait for module scripts to fully load before continuing
         if (oldScript.type === 'module' || oldScript.src) {
@@ -403,17 +355,14 @@ class PersistentAudioManager {
         }
       }
 
-
       // Re-intercept navigation on new page
       this.interceptNavigation();
-
 
       console.log('📄 Page loaded:', path);
     } catch (error) {
       console.error('❌ Error loading page:', error);
     }
   }
-
 
   /**
    * Sets the volume.
@@ -425,17 +374,16 @@ class PersistentAudioManager {
     }
   }
 
-
   /** Get persistent audio volume */
   getVolume() {
-    return this.audio ? this.audio.volume : parseFloat(localStorage.getItem('musicVolume')) || 1;
+    return this.audio
+      ? this.audio.volume
+      : parseFloat(localStorage.getItem('musicVolume')) || 1;
   }
 }
 
-
 // Create singleton instance
 export const persistentAudio = new PersistentAudioManager();
-
 
 // Auto-initialize when the DOM is ready
 if (typeof window !== 'undefined') {

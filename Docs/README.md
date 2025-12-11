@@ -64,15 +64,15 @@ npm run docs:open    # generate docs + open in browser
    → Takes you to difficulty selection
 
 3. **Choose your difficulty**
-    - **Easy** (green) – forgiving for newcomers
-    - **Medium** (yellow) – balanced challenge
-    - **Hard** (red) – pure arcade fury
+   - **Easy** (green) – forgiving for newcomers
+   - **Medium** (yellow) – balanced challenge
+   - **Hard** (red) – pure arcade fury
 
 4. **Blast aliens!**
-    - **Move**: Arrow Keys or WASD
-    - **Shoot**: Spacebar
-    - **Pause**: ESC (Resume/Restart/Exit)
-    - **Settings**: pause icon (volume, language)
+   - **Move**: Arrow Keys or WASD
+   - **Shoot**: Spacebar
+   - **Pause**: ESC (Resume/Restart/Exit)
+   - **Settings**: pause icon (volume, language)
 
 ## Pro Tips
 
@@ -94,7 +94,6 @@ _Blast off → RetroGa awaits._
 
 ![img_1.png](assets/team-notes2.png)
 
-
 **Miro Board**
 
 - We used Miro to organize our ideas and brainstorm.
@@ -106,12 +105,10 @@ _Blast off → RetroGa awaits._
 - Linked some proof of concepts and demos.
   ![img_2.png](assets/miro-demos.png)
 
-
-
 - **[A link to our miro board](https://miro.com/app/board/uXjVJsnu5Nk=/)**
 
-
 ## Credits
+
 Made with passion by Team Ctrl-Alt-Elite
 
 Inspired by Namco’s Galaga (1981)
