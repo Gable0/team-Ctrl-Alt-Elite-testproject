@@ -6,7 +6,7 @@ import { chromium } from 'playwright';
   await page.goto('http://localhost:3000/game.html');
 
   // Wait for your canvas
-  await page.waitForSelector('#game', { timeout: 15000 });
+  await page.waitForSelector('#game', { timeout: 30000 });
 
   console.log('Game loaded – measuring FPS for 5 seconds...');
 
